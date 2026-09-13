@@ -25,7 +25,7 @@ namespace treegens {
 
         line pos = global "%uuid roomPos".shiftAllAxes(
             num.random(-3, 3),
-            2,
+            -1,
             num.random(-3, 3),
         );
 
@@ -199,9 +199,9 @@ namespace treegens {
                     placed = 1;
                 }
                 game.setBlock(mat, pathPos);
-                allPlayers.playSound(snd("Wood Place"), pathPos);
                 if(placed == 1) {
                     outputPositions.append(pathPos);
+                    player.playSound(snd("Wood Place"), pathPos);
                     util.fastWait(1/(global "%uuid stats"["tree_growth"]));
                 }
             }
@@ -225,7 +225,7 @@ namespace treegens {
                     continue;
                 }
                 game.setBlock(mat, added);
-                allPlayers.playSound(snd("Wood Place"), added);
+                player.playSound(snd("Wood Place"), added);
                 outputPositions.append(added);
                 util.fastWait(1/(global "%uuid stats"["tree_growth"]));
             }
@@ -572,7 +572,7 @@ namespace treegens {
 
         line dt = num.random(0, 3.14);
         line lastRoot = root;
-        for(line t of range(0, height, 0.05)) {
+        for(line t of range(0, height, 0.4)) {
             line dx = (t + dt).cos(unit = "Radians") * 4;
             line dy = (t + dt).sin(unit = "Radians") * 4;
             lastRoot = root.shiftAllAxes(dx, t, dy);

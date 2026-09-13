@@ -1,55 +1,217 @@
 import stats;
 import util;
 
+playerevent chat {
+    if(chatGameSolution.len() != 0 && event.message.matches(global chatGameSolution)) {
+        allPlayers.sendMessage(s"<green><bold>WINNER! <reset><aqua>%default <gray>got the answer of %var(chatGameSolution)!");
+        line logInc = saved "%uuid logs" * 0.05;
+        line logRender = util.numberFormat(logInc);
+        allPlayers.sendMessage(s"<dark_gray>The person earned %var(logRender) logs!");
+        chatGameSolution = "";
+        saved "%uuid logs" += logInc;
+    }
+}
+
 namespace loops {
     process executePlayerLoops() {
         repeat {
             select allPlayers;
             start playerLoop(targetMode = "For each in selection");
             select reset;
+
+            if(game.ticksSinceStartup % 1000 == 0) {
+                setupChatGame();
+            }
+
             wait(1);
+        }
+    }
+
+    function generateScoreboard() {
+        if(game.timestamp - lastTime > 3) {
+            declare global lastTime: num = game.timestamp;
+
+            declare global tl = s"\n<green><bold>TREECUTTING<reset>\n\n\n";
+            line players: dict[num] = {};
+            line logs: dict[num] = {};
+            for(line playerUuid of game.plotPlayerUUIDs) {
+                select playersByName(playerUuid);
+                players[selected.name.clearFormatting()] = global "%uuid stats"["tree_type"];
+                logs[selected.name.clearFormatting()] = saved "%uuid logs";
+                select reset;
+            }
+            players = players.sort("type" = "Sort by Value", order = "Descending");
+            for(line player, line level of players) {
+                line lc = util.numberFormat(logs[player]);
+                line tag = createChatTag(level);
+                tl += s"%var(tag) <#dddddd>%var(player) <dark_gray>%var(lc)<reset>\n";
+            }
+
+            line cpu = game.cpuUsage * 100;
+            tl += s"\n<gray>CPU Usage: <green>%var(cpu)<dark_green>%\n";
+
+            if(game.cpuUsage * 100 > 40) {
+                tl += s"<red>LAG: Some visual effects have been disabled for performance.\n";
+            }
+
+            if(game.cpuUsage * 100 > 60) {
+                tl += s"<red>LAG: Speed-based animations been slowed down for performance.\n";
+            }
+
+            tl = tl + s"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+            
+            allPlayers.setTabListInfo(tl, field = "Header");
         }
     }
     
     process playerLoop() {
-        line brokenSoFar = global "%uuid brokenLogs".len();
-        line brokenReq = global "%uuid blocksToBreak".len();
-        line totalPerc = ((brokenSoFar / (brokenReq * 0.9)) * 100).round().min(100);
+        if(game.ticksSinceStartup % 5 == global "%uuid hashCode" % 5) {
+            line brokenSoFar = global "%uuid brokenLogs".len();
+            line brokenReq = global "%uuid blocksToBreak".len();
+            line totalPerc = ((brokenSoFar / (brokenReq * 0.9)) * 100).round().min(100);
+            line fmtLogs = util.numberFormat(saved "%uuid logs");
+            player.sendActionBar(s"<dark_green>╟ <green>%var(fmtLogs) Logs <dark_gray>| <gray>%var(totalPerc)%");
 
-        line fmtLogs = util.numberFormat(saved "%uuid logs");
-        player.sendActionBar(s"<dark_green>╟ <green>%var(fmtLogs) Logs <dark_gray>| <gray>%var(totalPerc)%");
-        player.setSaturationLevel(20);
-        player.setFoodLevel(20);
+            if(player.isGrounded()) {
+                global "%uuid canDoubleJump" = 1;
+            }
+            
+            generateScoreboard();
+        }
 
-        if(game.ticksSinceStartup % 5 == 0) {
-            updatePlayerInv();
-            stats.computeStats();
-
+        if(game.ticksSinceStartup % 20 == global "%uuid hashCode" % 20) {
             player.givePotionEffect(pot("Night Vision", 1, 100000), particles = "None", showIcon = "False");
+
+            player.setSaturationLevel(20);
+            player.setFoodLevel(20);
+
+            player.setNameTagVisible(visible = "Disable");
+            line lv = global "%uuid stats"["tree_type"];
+            player.setChatTag(createChatTag(lv));
+            player.setChatStyle(s"<#dddddd>");
+
+            updatePlayerInv();
         }
+    }
 
-        if(player.isGrounded()) {
-            global "%uuid canDoubleJump" = 1;
+    function createChatTag(level: num): txt {
+        line color = "gray";
+        if(level >= 5) {
+            color = "blue";
         }
-
-        line tl = s"\n<green><bold>TREECUTTING<reset>\n\n\n";
-
-        for(line player of game.plotPlayerNames) {
-            tl += s"<#cccccc>%var(player)<reset>\n";
+        if(level >= 10) {
+            color = "green";
         }
+        if(level >= 15) {
+            color = "yellow";
+        }
+        if(level >= 20) {
+            color = "gold";
+        }
+        if(level >= 25) {
+            color = "red";
+        }
+        if(level >= 30) {
+            color = "dark_red";
+        }
+        if(level >= 35) {
+            color = "dark_purple";
+        }
+        return txt.parseExpression("<dark_gray>[<%var(color)>%var(level)🪓<dark_gray>]");
+    }
 
-        line cpu = game.cpuUsage;
-        tl += s"\n<gray>CPU Usage: <green>%var(cpu)<dark_green>%";
+    function setupChatGame() {
+        if(game.ticksSinceStartup % 3000 != 0) {
+            return;
+        }
+        if(game.playerCount < 3) {
+            return;
+        }
+        setupChatGameHidden();
+    }
 
-        tl = tl + s"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-        
-        player.setTabListInfo(tl, field = "Header");
-        player.setNameTagVisible(visible = "Disable");
+    function setupChatGameHidden() {
+        declare global chatGameSolution: str = "";
 
+        line gameType = num.random(1, 2, rounding = "Whole number");
+        line gameTypeTxt: str = "";
+        line gamePrompt: str = "";
+        if(gameType == 1) {
+            gameTypeTxt = "QUICK MATH!";
+
+            line a = num.random(2, 20, rounding = "Whole number");
+            line b = num.random(2, 20, rounding = "Whole number");
+            line c = num.random(2, 20, rounding = "Whole number");
+            
+            line equationType = num.random(1, 3, rounding = "Whole number");
+            if(equationType == 1) {
+                chatGameSolution = str.setToString(a + b * c);
+                gamePrompt = "Solve %var(a) + %var(b) * %var(c)";
+            } else if(equationType == 2) {
+                chatGameSolution = str.setToString(a * b * c);
+                gamePrompt = "Solve %var(a) * %var(b) * %var(c)";
+            } else if(equationType == 3) {
+                chatGameSolution = str.setToString(a * b - c);
+                gamePrompt = "Solve %var(a) * %var(b) - %var(c)";
+            }
+            gamePrompt = "Solve %var(gamePrompt)! Winner gets 5% more of their logs!";
+        }
+        if(gameType == 2) {
+            line words: list[str] = [
+                "apple",
+                "almond",
+                "aspen",
+                "baobab",
+                "waxed slightly weathered cut copper stairs",
+                "birch",
+                "bodhi",
+                "bark",
+                "cedar",
+                "cherry",
+                "coconut",
+                "chestnut",
+                "elderberry",
+                "fir",
+                "forest",
+                "grove",
+                "grapefruit",
+                "haw",
+                "holly",
+                "jungle",
+                "maple",
+                "nectarine",
+                "oak",
+                "palm",
+                "rainforest",
+                "rubber",
+                "spruce",
+                "walnut",
+                "willow"
+            ];
+            line sel = words[num.random(1, words.len() - 1, rounding = "Whole number")];
+            line scrambled: list[str] = sel.split("");
+            for(line i of range(1, 20)) {
+                line char1 = num.random(1, sel.len());
+                line char2 = num.random(1, sel.len());
+                line tmp1 = scrambled[char1];
+                line tmp2 = scrambled[char2];
+                scrambled[char1] = tmp2;
+                scrambled[char2] = tmp1;
+            }
+            line outstr = scrambled.join("");
+            gameTypeTxt = "QUICK SCRAMBLE!";
+            gamePrompt = "Unscramble the word '%var(outstr)'!";
+            chatGameSolution = sel;
+        }
+        allPlayers.sendMessage(s"<green><bold>%var(gameTypeTxt) <reset><gray>%var(gamePrompt)");
     }
 
     function updatePlayerInv() {
         line logs = saved "%uuid logs";
+
+        if(game.cpuUsage * 100 > 30) {
+            logs = 0;
+        }
 
         line basicLogs = (logs % 64);
         line enchLogs = ((logs / 64) % 64);

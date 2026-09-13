@@ -3,6 +3,9 @@ namespace util {
         line oftency = 1 / freq;
         local __fastWait: num;
         local __fastWait = local __fastWait + 1;
+        if(game.cpuUsage * 100 > 60) {
+            __fastWait += (oftency / 20);
+        }
         if(__fastWait > oftency) {
             __fastWait = 0;
             wait(1);

@@ -1,6 +1,8 @@
 declare saved "%uuid logs": num;
 declare global "%uuid brokenLogs": list[loc];
 
+import stats;
+
 playerevent join {
     declare saved "%uuid statShop": dict[num];
     declare global "%uuid stats": dict[num] = {};
@@ -33,6 +35,7 @@ playerevent join {
     // );
 
     declare global "%uuid roomPos": loc = roomPositions.pop();
+    declare global "%uuid hashCode": num = num.random(0, 2147000000, rounding = "Whole number");
     if(global "%uuid roomPos" == 0) {
         player.kick();
     }
@@ -53,10 +56,11 @@ playerevent join {
     //     line avg = 0;
     //     for(line j of range(1, 10)) {
     game.cloneRegion(
-        loc(0, 6, 0),
-        loc(50, 37, 50),
-        loc(0, 6, 0),
-        global "%uuid roomPos".shiftAllAxes(-25, -1, -25),
+        loc(0, 3, 0),
+        loc(50, 38, 50),
+        loc(0, 3, 0),
+        global "%uuid roomPos".shiftAllAxes(-25, -3, -25),
+        ignoreAir = "False"
     );
     //         avg += treegens.growArbitraryTree(i).len();
     //     }
@@ -71,7 +75,12 @@ playerevent join {
     // player.sendMessage(
     //     txt.parseExpression("<click:copy_to_clipboard:\"%var(entryTxt)\">click to copy</click>", allowed = "Full")
     // );
+
     start treegens.growForPlayer();
+
+
+
+    stats.computeStats();
 
 }
 
@@ -86,6 +95,19 @@ gameevent startup {
 }
 
 function startup() {
+
+    declare global sweepVecs: list[vec] = [
+        vec(-1, -1, -1), vec(-1, -1, 0), vec(-1, -1, 1),
+        vec(-1, 0, -1),  vec(-1, 0, 0),  vec(-1, 0, 1),
+        vec(-1, 1, -1),   vec(-1, 1, 0),   vec(-1, 1, 1),
+        vec(0, -1, -1),   vec(0, -1, 0),   vec(0, -1, 1),
+        vec(0, 0, -1),                     vec(0, 0, 1),
+        vec(0, 1, -1),    vec(0, 1, 0),    vec(0, 1, 1),
+        vec(1, -1, -1),   vec(1, -1, 0),   vec(1, -1, 1),
+        vec(1, 0, -1),    vec(1, 0, 0),    vec(1, 0, 1),
+        vec(1, 1, -1),    vec(1, 1, 0),    vec(1, 1, 1)
+    ];
+
     declare global log_families: list[log_family] = [
         log_family(1, 0),
         log_family(3, 6),
@@ -113,25 +135,20 @@ function startup() {
 
     setupPositions();
 
-    print(roomPositions.len());
-
     start loops.executePlayerLoops();
 }
 
 function setupPositions() {
-    line relativePositions: list[vec] = [
-        vec(25, 0, 25),
-        vec(25, 0, 75),
-        vec(75, 0, 25),
-        vec(75, 0, 75)
-    ];
-    for(line y of range(35, 250-31, 31)) {
-        line baseLoc = loc(0, y, 0);
-        for(line subvec of relativePositions) {
-            line newLoc = baseLoc.shiftOnVector(subvec);
-            roomPositions.append(newLoc);
+    for(line x of range(25, 250, 70)) {
+        for(line z of range(25, 250, 70)) {
+            for(line y of range(35, 250-31, 70)) {
+                line newLoc = loc(x, y, z);
+                roomPositions.append(newLoc);
+            }
         }
     }
+    print(roomPositions.len());
+    
 }
 
 import treegens;
@@ -209,6 +226,11 @@ playerevent movementKeyChange {
 }
 
 playerevent command {
+
+    if(event.commandArgumentEquals("chat_game", 1) && player.hasPlotPermission(permission = "Owner")) {
+        loops.setupChatGameHidden();
+    }
+
     if(event.commandArgumentEquals("grant_logs", 1) && player.hasPlotPermission(permission = "Owner")) {
         line playerName = event.commandArguments[2];
         line amount = num.parse(event.commandArguments[3].replace("_", ""));
@@ -242,10 +264,7 @@ playerevent command {
             txt.parseExpression("<click:copy_to_clipboard:\"%var(entryTxt)\">click to copy</click>", allowed = "Full")
         );
     }
-    if(event.commandEquals("restart")) {
-        allPlayers.sendMessage(
-            s"<click:run_command:'/join treecutting'><red><bold>THE PLOT IS RESTARTING! </bold><gray>Click to rejoin."
-        );
-        allPlayers.kick();
+    if(event.commandEquals("killall")) {
+        allEntities.remove();
     }
 }

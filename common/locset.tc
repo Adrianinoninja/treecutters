@@ -1,0 +1,19 @@
+type loc_set: dict[num];
+
+extend loc_set {
+    function constructor(): loc_set {
+        return {} as loc_set;
+    }
+
+    function insert(this: var[loc_set], p: loc) {
+        this[str.setToString(p)] = 1;
+    }
+
+    function delete(this: var[loc_set], p: loc) {
+        this.remove(str.setToString(p));
+    }
+
+    function contains(this: var[loc_set], p: loc): num {
+        return this[str.setToString(p)];
+    }
+}

@@ -30,16 +30,25 @@ namespace throwingaxe {
         select entitiesByUUID(disp);
         entity.setDisplayRotationFromEulerAngles(0, 90, 0);
         select reset;
+
+        line dt = 0;
+        line oldPos = pos;
         while(game.blockEquals(pos, "air")) {
-            line oldPos = pos;
+            dt++;
+            if(dt > 30) {
+                break;
+            }
             pos = pos.shiftInDirection(1, direction = "Forward");
             pos.y -= dy;
             dy += 0.01;
 
-            start spawnTemporaryBeam(
-                oldPos.shiftAllDirections(0, -0.25, 0), 
-                pos.shiftAllDirections(0, -0.25, 0)
-            );
+            if(game.cpuUsage * 100 < 30 && dt % 3 == 1) {
+                start spawnTemporaryBeam(
+                    oldPos.shiftAllDirections(0, -0.25, 0), 
+                    pos.shiftAllDirections(0, -0.25, 0)
+                );
+                line oldPos = pos;
+            }
 
             line crossFD = f0.cross(dir);
             line rotAxis = crossFD.setLength(1);
@@ -107,10 +116,11 @@ namespace throwingaxe {
     function execBreak(
         pos: loc
     ) {
+        line ls = str.setToString(global woodTypeList);
         for(line adj of adjacent(pos, pattern = "Cube (26 blocks)", includeOrigin = "True")) {
             adj = adj.align(align = "Block center", rotation = "Remove rotation", coords = "All coordinates");
             line mat = game.getBlockMaterial(adj);
-            if(!(str.setToString(global woodTypeList).contains(mat))) {
+            if(!(ls.contains(mat))) {
                 continue;
             }
             line blocks = sweeping.getBlockOrders(

@@ -38,6 +38,7 @@ namespace statShopIcon.treeGrowthSpeed {
     amount = 1;
     basePrice = 30;
     priceScaling = 1.4;
+    maxLevel = 20;
 }
 
 namespace statShopIcon.jumpHeight {
@@ -73,6 +74,7 @@ namespace statShopIcon.speed {
 import statShopIcon;
 import util;
 import treegens;
+import stats;
 
 namespace statShop {
     function openMenu() {
@@ -167,13 +169,15 @@ namespace statShop {
                     );
                     start treegens.growForPlayer();
                 }
-            }
-            if(event.clickedSlotItem.hasTag("prestige")) {
-                saved "%uuid logs" = 0;
+
+
+                if(event.clickedSlotItem.hasTag("prestige")) {
+                    saved "%uuid logs" = 0;
+                }
             }
 
             openMenu();
-
+            stats.computeStats();
             
 
         }
