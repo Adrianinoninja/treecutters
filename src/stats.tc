@@ -19,6 +19,8 @@ namespace stats {
             player.givePotionEffect(jumpBoostEffect, particles = "None", showIcon = "False");
         }
 
+        player.setMovementAttribute(0.2 + (stats["walk_speed"] * 0.02), attr = "Walking speed", valueType = "Direct");
+
         global "%uuid stats" = stats;
     }
 }

@@ -31,6 +31,21 @@ namespace loops {
         if(player.isGrounded()) {
             global "%uuid canDoubleJump" = 1;
         }
+
+        line tl = s"\n<green><bold>TREECUTTING<reset>\n\n\n";
+
+        for(line player of game.plotPlayerNames) {
+            tl += s"<#cccccc>%var(player)<reset>\n";
+        }
+
+        line cpu = game.cpuUsage;
+        tl += s"\n<gray>CPU Usage: <green>%var(cpu)<dark_green>%";
+
+        tl = tl + s"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+        
+        player.setTabListInfo(tl, field = "Header");
+        player.setNameTagVisible(visible = "Disable");
+
     }
 
     function updatePlayerInv() {

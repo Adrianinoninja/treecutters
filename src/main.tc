@@ -41,6 +41,13 @@ playerevent join {
         (global "%uuid roomPos").shiftAllAxes(-6, 2, -6)
     );
 
+    player.sendMessage(s"");
+    player.sendMessage(s"<green>Welcome to Treecutting!");
+    player.sendMessage(s"<dark_gray>- <gray>Swap Hands to open your upgrade menu.");
+    player.sendMessage(s"<dark_gray>- <gray>Right Click to throw your axe.");
+    player.sendMessage(s"<dark_gray>- <gray>You can double jump mid-air.");
+    player.sendMessage(s"<yellow>Enjoy!");
+
     // line entries: list[num] = [];
     // for(line i of range(0, 39)) {
     //     line avg = 0;
@@ -234,5 +241,11 @@ playerevent command {
         player.sendMessage(
             txt.parseExpression("<click:copy_to_clipboard:\"%var(entryTxt)\">click to copy</click>", allowed = "Full")
         );
+    }
+    if(event.commandEquals("restart")) {
+        allPlayers.sendMessage(
+            s"<click:run_command:'/join treecutting'><red><bold>THE PLOT IS RESTARTING! </bold><gray>Click to rejoin."
+        );
+        allPlayers.kick();
     }
 }

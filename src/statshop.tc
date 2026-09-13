@@ -41,7 +41,7 @@ namespace statShopIcon.treeGrowthSpeed {
 }
 
 namespace statShopIcon.jumpHeight {
-    material = "feather";
+    material = "rabbit_foot";
     name = "Jump Height";
     stat = "jump_height";
     amount = 1;
@@ -57,7 +57,17 @@ namespace statShopIcon.treeType {
     prestigeEvery = 5;
     amount = 1;
     // auto-generated via desmos: https://www.desmos.com/calculator/kuar1urjyj
-    priceBrackets: list[num] = [45,196,537,962,1561,530,1918,4247,7358,10066,1201,7154,18240,31940,21522,5737,37957,90904,200360,283614,13340,89578,177610,397140,424958,36476,201036,461234,866315,228842,54916,269127,561050,1144020,768148,151444,757708,1937108];
+    priceBrackets: list[num] = [43,182,482,844,1341,449,1588,3455,5890,7941,938,5498,13842,23960,15973,4219,27610,65510,143120,200899,9380,62475,122967,273040,290221,24758,135589,309243,577550,151739,36228,176622,366407,743620,497044,97572,486084,1237604];
+}
+
+namespace statShopIcon.speed {
+    material = "iron_boots";
+    name = "Walk Speed";
+    stat = "walk_speed";
+    amount = 1;
+    basePrice = 100;
+    priceScaling = 1.25;
+    maxLevel = 10;
 }
 
 import statShopIcon;
@@ -141,9 +151,22 @@ namespace statShop {
             if(cost == -1) {
                 return;
             }
-            if(saved "%uuid logs" > cost) {
+            if(saved "%uuid logs" >= num.floor(cost)) {
                 saved "%uuid logs" -= cost;
                 saved "%uuid statShop"[iconKey] += 1;
+
+                if(iconKey == "treeType") {
+                    while(global "%uuid treeRegenerating" == 1) {
+                        wait();
+                    }
+                    game.cloneRegion(
+                        loc(0, 6, 0),
+                        loc(50, 37, 50),
+                        loc(0, 6, 0),
+                        global "%uuid roomPos".shiftAllAxes(-25, -1, -25),
+                    );
+                    start treegens.growForPlayer();
+                }
             }
             if(event.clickedSlotItem.hasTag("prestige")) {
                 saved "%uuid logs" = 0;
@@ -151,18 +174,7 @@ namespace statShop {
 
             openMenu();
 
-            if(iconKey == "treeType") {
-                while(global "%uuid treeRegenerating" == 1) {
-                    wait();
-                }
-                game.cloneRegion(
-                    loc(0, 6, 0),
-                    loc(50, 37, 50),
-                    loc(0, 6, 0),
-                    global "%uuid roomPos".shiftAllAxes(-25, -1, -25),
-                );
-                start treegens.growForPlayer();
-            }
+            
 
         }
     }
