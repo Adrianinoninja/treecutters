@@ -117,7 +117,8 @@ function startup() {
         log_family(100, 30),
         log_family(240, 36),
         log_family(480, 42),
-        log_family(600, 48)
+        log_family(600, 48),
+        log_family(900, 54)
     ];
 
     declare global woodTypeList: list[item] = [
@@ -128,7 +129,8 @@ function startup() {
         item("stripped_crimson_stem"),
         item("stripped_pale_oak_wood"),
         item("pale_oak_wood"),
-        item("stripped_birch_wood")
+        item("stripped_birch_wood"),
+        item("stripped_dark_oak_wood")
     ];
 
     declare global roomPositions: list[loc] = [];
@@ -241,7 +243,7 @@ playerevent command {
     }
     if(event.commandEquals("test_trees") && player.hasPlotPermission(permission = "Owner")) {
         line entries: list[num] = [];
-        for(line i of range(0, 39)) {
+        for(line i of range(0, 47)) {
             line avg = 0;
             for(line j of range(1, 10)) {
                 game.cloneRegion(

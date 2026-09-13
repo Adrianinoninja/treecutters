@@ -16,12 +16,13 @@ namespace treegens {
     aerial = "aerial";
     lunar = "lunar";
     solar = "solar";
+    astral = "astral";
 
     function growArbitraryTree(
         idx: num
     ): list[loc] {
         line individualSize = [tiny, small, medium, big, mega][(idx % 5) + 1];
-        line treeType = [oak, dark, cherry, warped, molten, aerial, lunar, solar][(idx / 5) + 1];
+        line treeType = [oak, dark, cherry, warped, molten, aerial, lunar, solar, astral][(idx / 5) + 1];
 
         line pos = global "%uuid roomPos".shiftAllAxes(
             num.random(-3, 3),
@@ -73,6 +74,12 @@ namespace treegens {
         }
         if(treeType == solar) {
             return treegens.buildSolarTree(
+                pos,
+                individualSize
+            );
+        }
+        if(treeType == astral) {
+            return treegens.buildAstralTree(
                 pos,
                 individualSize
             );
@@ -593,6 +600,58 @@ namespace treegens {
             num.random(2, 4),
             0,
             item("stripped_birch_wood")
+        );
+
+        outputPositions = outputPositions.removeDuplicates() as list[loc];
+        outputPositions.removeAir();
+        
+        return outputPositions;
+    }
+
+    function buildAstralTree(
+        root: loc,
+        size: str
+    ): list[loc] {
+        line svars = sizeVariables(size);
+        line logPositions = svars[1];
+        line height = svars[2];
+        line branchReqs = svars[3];
+        line outputPositions: list[loc] = [];
+
+        line dt = num.random(0, 3.14);
+        line lastRoot = root;
+        for(line t of range(0, height * 1.2, 0.4)) {
+            line dx = (t + dt).cos(unit = "Radians") * 2;
+            line dy = (t + dt).sin(unit = "Radians") * 2;
+            lastRoot = root.shiftAllAxes(dx, t, dy);
+            buildTrunk(
+                outputPositions,
+                lastRoot,
+                1,
+                logPositions,
+                item("stripped_dark_oak_wood")
+            );
+            if(t % 4 == 1.2) {
+                buildBranches(
+                    outputPositions,
+                    lastRoot,
+                    num.min(height * 0.7, 6),
+                    branchReqs,
+                    num.random(1, 2),
+                    0,
+                    item("stripped_dark_oak_wood")
+                );
+            }
+        }
+
+        line endcaps = buildBranches(
+            outputPositions,
+            lastRoot,
+            height * 0.7,
+            branchReqs,
+            num.random(2, 4),
+            0,
+            item("stripped_dark_oak_wood")
         );
 
         outputPositions = outputPositions.removeDuplicates() as list[loc];

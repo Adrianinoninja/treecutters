@@ -15,7 +15,7 @@ namespace stats {
         }
 
         if(stats["jump_height"] >= 1) {
-            line jumpBoostEffect = pot("Jump Boost", stats["jump_height"], 100);
+            line jumpBoostEffect = pot("Jump Boost", stats["jump_height"], 10000000);
             player.givePotionEffect(jumpBoostEffect, particles = "None", showIcon = "False");
         }
 
