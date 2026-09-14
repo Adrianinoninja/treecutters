@@ -4,6 +4,31 @@ declare global "%uuid brokenLogs": list[loc];
 import stats;
 
 playerevent join {
+    declare global log_families: list[log_family] = [
+        log_family(1, 0, "Oak"),
+        log_family(3, 6, "Darkwood"),
+        log_family(15, 12, "Cherry"),
+        log_family(30, 16, "Warped"),
+        log_family(60, 20, "Molten"),
+        log_family(100, 24, "Aerial"),
+        log_family(240, 28, "Lunar"),
+        log_family(480, 32, "Solar"),
+        log_family(600, 36, "Astral"),
+        log_family(900, 40, "Yggdrasil"),
+        log_family(1200, 45, "Infinitum I"),
+        log_family(1250, 45, "Infinitum II"),
+        log_family(1300, 45, "Infinitum III"),
+        log_family(1350, 45, "Infinitum IV"),
+        log_family(1400, 45, "Infinitum V"),
+        log_family(1450, 45, "Infinitum VI"),
+        log_family(1500, 45, "Infinitum VII"),
+        log_family(1550, 45, "Infinitum VIII"),
+        log_family(1600, 45, "Infinitum IX"),
+        log_family(1650, 45, "Infinitum X"),
+        log_family(1700, 45, "Infinitum XI"),
+        log_family(1750, 45, "Infinitum XII")
+    ];
+
     declare saved "%uuid statShop": dict[num];
     declare global "%uuid stats": dict[num] = {};
 
@@ -41,7 +66,7 @@ playerevent join {
     }
 
     player.teleport(
-        (global "%uuid roomPos").shiftAllAxes(-6, 2, -6)
+        (global "%uuid roomPos").shiftAllAxes(-6, 3, -6)
     );
 
     player.sendMessage(s"");
@@ -51,10 +76,6 @@ playerevent join {
     player.sendMessage(s"<dark_gray>- <gray>You can double jump mid-air.");
     player.sendMessage(s"<yellow>Enjoy!");
 
-    // line entries: list[num] = [];
-    // for(line i of range(0, 39)) {
-    //     line avg = 0;
-    //     for(line j of range(1, 10)) {
     game.cloneRegion(
         loc(0, 3, 0),
         loc(50, 38, 50),
@@ -62,19 +83,6 @@ playerevent join {
         global "%uuid roomPos".shiftAllAxes(-25, -3, -25),
         ignoreAir = "False"
     );
-    //         avg += treegens.growArbitraryTree(i).len();
-    //     }
-    //     print(avg);
-    //     entries.append(avg / 10);
-    // }
-    // line entryTxt = "";
-    // for(line entry of entries) {
-    //     entryTxt += line entry;
-    //     entryTxt += ",";
-    // }
-    // player.sendMessage(
-    //     txt.parseExpression("<click:copy_to_clipboard:\"%var(entryTxt)\">click to copy</click>", allowed = "Full")
-    // );
 
     start treegens.growForPlayer();
 
@@ -108,19 +116,6 @@ function startup() {
         vec(1, 1, -1),    vec(1, 1, 0),    vec(1, 1, 1)
     ];
 
-    declare global log_families: list[log_family] = [
-        log_family(1, 0),
-        log_family(3, 6),
-        log_family(15, 12),
-        log_family(30, 18),
-        log_family(60, 24),
-        log_family(100, 30),
-        log_family(240, 36),
-        log_family(480, 42),
-        log_family(600, 48),
-        log_family(900, 54)
-    ];
-
     declare global woodTypeList: list[item] = [
         item("stripped_oak_wood"),
         item("stripped_spruce_wood"),
@@ -130,7 +125,8 @@ function startup() {
         item("stripped_pale_oak_wood"),
         item("pale_oak_wood"),
         item("stripped_birch_wood"),
-        item("stripped_dark_oak_wood")
+        item("stripped_dark_oak_wood"),
+        item("oak_wood")
     ];
 
     declare global roomPositions: list[loc] = [];
@@ -232,6 +228,12 @@ playerevent command {
     if(event.commandArgumentEquals("chat_game", 1) && player.hasPlotPermission(permission = "Owner")) {
         loops.setupChatGameHidden();
     }
+    if(event.commandArgumentEquals("setstatshop", 1) && player.hasPlotPermission(permission = "Owner")) {
+        line skill = event.commandArguments[2];
+        line lv = num.parse(event.commandArguments[3]);
+        saved "%uuid statShop"[skill] = lv;
+    }
+
 
     if(event.commandArgumentEquals("grant_logs", 1) && player.hasPlotPermission(permission = "Owner")) {
         line playerName = event.commandArguments[2];
@@ -247,7 +249,7 @@ playerevent command {
             line avg = 0;
             for(line j of range(1, 10)) {
                 game.cloneRegion(
-                    loc(0, 6, 0),
+                    loc(0, 4, 0),
                     loc(50, 37, 50),
                     loc(0, 6, 0),
                     global "%uuid roomPos".shiftAllAxes(-25, -1, -25),

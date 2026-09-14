@@ -39,7 +39,7 @@ namespace throwingaxe {
                 break;
             }
             pos = pos.shiftInDirection(1, direction = "Forward");
-            pos.y -= dy;
+            // pos.y -= dy;
             dy += 0.01;
 
             if(game.cpuUsage * 100 < 30 && dt % 3 == 1) {

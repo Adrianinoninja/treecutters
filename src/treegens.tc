@@ -17,12 +17,28 @@ namespace treegens {
     lunar = "lunar";
     solar = "solar";
     astral = "astral";
+    yggdrasil = "yggdrasil";
+
+
+    infinite = "infinite";
 
     function growArbitraryTree(
-        idx: num
+        idx: num,
+        treeType: str = "default"
     ): list[loc] {
         line individualSize = [tiny, small, medium, big, mega][(idx % 5) + 1];
-        line treeType = [oak, dark, cherry, warped, molten, aerial, lunar, solar, astral][(idx / 5) + 1];
+        if(idx >= 55) {
+            individualSize = "mega";
+        }
+        if(treeType == "default") {
+            line treeType = [
+                oak, dark, cherry, warped, molten, aerial, lunar, solar, astral, yggdrasil, 
+                infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, 
+                infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite,
+                infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, 
+                infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite
+            ][(idx / 5) + 1];
+        }
 
         line pos = global "%uuid roomPos".shiftAllAxes(
             num.random(-3, 3),
@@ -83,6 +99,27 @@ namespace treegens {
                 pos,
                 individualSize
             );
+        }
+        if(treeType == yggdrasil) {
+            return treegens.buildYggdrasilTree(
+                pos,
+                individualSize
+            );
+        }
+        if(treeType == infinite) {
+            line treeTypeSel: str = var.setToRandom(
+                oak,
+                dark,
+                cherry,
+                warped,
+                molten,
+                aerial,
+                lunar,
+                solar,
+                astral,
+                yggdrasil
+            );
+            return growArbitraryTree(idx, treeTypeSel);
         }
         return [];
     }
@@ -201,12 +238,8 @@ namespace treegens {
             line pathPos: loc;
             for(pathPos of path(root, targetLoc, 0.25)) {
                 pathPos = pathPos.align(align = "Block center", rotation = "Remove rotation", coords = "All coordinates");
-                line placed = 0;
                 if(game.getBlockMaterial(pathPos) == "air") {
-                    placed = 1;
-                }
-                game.setBlock(mat, pathPos);
-                if(placed == 1) {
+                    game.setBlock(mat, pathPos);
                     outputPositions.append(pathPos);
                     player.playSound(snd("Wood Place"), pathPos);
                     util.fastWait(1/(global "%uuid stats"["tree_growth"]));
@@ -395,7 +428,7 @@ namespace treegens {
         line endcaps = buildBranches(
             outputPositions,
             root,
-            height * 0.8,
+            height * 0.6,
             branchReqs,
             num.random(2, 4),
             0,
@@ -414,7 +447,7 @@ namespace treegens {
             buildBranches(
                 outputPositions,
                 endcap,
-                height * 0.3,
+                height * 0.1,
                 branchReqs,
                 num.random(2, 4),
                 0,
@@ -652,6 +685,70 @@ namespace treegens {
             num.random(2, 4),
             0,
             item("stripped_dark_oak_wood")
+        );
+
+        outputPositions = outputPositions.removeDuplicates() as list[loc];
+        outputPositions.removeAir();
+        
+        return outputPositions;
+    }
+
+
+
+    function buildYggdrasilTree(
+        root: loc,
+        size: str
+    ): list[loc] {
+        line svars = sizeVariables(size);
+        line logPositions = svars[1];
+        line height = svars[2];
+        line branchReqs = svars[3];
+        line outputPositions: list[loc] = [];
+
+        line dt = num.random(0, 3.14);
+        line lastRoot = root;
+
+
+        for(line t of range(0, height * 1.2, 0.4)) {
+            line dx = (t + dt).cos(unit = "Radians") * 2;
+            line dy = (t + dt).sin(unit = "Radians") * 2;
+            lastRoot = root.shiftAllAxes(dx, t, dy);
+            buildTrunk(
+                outputPositions,
+                lastRoot,
+                1,
+                logPositions,
+                item("oak_wood")
+            );
+            line midRoot = root.shiftAllAxes(0, t, 0);
+            buildTrunk(
+                outputPositions,
+                midRoot,
+                1,
+                logPositions,
+                item("oak_wood")
+            );
+            if(t % 4 == 1.2) {
+                buildBranches(
+                    outputPositions,
+                    lastRoot,
+                    num.min(height * 0.7, 6),
+                    branchReqs,
+                    num.random(1, 2),
+                    0,
+                    item("oak_wood")
+                );
+            }
+        }
+
+        line endcaps = buildBranches(
+            outputPositions,
+            lastRoot,
+            height * 0.7,
+            branchReqs,
+            num.random(2, 4),
+            0,
+            item("oak_wood")
         );
 
         outputPositions = outputPositions.removeDuplicates() as list[loc];

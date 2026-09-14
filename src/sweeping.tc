@@ -3,12 +3,13 @@ import util;
 
 type log_family: {
     value: num,
-    toughness: num
+    toughness: num,
+    name: str
 };
 
 extend log_family {
-    function constructor(value: num, toughness: num): log_family {
-        return { value: value, toughness: toughness } as log_family;
+    function constructor(value: num, toughness: num, name: str): log_family {
+        return { value: value, toughness: toughness, name: name } as log_family;
     }
 }
 
@@ -92,6 +93,7 @@ namespace sweeping {
         if(mat != "air" && mat != "light" && !global "%uuid brokenLogs".contains(block)) {
             global "%uuid brokenLogs".append(block);
             saved "%uuid logs" += logValue * (global "%uuid stats"["fortune"] + 1);
+            declare saved "%uuid true_logs" += 1;
         }
         game.breakBlock(block);
         
@@ -108,6 +110,7 @@ namespace sweeping {
                 if(mat2 != "air" && !global "%uuid brokenLogs".contains(block2)) {
                     global "%uuid brokenLogs".append(block2);
                     saved "%uuid logs" += logValue * (global "%uuid stats"["fortune"] + 1);
+                    saved "%uuid true_logs" += 1;
                     if(game.cpuUsage * 100 < 30) {
                         start blockFallAnim(block2, mat);
                     }

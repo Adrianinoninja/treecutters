@@ -10,6 +10,7 @@ namespace statShopIcon {
         polynomialPrice: list[num] = [];
         maxLevel: num = 50;
         priceBrackets: list[num] = [];
+        levelReq: num = 0;
     };
 }
 
@@ -39,6 +40,7 @@ namespace statShopIcon.treeGrowthSpeed {
     basePrice = 30;
     priceScaling = 1.4;
     maxLevel = 20;
+    levelReq = 6;
 }
 
 namespace statShopIcon.jumpHeight {
@@ -49,7 +51,9 @@ namespace statShopIcon.jumpHeight {
     basePrice = 100;
     priceScaling = 1.5;
     maxLevel = 4;
+    levelReq = 3;
 }
+
 
 namespace statShopIcon.treeType {
     material = "jungle_sapling";
@@ -67,7 +71,21 @@ namespace statShopIcon.treeType {
         290221,24758,135589,309243,577550,
         151739,36228,176622,366407,743620,
         497044,97572,486084,1237604,1652486, 
-        2410494,192148,1239852,1978089,2450283];
+        2410494,192148,1239852,1978089,2450283,
+        3193494,401102,1950193,4012904,8401355,
+        25000000,500000,1000000,3000000,9000000,
+        12000000,16000000,22000000,30000000,40000000,
+        50000000,60000000,70000000,80000000,90000000,
+        100000000,110000000,120000000,130000000,140000000,
+        150000000,160000000,170000000,180000000,190000000,
+        200000000,220000000,240000000,260000000,280000000,
+        300000000,330000000,360000000,390000000,420000000,
+        500000000,540000000,580000000,620000000,640000000,
+        700000000,750000000,800000000,850000000,90000000,
+        900000000,930000000,960000000,975000000,990000000,
+        1000000000
+    ];
+    maxLevel = 100000000;
 }
 
 namespace statShopIcon.speed {
@@ -78,6 +96,29 @@ namespace statShopIcon.speed {
     basePrice = 100;
     priceScaling = 1.25;
     maxLevel = 10;
+    levelReq = 11;
+}
+
+namespace statShopIcon.abilityCooldown {
+    material = "clock";
+    name = "Throwing Axe Cooldown";
+    stat = "ability_cooldown";
+    amount = 1;
+    basePrice = 300;
+    priceScaling = 3;
+    maxLevel = 5;
+    levelReq = 16;
+}
+
+namespace statShopIcon.swingRange {
+    material = "iron_axe";
+    name = "Swing Range";
+    stat = "swing_range";
+    amount = 0.5;
+    basePrice = 1000;
+    priceScaling = 4;
+    maxLevel = 5;
+    levelReq = 21;
 }
 
 import statShopIcon;
@@ -87,10 +128,15 @@ import stats;
 
 namespace statShop {
     function openMenu() {
-        line inv = inventory.tiledMenu(1);
+        line inv = inventory.tiledMenu(2);
 
         line slot = 1;
         for(line iconKey of namespace.getKeys(statShopIcon)) {
+            line levelReq = statShopIcon[iconKey].levelReq;
+            if(global "%uuid stats"["tree_type"] < levelReq) {
+                continue;
+            }
+
             line name = statShopIcon[iconKey].name;
             line material = statShopIcon[iconKey].material;
             line cost = statShopIcon[iconKey].basePrice * num.exponent(
@@ -128,7 +174,7 @@ namespace statShop {
             icon = icon.setModel(material);
             icon = icon.setName(s"<green>%var(name)");
             icon = icon.addLore(s"<dark_gray>Level %var(level)");
-            if(prestigePoint != -1 && cost != -1 && ((level + 1) % prestigePoint == 0)) {
+            if(prestigePoint != -1 && cost != -1 && ((level + 1) % prestigePoint == 0) && level <= 50) {
                 icon = icon.addLore(s"");
                 icon = icon.addLore(s"<green><bold>PRESTIGE!");
                 icon = icon.addLore(s"<gray>Buying this upgrade will <red>reset");
@@ -167,8 +213,9 @@ namespace statShop {
                 saved "%uuid statShop"[iconKey] += 1;
 
                 if(iconKey == "treeType") {
-                    while(global "%uuid treeRegenerating" == 1) {
-                        wait();
+                    openMenu();
+                    if(global "%uuid treeRegenerating" == 1) {
+                        return;
                     }
                     game.cloneRegion(
                         loc(0, 6, 0),
@@ -184,8 +231,6 @@ namespace statShop {
                     saved "%uuid logs" = 0;
                 }
             }
-
-            openMenu();
             stats.computeStats();
             
 

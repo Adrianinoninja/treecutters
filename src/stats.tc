@@ -21,6 +21,8 @@ namespace stats {
 
         player.setMovementAttribute(0.2 + (stats["walk_speed"] * 0.02), attr = "Walking speed", valueType = "Direct");
 
+        player.setReachAttribute(4 + stats["swing_range"], attr = "Block interaction range", valueType = "Direct");
+
         global "%uuid stats" = stats;
     }
 }
