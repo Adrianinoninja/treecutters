@@ -1,5 +1,6 @@
 import stats;
 import util;
+import abils;
 
 playerevent chat {
     if(chatGameSolution.len() != 0 && event.message.matches(global chatGameSolution)) {
@@ -9,7 +10,7 @@ playerevent chat {
         if(global "%uuid stats"["tree_type"] >= 55) {
             line logInc = logValue * (6 * 225);
         }
-        
+
         // birthday
         logInc = logInc * 1.15;
 
@@ -123,6 +124,7 @@ namespace loops {
 
             updatePlayerInv();
         }
+        abils.turret();
     }
 
     function createChatTag(level: num): txt {

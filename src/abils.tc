@@ -1,0 +1,24 @@
+import sweeping;
+import throwingaxe;
+
+namespace abils {
+    function turret() {
+        if(game.ticksSinceStartup % (80 - global "%uuid stats"["turret"]) == 0 && global "%uuid stats"["turret"] > 0) {
+            line diff = global "%uuid blocksToBreak";
+            diff.removeValue(global "%uuid brokenLogs");
+            
+            line rngBlock = var.setToRandom(diff) as loc;
+
+            line blocks = sweeping.getBlockOrders(
+                (global "%uuid stats")["tree_type"],
+                rngBlock,
+                (global "%uuid stats")["sweep"]
+            );
+
+            start throwingaxe.spawnTemporaryBeam(rngBlock, player.midpointLocation);
+
+            sweeping.safeBreak(rngBlock);
+            sweeping.executeSweep(saved "%uuid logs", blocks);
+        }
+    }
+}

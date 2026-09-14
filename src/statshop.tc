@@ -13,6 +13,7 @@ namespace statShopIcon {
         maxLevel: num = 50;
         priceBrackets: list[num] = [];
         levelReq: num = 0;
+        description: list[str] = [];
     };
 }
 
@@ -123,6 +124,18 @@ namespace statShopIcon.swingRange {
     levelReq = 21;
 }
 
+namespace statShopIcon.turret {
+    material = "dispenser";
+    name = "Turret";
+    stat = "turret";
+    amount = 1;
+    basePrice = 40000;
+    priceScaling = 2;
+    maxLevel = 20;
+    levelReq = 26;
+    description: list[str] = ["You automatically fire a lazer,", "breaking a part of your tree.", "Upgrades increase the frequency", "the turret fires."];
+}
+
 import statShopIcon;
 import util;
 import treegens;
@@ -208,6 +221,12 @@ namespace statShop {
             icon = icon.setModel(material);
             icon = icon.setName(s"<green>%var(name)");
             icon = icon.addLore(s"<dark_gray>Level %var(level)");
+            if(!statShopIcon[iconKey].description.sizeEquals(0)) {
+                icon = icon.addLore(s"<gray>");
+                for(line loreLine of statShopIcon[iconKey].description) {
+                    icon = icon.addLore(s"<gray>%var(loreLine)");
+                }
+            }
             if(prestigePoint != -1 && cost != -1 && ((level + 1) % prestigePoint == 0) && level <= 50) {
                 icon = icon.addLore(s"");
                 icon = icon.addLore(s"<green><bold>PRESTIGE!");

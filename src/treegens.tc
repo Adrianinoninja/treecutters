@@ -132,7 +132,7 @@ namespace treegens {
 
         global "%uuid brokenLogs" = [];
         declare global "%uuid blocksToBreak" = treegens.growArbitraryTree(global "%uuid stats"["tree_type"]);
-        player.playSound(snd("Creaking Attack"));
+        player.playSound(snd("Creaking Attack"));   
         global "%uuid treeRegenerating" = 0;
     }
 
