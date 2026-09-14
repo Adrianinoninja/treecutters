@@ -42,7 +42,7 @@ namespace statShopIcon.treeGrowthSpeed {
     amount = 1;
     basePrice = 30;
     priceScaling = 1.4;
-    maxLevel = 20;
+    maxLevel = 30;
     levelReq = 6;
 }
 
@@ -141,8 +141,8 @@ namespace statShopIcon.cutoffRate {
     name = "Cut-off Rate";
     stat = "cutoff_rate";
     amount = 0.01;
-    basePrice = 100000;
-    priceScaling = 1.5;
+    basePrice = 50000;
+    priceScaling = 3;
     maxLevel = 10;
     levelReq = 31;
     description: list[str] = ["Each tier makes trees require", "1% less wood to be considered fully cut", "down."];

@@ -125,7 +125,7 @@ namespace throwingaxe {
             }
             line blocks = sweeping.getBlockOrders(
                 (global "%uuid stats")["tree_type"], 
-                adj, 
+                adj,
                 (global "%uuid stats")["sweep"]
             );
             sweeping.safeBreak(adj);

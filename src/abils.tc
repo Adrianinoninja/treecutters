@@ -9,6 +9,10 @@ namespace abils {
 
             line rngBlock = var.setToRandom(diff) as loc;
 
+            if(rngBlock == 0) {
+                return;
+            }
+
             line blocks = sweeping.getBlockOrders(
                 (global "%uuid stats")["tree_type"],
                 rngBlock,
@@ -17,7 +21,9 @@ namespace abils {
             line t2: list[loc] = blocks.flatten();
             t2 = t2.trim(1, (t2.len().root(1.5)) + 1) as list[loc];
 
-            start throwingaxe.spawnTemporaryBeam(rngBlock, player.midpointLocation);
+            line l1 = player.midpointLocation;
+            line l2 = rngBlock;
+            // start throwingaxe.spawnTemporaryBeam(l1, l2);
 
             sweeping.safeBreak(rngBlock);
             sweeping.executeSweepFlattened(saved "%uuid logs", t2);
