@@ -22,7 +22,7 @@ namespace statShopIcon.sweep {
     stat = "sweep";
     basePrice = 15;
     priceScaling = 1.15;
-    maxLevel = 120;
+    maxLevel = 110;
 }
 
 namespace statShopIcon.logFortune {
@@ -83,7 +83,7 @@ namespace statShopIcon.treeType {
         200000000,220000000,240000000,260000000,280000000,
         300000000,330000000,360000000,390000000,420000000,
         500000000,540000000,580000000,620000000,640000000,
-        700000000,750000000,800000000,850000000,90000000,
+        700000000,750000000,800000000,850000000,900000000,
         900000000,930000000,960000000,975000000,990000000,
         1000000000
     ];
@@ -195,19 +195,12 @@ namespace statShop {
             line prestigePoint = statShopIcon[iconKey].prestigeEvery;
 
             line maxLevel = statShopIcon[iconKey].maxLevel;
-            // remove me
-            if(iconKey == "sweep") {
-                maxLevel = 110;
-            }
+            
             if(
                 level >= maxLevel
                 || (level >= priceBrackets.len() && priceBrackets.len() != 0)
             ) {
                 cost = -1;
-            }
-            // remove me
-            if(cost == 25000000) {
-                cost = 10000000;
             }
 
             line costFmt = util.numberFormat(cost);
