@@ -128,7 +128,7 @@ namespace treegens {
         } 
 
         declare global "%uuid treeRegenerating" = 1;
-        wait(20);
+        wait(10);
 
         global "%uuid brokenLogs" = [];
         declare global "%uuid blocksToBreak" = treegens.growArbitraryTree(global "%uuid stats"["tree_type"]);

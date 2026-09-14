@@ -106,6 +106,10 @@ namespace loops {
 
             
             generateScoreboard();
+
+            if(game.getBlockMaterial(player.location) != "air" && game.getBlockMaterial(player.eyeLocation) != "air") {
+                player.teleport(player.location.shiftAllAxes(0, 2, 0));
+            }
         }
 
 

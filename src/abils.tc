@@ -3,7 +3,8 @@ import throwingaxe;
 
 namespace abils {
     function turret() {
-        if(game.ticksSinceStartup % (80 - global "%uuid stats"["turret"]) == 0 && global "%uuid stats"["turret"] > 0) {
+        if(game.ticksSinceStartup % (80 - global "%uuid stats"["turret"]) == 0 && global "%uuid stats"["turret"] > 0 && global "%uuid turretTimer" > 0) {
+            global "%uuid turretTimer" -= 1;
             line diff = global "%uuid blocksToBreak";
             diff.removeValue(global "%uuid brokenLogs");
 
@@ -19,8 +20,6 @@ namespace abils {
                 (global "%uuid stats")["sweep"]
             );
             line t2: list[loc] = blocks.flatten();
-            t2 = t2.trim(1, (t2.len().root(1.5)) + 1) as list[loc];
-
             line l1 = player.midpointLocation;
             line l2 = rngBlock;
             // start throwingaxe.spawnTemporaryBeam(l1, l2);

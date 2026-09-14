@@ -16,17 +16,17 @@ playerevent join {
         log_family(600, 36, "Astral"),
         log_family(900, 40, "Yggdrasil"),
         log_family(1200, 45, "Infinitum I"),
-        log_family(1250, 45, "Infinitum II"),
-        log_family(1300, 45, "Infinitum III"),
-        log_family(1350, 45, "Infinitum IV"),
-        log_family(1400, 45, "Infinitum V"),
-        log_family(1450, 45, "Infinitum VI"),
-        log_family(1500, 45, "Infinitum VII"),
-        log_family(1550, 45, "Infinitum VIII"),
-        log_family(1600, 45, "Infinitum IX"),
-        log_family(1650, 45, "Infinitum X"),
-        log_family(1700, 45, "Infinitum XI"),
-        log_family(1750, 45, "Infinitum XII")
+        log_family(1300, 45, "Infinitum II"),
+        log_family(1400, 45, "Infinitum III"),
+        log_family(1500, 45, "Infinitum IV"),
+        log_family(1600, 45, "Infinitum V"),
+        log_family(1700, 45, "Infinitum VI"),
+        log_family(1800, 45, "Infinitum VII"),
+        log_family(1900, 45, "Infinitum VIII"),
+        log_family(2000, 45, "Infinitum IX"),
+        log_family(2100, 45, "Infinitum X"),
+        log_family(2200, 45, "Infinitum XI"),
+        log_family(2300, 45, "Infinitum XII")
     ];
 
     declare saved "%uuid statShop": dict[num];
@@ -238,6 +238,7 @@ playerevent movementKeyChange {
         player.launchForward(9/5 * (global "%uuid stats"["jump_height"]) + 9/5, addToCurrentVel = "True");
 
         declare global "%uuid canDoubleJump" = 0;
+        declare global "%uuid turretTimer" = 5;
     }
 }
 
