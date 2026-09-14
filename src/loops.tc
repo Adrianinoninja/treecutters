@@ -6,6 +6,13 @@ playerevent chat {
         allPlayers.sendMessage(s"<green><bold>WINNER! <reset><aqua>%default <gray>got the answer of %var(chatGameSolution)!");
         line logValue = log_families[num.floor(global "%uuid stats"["tree_type"]/5)+1]["value"];
         line logInc = logValue * ((num.floor(global "%uuid stats"["tree_type"]%5)+1) * 225);
+        if(global "%uuid stats"["tree_type"] >= 55) {
+            line logInc = logValue * (6 * 225);
+        }
+        
+        // birthday
+        logInc = logInc * 1.15;
+
         line logRender = util.numberFormat(logInc);
         allPlayers.sendMessage(s"<dark_gray>The person earned %var(logRender) logs!");
         chatGameSolution = "";
@@ -62,7 +69,9 @@ namespace loops {
             }
 
             line cpu = game.cpuUsage * 100;
-            tl += s"\n<gray>CPU Usage: <green>%var(cpu)<dark_green>%\n";
+            line pc = game.playerCount;
+            tl += s"\n<gray>Players Online: <aqua>%var(pc)\n";
+            tl += s"<gray>CPU Usage: <green>%var(cpu)<dark_green>%\n";
 
             if(game.cpuUsage * 100 > 40) {
                 tl += s"<red>LAG: Some visual effects have been disabled for performance.\n";

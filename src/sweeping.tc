@@ -89,10 +89,15 @@ namespace sweeping {
             return;
         }
         line logValue = log_families[num.floor(global "%uuid stats"["tree_type"]/5)+1]["value"];
+        logValue *= global "%uuid stats"["fortune"] + 1;
+        
+        // birthday
+        logValue *= 1.15;
+
         line mat = game.getBlockMaterial(block);
         if(mat != "air" && mat != "light" && !global "%uuid brokenLogs".contains(block)) {
             global "%uuid brokenLogs".append(block);
-            saved "%uuid logs" += logValue * (global "%uuid stats"["fortune"] + 1);
+            saved "%uuid logs" += logValue;
             declare saved "%uuid true_logs" += 1;
         }
         game.breakBlock(block);
@@ -109,7 +114,7 @@ namespace sweeping {
                 line mat2 = game.getBlockMaterial(block2);
                 if(mat2 != "air" && !global "%uuid brokenLogs".contains(block2)) {
                     global "%uuid brokenLogs".append(block2);
-                    saved "%uuid logs" += logValue * (global "%uuid stats"["fortune"] + 1);
+                    saved "%uuid logs" += logValue;
                     saved "%uuid true_logs" += 1;
                     if(game.cpuUsage * 100 < 30) {
                         start blockFallAnim(block2, mat);

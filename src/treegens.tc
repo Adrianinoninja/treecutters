@@ -112,9 +112,7 @@ namespace treegens {
                 dark,
                 cherry,
                 warped,
-                molten,
                 aerial,
-                lunar,
                 solar,
                 astral,
                 yggdrasil

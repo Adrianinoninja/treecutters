@@ -1,3 +1,5 @@
+import loops;
+
 namespace statShopIcon {
     schema: namespace {
         material: str;
@@ -20,7 +22,7 @@ namespace statShopIcon.sweep {
     stat = "sweep";
     basePrice = 15;
     priceScaling = 1.15;
-    maxLevel = 100;
+    maxLevel = 120;
 }
 
 namespace statShopIcon.logFortune {
@@ -73,7 +75,7 @@ namespace statShopIcon.treeType {
         497044,97572,486084,1237604,1652486, 
         2410494,192148,1239852,1978089,2450283,
         3193494,401102,1950193,4012904,8401355,
-        25000000,500000,1000000,3000000,9000000,
+        10000000,500000,1000000,3000000,9000000,
         12000000,16000000,22000000,30000000,40000000,
         50000000,60000000,70000000,80000000,90000000,
         100000000,110000000,120000000,130000000,140000000,
@@ -128,7 +130,37 @@ import stats;
 
 namespace statShop {
     function openMenu() {
-        line inv = inventory.tiledMenu(2);
+        line inv = inventory.tiledMenu(3);
+
+        if(global "%uuid stats"["tree_type"] >= 7) {
+            if(player.y >= 33) {
+                line city_icon = item("gold_block");
+                city_icon = city_icon.setName(s"<gold>The City");
+                city_icon = city_icon.setLore([
+                    s"<gray>The City is a global hub for all players",
+                    s"<gray>to meet, communicate, and trade.",
+                    s"",
+                    s"<yellow>Click to warp!" 
+                ]);
+                city_icon = city_icon.setTag("warp", "city");
+                inv.setItem(27, city_icon);
+            } else {
+                line city_icon = item("grass_block");
+                city_icon = city_icon.setName(s"<green>Home");
+                city_icon = city_icon.setLore([
+                    s"<gray>Your Home Base with your tree.",
+                    s"",
+                    s"<yellow>Click to warp!" 
+                ]);
+                city_icon = city_icon.setTag("warp", "home");
+                inv.setItem(27, city_icon);
+            }
+        }
+
+        line lbIcon = item("cherry_hanging_sign");
+        lbIcon = lbIcon.setName(s"<gold>Leaderboard");
+        lbIcon = lbIcon.setLore(leaderboardLore());
+        inv.setItem(26, lbIcon);
 
         line slot = 1;
         for(line iconKey of namespace.getKeys(statShopIcon)) {
@@ -162,11 +194,20 @@ namespace statShop {
             }
             line prestigePoint = statShopIcon[iconKey].prestigeEvery;
 
+            line maxLevel = statShopIcon[iconKey].maxLevel;
+            // remove me
+            if(iconKey == "sweep") {
+                maxLevel = 110;
+            }
             if(
-                level >= statShopIcon[iconKey].maxLevel 
+                level >= maxLevel
                 || (level >= priceBrackets.len() && priceBrackets.len() != 0)
             ) {
                 cost = -1;
+            }
+            // remove me
+            if(cost == 25000000) {
+                cost = 10000000;
             }
 
             line costFmt = util.numberFormat(cost);
@@ -231,9 +272,39 @@ namespace statShop {
                     saved "%uuid logs" = 0;
                 }
             }
+            openMenu();
             stats.computeStats();
             
 
         }
+    }
+
+    function leaderboardLore(): list[txt] {
+        if(!var.exists(leaderboard)) {
+            declare saved leaderboard: dict[num] = {};
+            declare saved leaderboardNames: dict[str] = {};
+        }
+        
+        for(line p of game.plotPlayerUUIDs) {
+            select playersByName(p);
+            leaderboard[p] = global "%uuid stats"["tree_type"];
+            leaderboardNames[p] = selected.name.clearFormatting();
+            select reset;
+        }
+
+        leaderboard = leaderboard.sort("type" = "Sort by Value", order = "Descending");
+        
+        line txts: list[txt] = [];
+        line idx = 1;
+        for(line uuid, line value of leaderboard) {
+            line name = leaderboardNames[uuid];
+            line tag = loops.createChatTag(value);
+            txts.append(s"<dark_gray>%var(idx). %var(tag) <white>%var(name) ");
+            idx++;
+            if(idx > 10) {
+                break;
+            }
+        }
+        return txts;
     }
 }

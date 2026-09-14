@@ -70,11 +70,16 @@ playerevent join {
     );
 
     player.sendMessage(s"");
+    player.sendMessage(s"");
     player.sendMessage(s"<green>Welcome to Treecutting!");
     player.sendMessage(s"<dark_gray>- <gray>Swap Hands to open your upgrade menu.");
     player.sendMessage(s"<dark_gray>- <gray>Right Click to throw your axe.");
     player.sendMessage(s"<dark_gray>- <gray>You can double jump mid-air.");
     player.sendMessage(s"<yellow>Enjoy!");
+    player.sendMessage(s"");
+    player.sendMessage(s"");
+    player.sendMessage(s"<yellow><bold>PROMO! <reset><gray>It is the creator (Endistic)'s birthday, all log yields today are +15%!");
+    
 
     game.cloneRegion(
         loc(0, 3, 0),
@@ -173,6 +178,7 @@ playerevent placeBlock {
 import throwingaxe;
 
 playerevent rightClick {
+    event.cancel();
     if(player.mainHandItem.getTag("axe") != 0) {
         if(player.getItemCooldown(player.mainHandItem) != 0) {
             endthread;
@@ -199,6 +205,18 @@ playerevent swapHands {
 }
 
 playerevent clickMenuSlot {
+    if(event.item.hasTag("warp", "home")) {
+        player.teleport(
+            (global "%uuid roomPos").shiftAllAxes(-6, 3, -6)
+        );
+        player.closeInventory();
+    }
+    if(event.item.hasTag("warp", "city")) {
+        player.teleport(
+            loc(73.4768, 5, 54.5637, 1.86, -90.99)
+        );
+        player.closeInventory();
+    }
     statShop.clickStatShopIcon();
 }
 
