@@ -100,15 +100,17 @@ namespace loops {
         if(game.ticksSinceStartup % 5 == global "%uuid hashCode" % 5) {
             line brokenSoFar = global "%uuid brokenLogs".len();
             line brokenReq = global "%uuid blocksToBreak".len();
-            line totalPerc = ((brokenSoFar / (brokenReq * 0.9)) * 100).round().min(100);
+            line totalPerc = ((brokenSoFar / (brokenReq * (0.9 - global "%uuid stats"["cutoff_rate"]))) * 100).round().min(100);
             line fmtLogs = util.numberFormat(saved "%uuid logs");
             player.sendActionBar(s"<dark_green>╟ <green>%var(fmtLogs) Logs <dark_gray>| <gray>%var(totalPerc)%");
 
-            if(player.isGrounded()) {
-                global "%uuid canDoubleJump" = 1;
-            }
             
             generateScoreboard();
+        }
+
+
+        if(player.isGrounded()) {
+            global "%uuid canDoubleJump" = 1;
         }
 
         if(game.ticksSinceStartup % 20 == global "%uuid hashCode" % 20) {

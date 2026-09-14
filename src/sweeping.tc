@@ -80,6 +80,19 @@ namespace sweeping {
         }
     }
 
+    function executeSweepFlattened(
+        incrementOnBlock: var[num],
+        blocks: list[loc]
+    ): num {
+        blocks.removeDuplicates();
+
+        line blocksPerTick =  (blocks.len() / 10);
+        for(line block of blocks) {
+            safeBreak(block);
+            util.fastWait(1/blocksPerTick);
+        }
+    }
+
     function safeBreak(
         block: loc
     ) {
@@ -107,7 +120,7 @@ namespace sweeping {
         line brokenSoFar = global "%uuid brokenLogs".len();
         line brokenReq = global "%uuid blocksToBreak".len();
         if(
-            brokenSoFar / brokenReq >= 0.9
+            brokenSoFar / brokenReq >= 0.9 - global "%uuid stats"["cutoff_rate"]
         ) {
             start treeClearAnim(block);
             for(line block2 of global "%uuid blocksToBreak") {
