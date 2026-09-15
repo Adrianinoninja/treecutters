@@ -1,0 +1,83 @@
+import settingsMenu;
+import settings;
+
+namespace settings {
+    schema: namespace {
+        icon: str;
+        name: str;
+        description: list[str];
+        options: list[str];
+        defaultSetting: str;
+    };
+}
+
+namespace settings.helpfulTips {
+    icon = "acacia_boat";
+    name = "Helpful Tips";
+    description: list[str] = ["Whether to send the 'did you know'", "message in chat or not."];
+    options: list[str] = ["Enabled", "Disabled"];
+    defaultSetting = "Enabled";
+}
+
+namespace settingsMenu {
+    function initJoin() {
+        declare saved "%uuid settings": dict[str] = {};
+
+        for(line settingKey of namespace.getKeys(settings)) {
+            if(!saved "%uuid settings".hasKey(settingKey)) {
+                line defaultSetting = settings[settingKey].defaultSetting;
+                saved "%uuid settings"[settingKey] = defaultSetting;
+            }
+        }
+    }
+
+    function openMenu() {
+        line inv = inventory.tiledMenu(3);
+        line idx = 0;
+
+        for(line settingKey of namespace.getKeys(settings)) {
+            line iconModel = settings[settingKey].icon;
+            line name = settings[settingKey].name;
+            line desc = settings[settingKey].description;
+            line options = settings[settingKey].options as list[str];
+            line defaultSetting = settings[settingKey].defaultSetting;
+
+            line icon = item("acacia_boat");
+            icon = icon.setModel(iconModel);
+            icon = icon.setName(s"<green>%var(name)");
+            icon = icon.addLore(s"");
+            for(line l of desc) {
+                icon = icon.addLore(s"<gray>%var(l)");
+            }
+            icon = icon.addLore(s"");
+
+            line nextSetting: str = options[1];
+            for(line s of options) {
+                if(saved "%uuid settings"[settingKey] == s) {
+                    icon = icon.addLore(s"<blue>> <aqua>%var(s)");
+                    nextSetting = options[options.find(s) + 1] as str;
+                    if(var.equals(nextSetting, 0)) {
+                        nextSetting = (options[1]) as str;
+                    }
+                } else {
+                    icon = icon.addLore(s"<dark_gray>> <gray>%var(s)");
+                }
+            }
+
+            icon = icon.setTag("edit_setting", settingKey);
+            icon = icon.setTag("value", nextSetting);
+            inv.setItem(idx, icon);
+            idx++;
+        }
+
+        inv.openForSelection();
+    }
+
+    function click() {
+        line setting = event.clickedSlotItem.getTag("edit_setting") as str;
+        if(namespace.has_member(settings, setting)) {
+            saved "%uuid settings"[setting] = event.clickedSlotItem.getTag("value") as str;
+            openMenu();
+        }
+    }
+}

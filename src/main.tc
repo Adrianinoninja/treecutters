@@ -2,8 +2,11 @@ declare saved "%uuid logs": num;
 declare global "%uuid brokenLogs": list[loc];
 
 import stats;
+import settingsMenu;
 
 playerevent join {
+    settingsMenu.initJoin();
+
     declare global log_families: list[log_family] = [
         log_family(1, 0, "Oak"),
         log_family(3, 6, "Darkwood"),
@@ -105,13 +108,14 @@ playerevent leave {
 }
 
 import loops;
+import stocks;
 
 gameevent startup {
     startup();
 }
 
 function startup() {
-
+    stocks.init();
     declare global sweepVecs: list[vec] = [
         vec(-1, -1, -1), vec(-1, -1, 0), vec(-1, -1, 1),
         vec(-1, 0, -1),  vec(-1, 0, 0),  vec(-1, 0, 1),
@@ -238,6 +242,7 @@ playerevent clickMenuSlot {
         player.closeInventory();
     }
     statShop.clickStatShopIcon();
+    settingsMenu.click();
 }
 
 playerevent takeDamage {

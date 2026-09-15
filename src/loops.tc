@@ -99,7 +99,9 @@ namespace loops {
             s"Calc is short for calculator, for those new to the stream.",
             s"Meowing gives you a 0.000001% chance to instantly get a billion logs."
         );
-        allPlayers.sendMessage(s"<gold><bold>DID YOU KNOW? <reset><gray>%var(tip)");
+        select playersByCondition(saved "%uuid settings"["helpfulTips"] == "Enabled");
+        selected.sendMessage(s"<gold><bold>DID YOU KNOW? <reset><gray>%var(tip)");
+        select reset;
     }
     
     process playerLoop() {

@@ -1,0 +1,7 @@
+import stocks;
+
+namespace stocks {
+    function init() {
+        
+    }
+}

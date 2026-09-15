@@ -164,6 +164,7 @@ import statShopIcon;
 import util;
 import treegens;
 import stats;
+import settingsMenu;
 
 namespace statShop {
     function openMenu() {
@@ -198,6 +199,11 @@ namespace statShop {
         lbIcon = lbIcon.setName(s"<gold>Leaderboard");
         lbIcon = lbIcon.setLore(leaderboardLore());
         inv.setItem(26, lbIcon);
+
+        line settingsIcon = item("iron_ingot");
+        settingsIcon = settingsIcon.setName(s"<#cccccc>Settings");
+        settingsIcon = settingsIcon.setTag("settings_menu", 1);
+        inv.setItem(25, settingsIcon);
 
         line slot = 1;
         for(line iconKey of namespace.getKeys(statShopIcon)) {
@@ -278,6 +284,9 @@ namespace statShop {
     }
 
     function clickStatShopIcon() {
+        if(event.clickedSlotItem.hasTag("settings_menu")) {
+            settingsMenu.openMenu();
+        }
         line iconKey = event.clickedSlotItem.getTag("upgrade") as str;
         if(namespace.has_member(statShopIcon, iconKey)) {
             line cost = event.clickedSlotItem.getTag("cost") as num;
@@ -309,8 +318,6 @@ namespace statShop {
             }
             openMenu();
             stats.computeStats();
-            
-
         }
     }
 
