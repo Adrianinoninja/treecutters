@@ -1,7 +1,132 @@
-import stocks;
+import stocksMenu;
+import util;
 
-namespace stocks {
+
+playerevent move {
+    if(player.location.getDistance(loc(103, 5, 41)) <= 12) {
+        stocksMenu.updateValue();
+    }
+}
+
+namespace stocksMenu {
     function init() {
-        
+        if(stockValue == 0) {
+            declare saved stockValue: num = 1_000_000;
+        }
+        updateValue();
+    }
+
+    function tick() {
+        if(game.ticksSinceStartup % 300 == 60) {
+            line rng = num.random(1, 12, rounding = "Whole number");
+            if(var.isInRange(rng, 1, 5)) {
+                line evnt: str = var.setToRandom(
+                    ""
+                ) as str;
+                line rng = num.random(0.02, 0.05, rounding = "Decimal number");
+                line rng100 = rng * 100;
+                select playersByCondition(saved "%uuid settings"["stockTickerAnnouncementsGlobal"] == "Enabled");
+                selected.sendMessage(s"<green><bold>STOCK TICKER! <reset><gray>%var(evnt) <green>+%var(rng100)%");
+                select reset;
+                boom(rng);
+            }
+            if(var.isInRange(rng, 6, 10)) {
+                line evnt: str = var.setToRandom(
+                    ""
+                ) as str;
+                line rng = num.random(0.03, 0.06, rounding = "Decimal number");
+                line rng100 = rng * 100;
+                fall(rng);
+                select playersByCondition(saved "%uuid settings"["stockTickerAnnouncementsGlobal"] == "Enabled");
+                selected.sendMessage(s"<red><bold>STOCK TICKER! <reset><gray>%var(evnt) <red>-%var(rng100)%");
+                select reset;
+            }
+            if(rng == 11) {
+                line evnt: str = var.setToRandom(   
+                    ""
+                ) as str;
+                line rng = num.random(0.1, 0.4, rounding = "Decimal number");
+                line rng100 = rng * 100;
+                boom(rng);
+                select playersByCondition(saved "%uuid settings"["stockTickerAnnouncementsGlobal"] == "Enabled");
+                selected.sendMessage(s"<red><bold>STOCK TICKER! <reset><gray>%var(evnt) <red>-%var(rng100)%");
+                select reset;
+            }
+            if(rng == 12) {
+                line evnt: str = var.setToRandom(   
+                    ""
+                ) as str;
+                line rng = num.random(0.1, 0.4, rounding = "Decimal number");
+                line rng100 = rng * 100;
+                fall(rng);
+                select playersByCondition(saved "%uuid settings"["stockTickerAnnouncementsGlobal"] == "Enabled");
+                selected.sendMessage(s"<red><bold>STOCK TICKER! <reset><gray>%var(evnt) <red>-%var(rng100)%");
+                select reset;
+            }
+            updateValue();
+        }
+    }
+
+    function boom(scale: num = 0.1) {
+        stockValue *= 1 + scale;
+        updateValue();
+        if(stockValue >= 5_000_000) {
+            stockValue = 5_000_000;
+        }
+    }
+
+    function fall(scale: num = 0.1) {
+        stockValue *= 1 / (1 + scale);
+        updateValue();
+        if(stockValue <= 100000) {
+            stockValue = 100000;
+        }
+    }
+
+    function clicks() {
+        if(event.blockLocation.getDistance(loc(103, 5, 41)) <= 1) {
+            if(saved "%uuid logs" >= stockValue) {
+                declare saved "%uuid stockCount" += 1;
+                saved "%uuid logs" -= stockValue;
+                boom(num.random(0.001, 0.003, rounding = "Decimal number"));
+            }
+        }
+        if(event.blockLocation.getDistance(loc(103, 5, 47)) <= 1) {
+            if(saved "%uuid stockCount" >= 1) {
+                saved "%uuid stockCount"--;
+                saved "%uuid logs" += stockValue;
+                fall(num.random(0.001, 0.002, rounding = "Decimal number"));
+            }
+        }
+    }
+
+    function updateValue() {
+        game.changeSignText(
+            loc(101, 4, 44),
+            4,
+            s"<green>Value: " + util.numberFormat(stockValue)
+        );
+        for(line player of game.plotPlayerUUIDs) {
+            select playersByName(player);
+            selected.displaySignText(
+                loc(102, 4, 41),
+                [
+                    s"",
+                    s"<green><bold>BUY",
+                    s"",
+                    s"<gray>Your Stocks: " + util.numberFormat(saved "%uuid stockCount")
+                ]
+            );
+            selected.displaySignText(
+                loc(102, 4, 47),
+                [
+                    s"",
+                    s"<red><bold>SELL",
+                    s"",
+                    s"<gray>Your Stocks: " + util.numberFormat(saved "%uuid stockCount")
+                ]
+            );
+            select reset;
+        }
     }
 }

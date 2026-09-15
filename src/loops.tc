@@ -37,6 +37,8 @@ playerevent chat {
     }
 }
 
+import stocksMenu;
+
 namespace loops {
     process executePlayerLoops() {
         repeat {
@@ -47,6 +49,8 @@ namespace loops {
             if(game.ticksSinceStartup % 1000 == 0) {
                 setupChatGame();
             }
+
+            stocksMenu.tick();
 
             wait(1);
         }
@@ -380,6 +384,7 @@ namespace loops {
         line hyperEnchLogs = ((logs / 64 / 64) % 64);
         line hyperEnch2Logs = ((logs / 64 / 64 / 64) % 64);
         line hyperEnch3Logs = ((logs / 64 / 64 / 64 / 64) % 64);
+        line hyperEnch4Logs = ((logs / 64 / 64 / 64 / 64 / 64) % 64);
 
         line basicLogItem = item("stripped_oak_wood", basicLogs);
         basicLogItem = basicLogItem.setName(s"");
@@ -411,7 +416,21 @@ namespace loops {
         hyperEnch3LogItem = hyperEnch3LogItem.setName(s"");
         hyperEnch3LogItem = hyperEnch3LogItem.setTooltipVisible(tooltip = "Disable");
 
+
+        line hyperEnch4LogItem = item("stripped_crimson_stem", hyperEnch4Logs);
+        hyperEnch4LogItem = hyperEnch4LogItem.setHiddenComponents("enchantments");
+        hyperEnch4LogItem = hyperEnch4LogItem.addEnchant("sharpness", 1);
+        hyperEnch4LogItem = hyperEnch4LogItem.setName(s"");
+        hyperEnch4LogItem = hyperEnch4LogItem.setTooltipVisible(tooltip = "Disable");
+
+        for(line r of range(2, 9)) {
+            player.setItemInSlot("air" as item, r);
+        }
         line slot = 2;
+        if(hyperEnch4Logs > 1) {
+            player.setItemInSlot(hyperEnch4LogItem, slot);
+            slot++;
+        }
         if(hyperEnch3Logs > 1) {
             player.setItemInSlot(hyperEnch3LogItem, slot);
             slot++;

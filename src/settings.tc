@@ -19,21 +19,38 @@ namespace settings.helpfulTips {
     defaultSetting = "Enabled";
 }
 
+namespace settings.stockTickerAnnouncementsGlobal {
+    icon = "gold_ingot";
+    name = "Stock Ticker Announcements";
+    description: list[str] = ["Whether to send stock ticker announcements whenever an event occurs."];
+    options: list[str] = ["Enabled", "Disabled"];
+    defaultSetting = "Disabled";
+}
+
 namespace settingsMenu {
     function initJoin() {
-        declare saved "%uuid settings": dict[str] = {};
+        if(!var.exists(saved "%uuid settings")) {
+            declare saved "%uuid settings": dict[str] = {};
+        }
 
         for(line settingKey of namespace.getKeys(settings)) {
             if(!saved "%uuid settings".hasKey(settingKey)) {
                 line defaultSetting = settings[settingKey].defaultSetting;
                 saved "%uuid settings"[settingKey] = defaultSetting;
             }
-        }
+        }        
     }
 
     function openMenu() {
+        for(line settingKey of namespace.getKeys(settings)) {
+            if(!saved "%uuid settings".hasKey(settingKey)) {
+                line defaultSetting = settings[settingKey].defaultSetting;
+                saved "%uuid settings"[settingKey] = defaultSetting;
+            }
+        }
+
         line inv = inventory.tiledMenu(3);
-        line idx = 0;
+        line idx = 1;
 
         for(line settingKey of namespace.getKeys(settings)) {
             line iconModel = settings[settingKey].icon;
@@ -67,7 +84,8 @@ namespace settingsMenu {
             icon = icon.setTag("edit_setting", settingKey);
             icon = icon.setTag("value", nextSetting);
             inv.setItem(idx, icon);
-            idx++;
+
+            idx += 1;
         }
 
         inv.openForSelection();

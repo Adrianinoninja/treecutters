@@ -108,14 +108,14 @@ playerevent leave {
 }
 
 import loops;
-import stocks;
 
 gameevent startup {
+    stocksMenu.init();
     startup();
 }
 
 function startup() {
-    stocks.init();
+
     declare global sweepVecs: list[vec] = [
         vec(-1, -1, -1), vec(-1, -1, 0), vec(-1, -1, 1),
         vec(-1, 0, -1),  vec(-1, 0, 0),  vec(-1, 0, 1),
@@ -184,9 +184,11 @@ playerevent placeBlock {
 }
 
 import throwingaxe;
+import stocksMenu;
 
 playerevent rightClick {
     event.cancel();
+    stocksMenu.clicks();
     if(player.mainHandItem.getTag("axe") != 0) {
         if(player.getItemCooldown(player.mainHandItem) != 0) {
             endthread;
