@@ -103,9 +103,6 @@ namespace sweeping {
         }
         line logValue = log_families[num.floor(global "%uuid stats"["tree_type"]/5)+1]["value"];
         logValue *= global "%uuid stats"["fortune"] + 1;
-        
-        // birthday
-        logValue *= 1.15;
 
         line mat = game.getBlockMaterial(block);
         if(mat != "air" && mat != "light" && !global "%uuid brokenLogs".contains(block)) {
@@ -135,6 +132,7 @@ namespace sweeping {
                 }
                 game.breakBlock(block2);
             }
+            player.playSound(snd("Creaking Activate", 1, 0.5));
             start treegens.growForPlayer();
         }
     }

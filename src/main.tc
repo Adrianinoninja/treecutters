@@ -69,16 +69,6 @@ playerevent join {
         (global "%uuid roomPos").shiftAllAxes(-6, 3, -6)
     );
 
-    player.sendMessage(s"");
-    player.sendMessage(s"");
-    player.sendMessage(s"<green>Welcome to Treecutting!");
-    player.sendMessage(s"<dark_gray>- <gray>Swap Hands to open your upgrade menu.");
-    player.sendMessage(s"<dark_gray>- <gray>Right Click to throw your axe.");
-    player.sendMessage(s"<dark_gray>- <gray>You can double jump mid-air.");
-    player.sendMessage(s"<yellow>Enjoy!");
-    player.sendMessage(s"");
-    player.sendMessage(s"");
-    player.sendMessage(s"<yellow><bold>PROMO! <reset><gray>It is the creator (Endistic)'s birthday, all log yields today are +15%!");
     
 
     game.cloneRegion(
@@ -94,7 +84,20 @@ playerevent join {
 
 
     stats.computeStats();
+    
+    wait(60);
 
+
+    player.sendMessage(s"");
+    player.sendMessage(s"");
+    player.sendMessage(s"<green>Welcome to Treecutting!");
+    player.sendMessage(s"<dark_gray>- <gray>Swap Hands to open your upgrade menu.");
+    player.sendMessage(s"<dark_gray>- <gray>Right Click to throw your axe.");
+    player.sendMessage(s"<dark_gray>- <gray>You can double jump mid-air.");
+    player.sendMessage(s"<yellow>Enjoy!");
+    player.sendMessage(s"");
+    player.sendMessage(s"");
+    player.playSound(snd("Pling"));
 }
 
 playerevent leave {
@@ -156,6 +159,7 @@ function setupPositions() {
 
 import treegens;
 import sweeping;
+import statShopIcon;
 
 playerevent breakBlock {
     if(!event.blockEquals(global woodTypeList)) {
@@ -188,8 +192,24 @@ playerevent rightClick {
         start throwingaxe.throw(p);
         player.setItemCooldown(
             player.mainHandItem, 
-            10 - (global "%uuid stats"["ability_cooldown"])
+            10 - (global "%uuid stats"["ability_cooldown"]) + (global "%uuid stats"["multishot"] * 5)
         );
+
+        if(global "%uuid stats"["multishot"] > 0 && global "%uuid treeRegenerating" == 0 && global "%uuid turretTimer" > 0) {
+            line diff = global "%uuid blocksToBreak";
+            diff.removeValue(global "%uuid brokenLogs");
+
+            for(line x of range(1, global "%uuid stats"["multishot"])) {
+                wait(5);
+                line rngBlock = var.setToRandom(diff) as loc;
+                rngBlock = rngBlock.align(coords = "All coordinates", align = "Block center", rotation = "Remove rotation");
+                rngBlock.y -= 0.3;
+                start throwingaxe.throw(p, rngBlock);
+            }
+        }
+
+
+
     }
 }
 
@@ -243,9 +263,42 @@ playerevent movementKeyChange {
 }
 
 playerevent command {
+    if(event.commandArgumentEquals("city", 1)) {
+        player.teleport(
+            loc(73.4768, 5, 54.5637, 1.86, -90.99)
+        );
+    }
+    if(event.commandArgumentEquals("profile", 1)) {
+        line p = event.commandArguments[2] as str;
+        if(!game.hasPlayer(p)) {
+            player.sendMessage(s"player isn't online :(");
+            return;
+        }
+        if(p as num == 0) {
+            p = "%default";
+        }
 
+        select playersByName(p);
+        line uuid = selected.uuid;
+        select reset;
+
+        player.sendMessage(s"<green>%var(p)'s Stats:");
+        line tag = loops.createChatTag((global "%var(uuid) stats" as dict[num])["tree_type"]);
+        player.sendMessage(s"<dark_gray>- <gray>Tag: %var(tag)");
+        for(line key, line level of ((saved "%var(uuid) statShop" as dict[num]))) {
+            line name = statShopIcon[key].name;
+            player.sendMessage(s"<dark_gray>- <gray>%var(name): <green>%var(level)");
+            if(key == "treeType") {
+                line logFamily = global log_families[num.floor(level / 5) + 1];
+                player.sendMessage(s" <dark_gray> > <aqua>%entry(logFamily,name) <green>+%entry(logFamily,value) Logs");
+            }
+        }
+    }
+    if(event.commandArgumentEquals("didyouknow", 1) && player.hasPlotPermission(permission = "Owner")) {
+        loops.didyouknow();
+    }
     if(event.commandArgumentEquals("chat_game", 1) && player.hasPlotPermission(permission = "Owner")) {
-        loops.setupChatGameHidden();
+        loops.setupChatGameHidden(num.parse(event.commandArguments[2]));
     }
     if(event.commandArgumentEquals("setstatshop", 1) && player.hasPlotPermission(permission = "Owner")) {
         line skill = event.commandArguments[2];

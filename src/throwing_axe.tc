@@ -2,7 +2,8 @@ import sweeping;
 
 namespace throwingaxe {
     process throw(
-        origin: loc
+        origin: loc,
+        target: loc = loc(0, 0, 0)
     ) {
         player.playSound(snd("Trident Throw"));
         player.playSound(snd("Armor Equip (Leather)"));
@@ -17,7 +18,14 @@ namespace throwingaxe {
 
         line dir = playerLoc.getDirection();
 
+
         line pos = origin;
+
+
+        if(target.x != 0) {
+            dir = vec.between(playerLoc, target).setLength(1);
+            pos = pos.setDirection(dir);
+        }
 
         line dy = 0.0;
 

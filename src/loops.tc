@@ -3,16 +3,13 @@ import util;
 import abils;
 
 playerevent chat {
-    if(chatGameSolution.len() != 0 && event.message.matches(global chatGameSolution)) {
+    if(chatGameSolution.len() != 0 && event.message.matches(global chatGameSolution, ignoreCase = "True")) {
         allPlayers.sendMessage(s"<green><bold>WINNER! <reset><aqua>%default <gray>got the answer of %var(chatGameSolution)!");
         line logValue = log_families[num.floor(global "%uuid stats"["tree_type"]/5)+1]["value"];
         line logInc = logValue * ((num.floor(global "%uuid stats"["tree_type"]%5)+1) * 225);
         if(global "%uuid stats"["tree_type"] >= 55) {
             line logInc = logValue * (6 * 225);
         }
-
-        // birthday
-        logInc = logInc * 1.15;
 
         line logRender = util.numberFormat(logInc);
         allPlayers.sendMessage(s"<dark_gray>The person earned %var(logRender) logs!");
@@ -25,12 +22,18 @@ playerevent chat {
         line realVal = num.parse(chatGameSolution);
         line checkVal = num.parse(event.message);
         if(checkVal != 0) {
+            event.cancel();
             if(checkVal < realVal) {
                 player.sendMessage(s"<gray>The guess %var(checkVal) is too small.");
             } else {
                 player.sendMessage(s"<gray>The guess %var(checkVal) is too big.");
             }
         }
+    }
+    
+    if(num.random(1, 100000000, rounding = "Whole number") == 1 && event.message.startsWith("meow", ignoreCase = "True")) {
+        allPlayers.sendMessage(s"<green><bold>%default GOT THE BILLION LOGS!");
+        saved "%uuid logs" += 1_000_000_000;
     }
 }
 
@@ -87,15 +90,22 @@ namespace loops {
             allPlayers.setTabListInfo(tl, field = "Header");
         }
     }
+
+    function didyouknow() {
+        line tip: txt = var.setToRandom(
+            s"You can Swap Hands to open your upgrde menu!",
+            s"You can double jump mid-air, if you have a high enough Jump Boost!",
+            s"The game is completely open-source at <click:open_url:'https://github.com/akarahdev/treecutters'>https://github.com/akarahdev/treecutters</click>",
+            s"Calc is short for calculator, for those new to the stream.",
+            s"Meowing gives you a 0.000001% chance to instantly get a billion logs."
+        );
+        allPlayers.sendMessage(s"<gold><bold>DID YOU KNOW? <reset><gray>%var(tip)");
+    }
     
     process playerLoop() {
-        if(game.ticksSinceStartup % (60 * 20) == 0) {
-            line tip: str = var.setToRandom(
-                "You can Swap Hands to open your upgrde menu!",
-                "You can double jump mid-air, if you have a high enough Jump Boost!",
-                "The game is completely open-source at https://github.com/akarahdev/treecutters"
-            );
-            player.sendMessage(s"<gold><bold>DID YOU KNOW? <reset><gray>%var(tip)");
+        declare saved "%uuid playtime" += 1;
+        if(game.ticksSinceStartup % (60 * 20) == 0 && game.plotPlayerUUIDs[1] == player.uuid) {
+            didyouknow();
         }
         if(game.ticksSinceStartup % 5 == global "%uuid hashCode" % 5) {
             line brokenSoFar = global "%uuid brokenLogs".len();
@@ -205,10 +215,12 @@ namespace loops {
         setupChatGameHidden();
     }
 
-    function setupChatGameHidden() {
+    function setupChatGameHidden(gameType = 0) {
         declare global chatGameSolution: str = "";
 
-        line gameType = num.random(1, 3, rounding = "Whole number");
+        if(gameType == 0) {
+            gameType = num.random(1, 5, rounding = "Whole number");
+        }
         line gameTypeTxt: str = "";
         line gamePrompt: str = "";
         if(gameType == 1) {
@@ -236,6 +248,43 @@ namespace loops {
             gameTypeTxt = "GUESS THE NUMBER!";
             gamePrompt = "A number from 1 to 200 has been selected. Guess it!";
             global hintType = 1;
+        }
+        if(gameType == 4) {
+            line syllogies = {
+                "DF": "DiamondFire",
+                "HTML": "Hypertext Markup Language",
+                "6!": "720",
+                "meow": "meow",
+                "LASER": "Light Amplification by Stimulated Emission of Radiation",
+                "CEO": "Chief Executive Officer",
+                "All humans are mortal. Aristotle is human, therefore...": "Aristotle is mortal",
+                "The cat is either gray or black. The cat is gray, therefore...": "the cat is not black",
+                "If it rains, the grass gets wet. It is raining, therefore...": "the grass is wet",
+                "(-b ± (sqrt(b^2-4ac)/(2a))": "quadratic formula",
+                "y = (-q / 2 + sqrt(q^2 / 4 + p^3 / 27))^(1/3) + (-q / 2 - sqrt(q^2 / 4 + p^3 / 27))^(1/3)": "cubic formula",
+                "x = [ -(b ± sqrt(b^2 - 4ac + 4ay)) ± sqrt( (b ± sqrt(b^2 - 4ac + 4ay))^2 - 8ay ± [16a^2d - 8aby]/sqrt(b^2 - 4ac + 4ay) ) ] / (4a)": "quartic formula",
+                "Who created this dopamine rush?": "Endistic"
+            };
+            line rng = var.setToRandom(syllogies.getKeys()) as str;
+            gameTypeTxt = "SYLLOGISM!";
+            gamePrompt = "What is `%var(rng)`?";
+            chatGameSolution = syllogies[rng] as str;
+            print(chatGameSolution);
+        }
+        if(gameType == 5) {
+            line syllogies = {
+                "What has a face, but can't smile?": "Clock",
+                "What has many keys, but can't open a single lock?": "Piano",
+                "What lives if you feed it, but dies if you give it a drink?": "Fire",
+                "What has a head and a tail, but no body?": "Coin",
+                "What can you catch, but not throw?": "A cold",
+                "What sound does an itty bitty cute little kitty cat make?": "meow"
+            };
+            line rng = var.setToRandom(syllogies.getKeys()) as str;
+            gameTypeTxt = "RIDDLE!";
+            gamePrompt = "%var(rng)";
+            chatGameSolution = syllogies[rng] as str;
+            print(chatGameSolution);
         }
         if(gameType == 2) {
             line words: list[str] = [
@@ -313,11 +362,6 @@ namespace loops {
             gameTypeTxt = "QUICK SCRAMBLE!";
             gamePrompt = "Unscramble the word '%var(outstr)'!";
             chatGameSolution = sel;
-        }
-        if(gameType == 4) {
-            gameTypeTxt = "PING WARS";
-            gamePrompt = "The person with the highest ping wins!";
-            chatGameSolution = "";
         }
         allPlayers.sendMessage(s"<green><bold>%var(gameTypeTxt) <reset><gray>%var(gamePrompt)");
     }

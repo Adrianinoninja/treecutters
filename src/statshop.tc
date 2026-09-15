@@ -42,7 +42,7 @@ namespace statShopIcon.treeGrowthSpeed {
     amount = 1;
     basePrice = 30;
     priceScaling = 1.4;
-    maxLevel = 30;
+    maxLevel = 40;
     levelReq = 6;
 }
 
@@ -120,7 +120,7 @@ namespace statShopIcon.swingRange {
     amount = 0.5;
     basePrice = 1000;
     priceScaling = 4;
-    maxLevel = 5;
+    maxLevel = 7;
     levelReq = 21;
 }
 
@@ -146,6 +146,18 @@ namespace statShopIcon.cutoffRate {
     maxLevel = 10;
     levelReq = 31;
     description: list[str] = ["Each tier makes trees require", "1% less wood to be considered fully cut", "down."];
+}
+
+namespace statShopIcon.multishot {
+    material = "crossbow";
+    name = "Meowltishot";
+    stat = "multishot";
+    amount = 1;
+    basePrice = 100000;
+    priceScaling = 10;
+    maxLevel = 4;
+    levelReq = 36;
+    description: list[str] = ["Each tier makes your throwing axe", "shoot an extra time.", "The extra axes will be aimed towards", "a random block on the tree.", "Each tier will also increase", "the throwing axe cooldown."];
 }
 
 import statShopIcon;
@@ -220,11 +232,10 @@ namespace statShop {
             line prestigePoint = statShopIcon[iconKey].prestigeEvery;
 
             line maxLevel = statShopIcon[iconKey].maxLevel;
-            
-            if(
-                level >= maxLevel
-                || (level >= priceBrackets.len() && priceBrackets.len() != 0)
-            ) {
+            if(priceBrackets.len() != 0) {
+                maxLevel = priceBrackets.len();
+            }
+            if(level >= maxLevel) {
                 cost = -1;
             }
 
@@ -232,7 +243,7 @@ namespace statShop {
             line icon = item("acacia_boat");
             icon = icon.setModel(material);
             icon = icon.setName(s"<green>%var(name)");
-            icon = icon.addLore(s"<dark_gray>Level %var(level)");
+            icon = icon.addLore(s"<dark_gray>Level %var(level)<#333333>/%var(maxLevel)");
             if(!statShopIcon[iconKey].description.sizeEquals(0)) {
                 icon = icon.addLore(s"<gray>");
                 for(line loreLine of statShopIcon[iconKey].description) {
@@ -241,7 +252,7 @@ namespace statShop {
             }
             if(prestigePoint != -1 && cost != -1 && ((level + 1) % prestigePoint == 0) && level <= 50) {
                 icon = icon.addLore(s"");
-                icon = icon.addLore(s"<green><bold>PRESTIGE!");
+                icon = icon.addLore(s"<green><bold>PRESTREEIGE!");
                 icon = icon.addLore(s"<gray>Buying this upgrade will <red>reset");
                 icon = icon.addLore(s"<gray>your current logs.");
                 icon = icon.setTag("prestige", 1);
@@ -325,7 +336,7 @@ namespace statShop {
             line tag = loops.createChatTag(value);
             txts.append(s"<dark_gray>%var(idx). %var(tag) <white>%var(name) ");
             idx++;
-            if(idx > 10) {
+            if(idx > 20) {
                 break;
             }
         }
