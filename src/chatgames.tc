@@ -1,0 +1,162 @@
+namespace loops {
+    function setupChatGame() {
+        if(game.ticksSinceStartup % 3000 != 0) {
+            return;
+        }
+        if(game.playerCount < 3) {
+            return;
+        }
+        setupChatGameHidden();
+    }
+
+    function setupChatGameHidden(gameType = 0) {
+        declare global chatGameSolution: str = "";
+
+        if(gameType == 0) {
+            gameType = num.random(1, 5, rounding = "Whole number");
+        }
+        line gameTypeTxt: str = "";
+        line gamePrompt: str = "";
+        if(gameType == 1) {
+            gameTypeTxt = "QUICK MATH!";
+
+            line a = num.random(2, 20, rounding = "Whole number");
+            line b = num.random(2, 20, rounding = "Whole number");
+            line c = num.random(2, 20, rounding = "Whole number");
+            
+            line equationType = num.random(1, 3, rounding = "Whole number");
+            if(equationType == 1) {
+                chatGameSolution = str.setToString(a + b * c);
+                gamePrompt = "Solve %var(a) + %var(b) * %var(c)";
+            } else if(equationType == 2) {
+                chatGameSolution = str.setToString(a * b * c);
+                gamePrompt = "Solve %var(a) * %var(b) * %var(c)";
+            } else if(equationType == 3) {
+                chatGameSolution = str.setToString(a * b - c);
+                gamePrompt = "Solve %var(a) * %var(b) - %var(c)";
+            }
+            gamePrompt = "Solve %var(gamePrompt).";
+        }
+        if(gameType == 3) {
+            chatGameSolution = str.setToString(num.random(1, 200, rounding = "Whole number"));
+            gameTypeTxt = "GUESS THE NUMBER!";
+            gamePrompt = "A number from 1 to 200 has been selected. Guess it!";
+            global hintType = 1;
+        }
+        if(gameType == 4) {
+            line syllogies = {
+                "DF": "DiamondFire",
+                "HTML": "Hypertext Markup Language",
+                "6!": "720",
+                "meow": "meow",
+                "LASER": "Light Amplification by Stimulated Emission of Radiation",
+                "CEO": "Chief Executive Officer",
+                "All humans are mortal. Aristotle is human, therefore...": "Aristotle is mortal",
+                "The cat is either gray or black. The cat is gray, therefore...": "the cat is not black",
+                "If it rains, the grass gets wet. It is raining, therefore...": "the grass is wet",
+                "(-b ± (sqrt(b^2-4ac)/(2a))": "quadratic formula",
+                "y = (-q / 2 + sqrt(q^2 / 4 + p^3 / 27))^(1/3) + (-q / 2 - sqrt(q^2 / 4 + p^3 / 27))^(1/3)": "cubic formula",
+                "x = [ -(b ± sqrt(b^2 - 4ac + 4ay)) ± sqrt( (b ± sqrt(b^2 - 4ac + 4ay))^2 - 8ay ± [16a^2d - 8aby]/sqrt(b^2 - 4ac + 4ay) ) ] / (4a)": "quartic formula",
+                "Who created this dopamine rush?": "Endistic"
+            };
+            line rng = var.setToRandom(syllogies.getKeys()) as str;
+            gameTypeTxt = "SYLLOGISM!";
+            gamePrompt = "What is `%var(rng)`?";
+            chatGameSolution = syllogies[rng] as str;
+            print(chatGameSolution);
+        }
+        if(gameType == 5) {
+            line syllogies = {
+                "What has a face, but can't smile?": "Clock",
+                "What has many keys, but can't open a single lock?": "Piano",
+                "What lives if you feed it, but dies if you give it a drink?": "Fire",
+                "What has a head and a tail, but no body?": "Coin",
+                "What can you catch, but not throw?": "A cold",
+                "What sound does an itty bitty cute little kitty cat make?": "meow"
+            };
+            line rng = var.setToRandom(syllogies.getKeys()) as str;
+            gameTypeTxt = "RIDDLE!";
+            gamePrompt = "%var(rng)";
+            chatGameSolution = syllogies[rng] as str;
+            print(chatGameSolution);
+        }
+        if(gameType == 2) {
+            line words: list[str] = [
+                "apple",
+                "almond",
+                "aspen",
+                "baobab",
+                "waxed lightly weathered cut copper stairs",
+                "birch",
+                "bodhi",
+                "bark",
+                "cedar",
+                "cherry",
+                "coconut",
+                "chestnut",
+                "elderberry",
+                "fir",
+                "forest",
+                "grove",
+                "grapefruit",
+                "haw",
+                "holly",
+                "jungle",
+                "maple",
+                "nectarine",
+                "oak",
+                "palm",
+                "rainforest",
+                "rubber",
+                "spruce",
+                "walnut",
+                "willow",
+
+                "sprout",
+                "sprouting",
+                "flower",
+                "flowering",
+                "birches",
+                "felled",
+                "chopped",
+                "cut",
+                "treecutting",
+                "bonsai",
+                "shrubs",
+                "arboreal",
+                "evergreen",
+                "poplars",
+                "leafless",
+                "cedars",
+                "grapevines",
+                "deciduous",
+                "undergrowth",
+                "eucalyptus",
+                "persimmon",
+                "pines",
+                "bushes",
+                "fruit",
+                "pruned",
+                "mango",
+                "dwarfed",
+                "trunks",
+                "leaves"
+            ];
+            line sel = words[num.random(1, words.len() - 1, rounding = "Whole number")];
+            line scrambled: list[str] = sel.split("");
+            for(line i of range(1, 20)) {
+                line char1 = num.random(1, sel.len());
+                line char2 = num.random(1, sel.len());
+                line tmp1 = scrambled[char1];
+                line tmp2 = scrambled[char2];
+                scrambled[char1] = tmp2;
+                scrambled[char2] = tmp1;
+            }
+            line outstr = scrambled.join("");
+            gameTypeTxt = "QUICK SCRAMBLE!";
+            gamePrompt = "Unscramble the word '%var(outstr)'!";
+            chatGameSolution = sel;
+        }
+        allPlayers.sendMessage(s"<green><bold>%var(gameTypeTxt) <reset><gray>%var(gamePrompt)");
+    }
+}

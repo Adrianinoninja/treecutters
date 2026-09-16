@@ -6,57 +6,89 @@ playerevent move {
     if(player.location.getDistance(loc(103, 5, 41)) <= 12) {
         stocksMenu.updateValue();
     }
+    declare global "%uuid turretTimer": num = 5;
 }
 
 namespace stocksMenu {
     function init() {
         if(stockValue == 0) {
-            declare saved stockValue: num = 1_000_000;
+            declare saved stockValue: num = 600_000;
+        }
+        if(!var.exists(saved historicalStocks)) {
+            declare saved historicalStocks: list[num] = [];
         }
         updateValue();
     }
 
-    function tick() {
-        if(game.ticksSinceStartup % 300 == 60) {
+    function tick(forceChance: num = -1) {
+        if(game.playerCount < 3) {
+            return;
+        }
+        declare global lotteryTime: num;
+        if(global lotteryTime == 0) {
+            global lotteryTime = num.random(20 * 45, 20 * 90, rounding = "Whole number");
+            line depression = num.random(1, 400, rounding = "Whole number");
+            if(forceChance == 400) {
+                depression = 5;
+            }
+            if(depression == 5) {
+                select playersByCondition(saved "%uuid settings"["stockTickerAnnouncementsGlobal"] == "Enabled");
+                stockValue = 100_000;
+                selected.sendMessage(s"<dark_red><bold>GREAT DEPRESSION! <reset><gray>Oh my god. <red>-100%");
+                select reset;
+                return;
+            }
             line rng = num.random(1, 12, rounding = "Whole number");
+            if(forceChance != -1) {
+                rng = forceChance;
+            }
             if(var.isInRange(rng, 1, 5)) {
-                line evnt: str = var.setToRandom(
-                    ""
-                ) as str;
-                line rng = num.random(0.02, 0.05, rounding = "Decimal number");
+                line rng = num.random(0.05, 0.1, rounding = "Decimal number");
                 line rng100 = rng * 100;
                 select playersByCondition(saved "%uuid settings"["stockTickerAnnouncementsGlobal"] == "Enabled");
-                selected.sendMessage(s"<green><bold>STOCK TICKER! <reset><gray>%var(evnt) <green>+%var(rng100)%");
+                selected.sendMessage(s"<green><bold>STOCK TICKER! <reset><green>+%var(rng100)%");
                 select reset;
                 boom(rng);
             }
             if(var.isInRange(rng, 6, 10)) {
-                line evnt: str = var.setToRandom(
-                    ""
-                ) as str;
-                line rng = num.random(0.03, 0.06, rounding = "Decimal number");
+                line rng = num.random(0.05, 0.1, rounding = "Decimal number");
                 line rng100 = rng * 100;
                 fall(rng);
                 select playersByCondition(saved "%uuid settings"["stockTickerAnnouncementsGlobal"] == "Enabled");
-                selected.sendMessage(s"<red><bold>STOCK TICKER! <reset><gray>%var(evnt) <red>-%var(rng100)%");
+                selected.sendMessage(s"<red><bold>STOCK TICKER! <reset><red>-%var(rng100)%");
                 select reset;
             }
             if(rng == 11) {
                 line evnt: str = var.setToRandom(   
-                    ""
+                    "The CEO of Leaf Inc. just fundraised $200M of capital!",
+                    "A player found a hidden gem while cutting a tree!",
+                    "A rich venture capitalist just funded Leaf Inc. with millions of dollars!",
+                    "Leaf Inc. just released revolutionary new tree-cutting technology!",
+                    "Leaf Inc. just reported a +25% earnings increase this quarter!",
+                    "Leaf Inc. just secured a $400M deal with {company}!"
                 ) as str;
-                line rng = num.random(0.1, 0.4, rounding = "Decimal number");
+                evnt = evnt.replace(
+                    "{company}", var.setToRandom("Apple", "Microsoft", "Amazon")
+                );
+                line rng = num.random(0.4, 0.6, rounding = "Decimal number");
                 line rng100 = rng * 100;
                 boom(rng);
                 select playersByCondition(saved "%uuid settings"["stockTickerAnnouncementsGlobal"] == "Enabled");
-                selected.sendMessage(s"<red><bold>STOCK TICKER! <reset><gray>%var(evnt) <red>-%var(rng100)%");
+                selected.sendMessage(s"<green><bold>STOCK TICKER! <reset><gray>%var(evnt) <green>+%var(rng100)%");
                 select reset;
             }
             if(rng == 12) {
                 line evnt: str = var.setToRandom(   
-                    ""
+                    "The CEO of Leaf Inc. was outed as a Mace Roulette player.",
+                    "Leaf Inc. just laid off over 300 employees.",
+                    "A Leaf Inc. LLM had a malfunction, causing {company} to have their infrastructure hacked.",
+                    "Leaf Inc. just lost a huge $200M contract with {company}.",
+                    "Leaf Inc. reported a 25% reduction in profits this quarter."
                 ) as str;
-                line rng = num.random(0.1, 0.4, rounding = "Decimal number");
+                evnt = evnt.replace(
+                    "{company}", var.setToRandom("Apple", "Microsoft", "Amazon")
+                );
+                line rng = num.random(0.4, 0.6, rounding = "Decimal number");
                 line rng100 = rng * 100;
                 fall(rng);
                 select playersByCondition(saved "%uuid settings"["stockTickerAnnouncementsGlobal"] == "Enabled");
@@ -65,25 +97,48 @@ namespace stocksMenu {
             }
             updateValue();
         }
+        global lotteryTime -= 1;
     }
 
     function boom(scale: num = 0.1) {
+        historicalStocks.append(stockValue);
         stockValue *= 1 + scale;
         updateValue();
-        if(stockValue >= 5_000_000) {
-            stockValue = 5_000_000;
+        if(stockValue >= 3_000_000) {
+            stockValue = 3_000_000;
+        }
+        while(historicalStocks.len() > 5000) {
+            historicalStocks.remove(0);
         }
     }
 
     function fall(scale: num = 0.1) {
+        historicalStocks.append(stockValue);
         stockValue *= 1 / (1 + scale);
         updateValue();
-        if(stockValue <= 100000) {
-            stockValue = 100000;
+        if(stockValue <= 100_000) {
+            stockValue = 100_000;
+        }
+        while(historicalStocks.len() > 5000) {
+            historicalStocks.remove(0);
         }
     }
 
     function clicks() {
+        if(event.blockLocation.getDistance(loc(103, 5, 44)) <= 1
+    && player.getItemCooldown(item("acacia_hanging_sign")) == 0) {
+            player.setItemCooldown(item("acacia_hanging_sign"), 20);
+            line pos = loc(107, 4, 40);
+            for(line x of range(0, historicalStocks.len(), 25)) {
+                pos.z += 0.05;
+                pos.y = 4 + (historicalStocks[x] / 500000);
+                player.displayParticleEffect(
+                    par("Happy Villager"),
+                    pos
+                );
+                util.fastWait(1/100);
+            }
+        }
         if(event.blockLocation.getDistance(loc(103, 5, 41)) <= 1) {
             if(saved "%uuid logs" >= stockValue) {
                 declare saved "%uuid stockCount" += 1;

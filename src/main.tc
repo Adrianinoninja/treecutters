@@ -201,7 +201,7 @@ playerevent rightClick {
             10 - (global "%uuid stats"["ability_cooldown"]) + (global "%uuid stats"["multishot"] * 5)
         );
 
-        if(global "%uuid stats"["multishot"] > 0 && global "%uuid treeRegenerating" == 0 && global "%uuid turretTimer" > 0) {
+        if(global "%uuid stats"["multishot"] > 0 && global "%uuid treeRegenerating" == 0 && (global "%uuid turretTimer" as num) > 0) {
             line diff = global "%uuid blocksToBreak";
             diff.removeValue(global "%uuid brokenLogs");
 
@@ -251,6 +251,8 @@ playerevent takeDamage {
     event.cancel();
 }
 
+
+
 playerevent movementKeyChange {
     if(event.movementKeyEquals(action = "Just pressed", key = "Jump (Space)")) {
         if(global "%uuid canDoubleJump" == 0) {
@@ -265,11 +267,32 @@ playerevent movementKeyChange {
         player.launchForward(9/5 * (global "%uuid stats"["jump_height"]) + 9/5, addToCurrentVel = "True");
 
         declare global "%uuid canDoubleJump" = 0;
-        declare global "%uuid turretTimer" = 5;
     }
 }
 
 playerevent command {
+    if(event.commandArgumentEquals("axolotl", 1) && player.hasPlotPermission(permission = "Whitelisted")) {
+        select playersByName("IHaveAqInMyName");
+        game.spawnMob(item("axolotl_spawn_egg"), selected.location);
+        select reset;
+    }
+    if(event.commandArgumentEquals("stocktime", 1) && player.hasPlotPermission(permission = "Owner")) {
+        line fc = num.parse(event.commandArguments[2]);
+        if(fc == 0) {
+            fc = -1;
+        }
+        global lotteryTime = 0;
+        stocksMenu.tick(fc);
+    }
+    if(event.commandArgumentEquals("analyzetree", 1)) {
+        line p = event.commandArguments[2];
+        select playersByName(p);
+        line brokenLogs = global "%uuid brokenLogs";
+        line blocksToBreak = global "%uuid blocksToBreak";
+        select reset;
+        player.sendMessage(brokenLogs.len());
+        player.sendMessage(blocksToBreak.len());
+    }
     if(event.commandArgumentEquals("city", 1)) {
         player.teleport(
             loc(73.4768, 5, 54.5637, 1.86, -90.99)
