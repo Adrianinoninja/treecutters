@@ -185,9 +185,10 @@ playerevent placeBlock {
 
 import throwingaxe;
 import stocksMenu;
-
+import weather;
 playerevent rightClick {
     event.cancel();
+    weather.donate();
     stocksMenu.clicks();
     if(player.mainHandItem.getTag("axe") != 0) {
         if(player.getItemCooldown(player.mainHandItem) != 0) {
@@ -373,4 +374,8 @@ playerevent command {
     if(event.commandEquals("killall")) {
         allEntities.remove();
     }
+}
+
+playerevent dropItem {
+    event.cancel();
 }

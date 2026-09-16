@@ -104,6 +104,16 @@ namespace sweeping {
         line logValue = log_families[num.floor(global "%uuid stats"["tree_type"]/5)+1]["value"];
         logValue *= global "%uuid stats"["fortune"] + 1;
 
+        if(weatherType == 1) {
+            logValue *= 1.1;
+        }
+        if(weatherType == 2) {
+            logValue *= 1.3;
+        }
+        if(weatherType == 3) {
+            logValue *= 1.5;
+        }
+
         line mat = game.getBlockMaterial(block);
         if(mat != "air" && mat != "light" && !global "%uuid brokenLogs".contains(block)) {
             global "%uuid brokenLogs".append(block);

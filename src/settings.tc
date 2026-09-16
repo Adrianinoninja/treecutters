@@ -26,6 +26,13 @@ namespace settings.stockTickerAnnouncementsGlobal {
     options: list[str] = ["Enabled", "Disabled"];
     defaultSetting = "Disabled";
 }
+namespace settings.logSecActionBar {
+    icon = "stripped_spruce_wood";
+    name = "Logs Gain Per Second";
+    description: list[str] = ["Whether to send your logs per second", "through the actionbar."];
+    options: list[str] = ["Enabled", "Disabled"];
+    defaultSetting = "Disabled";
+}
 
 namespace settingsMenu {
     function initJoin() {

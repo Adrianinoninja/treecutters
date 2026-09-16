@@ -39,22 +39,27 @@ playerevent chat {
 
 import stocksMenu;
 import loops;
+import weather;
 
 namespace loops {
     process executePlayerLoops() {
         repeat {
-            select allPlayers;
-            start playerLoop(targetMode = "For each in selection");
-            select reset;
-
-            if(game.ticksSinceStartup % 1000 == 0) {
-                loops.setupChatGame();
-            }
-
-            stocksMenu.tick();
-
+            generalTickables();
             wait(1);
         }
+    }
+
+    function generalTickables() {
+        select allPlayers;
+        start playerLoop(targetMode = "For each in selection");
+        select reset;
+        
+        if(game.ticksSinceStartup % 1000 == 0) {
+            loops.setupChatGame();
+        }
+
+        stocksMenu.tick();
+        weather.tick();
     }
 
     function generateScoreboard() {
@@ -90,6 +95,28 @@ namespace loops {
                 tl += s"<red>LAG: Speed-based animations been slowed down for performance.\n";
             }
 
+            tl += s"\n<aqua><bold>WEATHER MACHINE<reset>\n";
+            if(weatherType == 0) {
+                tl += s"<gray>Status: <red>Inactive\n";
+            }
+            if(weatherType == 1) {
+                tl += s"<gray>Status: <aqua>Rain\n";
+                tl += s"<gray>Global Boost: <green>+10%\n";
+                tl += s"<gray>Cost: <red>-5k/s/p\n";
+            }
+            if(weatherType == 2) {
+                tl += s"<gray>Status: <blue>Thunderstorm\n";
+                tl += s"<gray>Global Boost: <green>+30%\n";
+                tl += s"<gray>Cost: <red>-20k/s/p\n";
+            }
+            if(weatherType == 3) {
+                tl += s"<gray>Status: <dark_red>Severe Thunderstorm\n";
+                tl += s"<gray>Global Boost: <green>+50%\n";
+                tl += s"<gray>Cost: <red>-50k/s/p\n";
+            }
+            line fmt = util.numberFormat(weatherMachineLogs);
+            tl += s"<gray>Logs: <green>%var(fmt)\n";
+
             tl = tl + s"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
             
             allPlayers.setTabListInfo(tl, field = "Header");
@@ -114,6 +141,14 @@ namespace loops {
         if(game.ticksSinceStartup % (60 * 20) == 0 && game.plotPlayerUUIDs[1] == player.uuid) {
             didyouknow();
         }
+        if(game.ticksSinceStartup % 20 == 19) {
+            declare global "%default currLogs": num = saved "%uuid logs";
+            line diff = global "%default currLogs" - global "%default lastLogs";
+            declare global "%default logSecComp": txt = s"<green>+%var(diff)/s";
+        }
+        if(game.ticksSinceStartup % 20 == 0) {
+            declare global "%default lastLogs": num = saved "%uuid logs";
+        }
         if(game.ticksSinceStartup % 5 == global "%uuid hashCode" % 5) {
             line brokenSoFar = global "%uuid brokenLogs".len();
             line brokenReq = global "%uuid blocksToBreak".len();
@@ -122,6 +157,10 @@ namespace loops {
 
             line components: list[txt] = [];
             components.append(s"<dark_green>╟ <green>%var(fmtLogs) Logs");
+
+            if(global "%default logSecComp" != 0 && saved "%uuid settings"["logSecActionBar"] == "Enabled") {
+                components.append(global "%default logSecComp");
+            }
 
             if(saved "%uuid stockCount" >= 1) {
                 line fmt = util.numberFormat(saved stockValue);
@@ -141,8 +180,12 @@ namespace loops {
             
             generateScoreboard();
 
-            if(game.getBlockMaterial(player.location) != "air" && game.getBlockMaterial(player.eyeLocation) != "air") {
+            if(game.locationIsInBlock(player.location) && game.locationIsInBlock(player.eyeLocation)) {
                 player.teleport(player.location.shiftAllAxes(0, 2, 0));
+            }
+
+            if(player.isStandingOnBlock(item("light_blue_stained_glass"))) {
+                player.teleport(global "%uuid roomPos".shiftAllAxes(6, 6, 6));
             }
         }
 

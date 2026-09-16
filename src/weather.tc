@@ -1,0 +1,41 @@
+namespace weather {
+    function tick() {
+        declare saved weatherMachineLogs: num;
+        declare global weatherType: num = 0;
+
+        if(weatherMachineLogs > 200_000_000) {
+            weatherMachineLogs -= (50000 * game.playerCount)/20;
+            weatherType = 3;
+            if(game.ticksSinceStartup % 150 == 1) {
+                game.summonLightning(loc(101, 14, 62));
+            }
+            allPlayers.setWeather(weather = "Downfall");
+        } else if(weatherMachineLogs > 50_000_000) {
+            weatherMachineLogs -= (20000 * game.playerCount)/20;
+            weatherType = 2;
+            if(game.ticksSinceStartup % 300 == 1) {
+                game.summonLightning(loc(101, 14, 62));
+            }
+            allPlayers.setWeather(weather = "Downfall");
+        } else if(weatherMachineLogs > 10_000_000) {
+            weatherMachineLogs -= (5000 * game.playerCount)/20;
+            weatherType = 1;
+            allPlayers.setWeather(weather = "Downfall");
+        } else {
+            weatherType = 0;
+        }
+    }
+
+    function donate() {
+        if(player.isLookingAtBlock(loc(101, 6, 62))) {
+            if(saved "%uuid logs" >= 1_000_000) {
+                saved "%uuid logs" -= 1_000_000;
+                weatherMachineLogs += 1_000_000;
+                player.playSound(snd("Chest Open"));
+            } else {
+                player.sendMessage(s"<gray>You need at least <green>1,000,000 <gray>logs to power the weather machine.");
+                player.playSound(snd("Chest Locked"));
+            }
+        }
+    }
+}
