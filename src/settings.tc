@@ -34,6 +34,14 @@ namespace settings.logSecActionBar {
     defaultSetting = "Disabled";
 }
 
+namespace settings.logEffects {
+    icon = "stripped_cherry_wood";
+    name = "Log Effects";
+    description: list[str] = ["Whether to send particle and visual", "effects when chopping trees."];
+    options: list[str] = ["Enabled", "Disabled"];
+    defaultSetting = "Enabled";
+}
+
 namespace settingsMenu {
     function initJoin() {
         if(!var.exists(saved "%uuid settings")) {

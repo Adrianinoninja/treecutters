@@ -23,6 +23,7 @@ namespace weather {
             allPlayers.setWeather(weather = "Downfall");
         } else {
             weatherType = 0;
+            allPlayers.setWeather(weather = "Clear");
         }
     }
 
@@ -31,6 +32,7 @@ namespace weather {
             if(saved "%uuid logs" >= 1_000_000) {
                 saved "%uuid logs" -= 1_000_000;
                 weatherMachineLogs += 1_000_000;
+                declare saved "%uuid donatedToWeatherMachine": num += 1_000_000;
                 player.playSound(snd("Chest Open"));
             } else {
                 player.sendMessage(s"<gray>You need at least <green>1,000,000 <gray>logs to power the weather machine.");

@@ -42,7 +42,7 @@ namespace statShopIcon.treeGrowthSpeed {
     amount = 1;
     basePrice = 30;
     priceScaling = 1.4;
-    maxLevel = 40;
+    maxLevel = 60;
     levelReq = 6;
 }
 
@@ -197,6 +197,22 @@ namespace statShop {
 
         line lbIcon = item("cherry_hanging_sign");
         lbIcon = lbIcon.setName(s"<gold>Leaderboard");
+        lbIcon = lbIcon.setTag("leaderboard_icon", 1);
+        if(!var.exists(treeTypeLeaderboard)) {
+            declare saved treeTypeLeaderboard: dict[num] = saved "leaderboard" as dict[num];
+        }
+        if(!var.exists(leaderboardNames)) {
+            declare saved leaderboardNames: dict[str] = {};
+        }
+        if(!var.exists(trueLogLeaderboard)) {
+            declare saved trueLogLeaderboard: dict[num] = {};
+        }
+        if(!var.exists(chatWinLeaderboard)) {
+            declare saved chatWinLeaderboard: dict[num] = {};
+        }
+        if(!var.exists(weatherDonationLeaderboard)) {
+            declare saved weatherDonationLeaderboard: dict[num] = {};
+        }
         lbIcon = lbIcon.setLore(leaderboardLore());
         inv.setItem(26, lbIcon);
 
@@ -287,6 +303,10 @@ namespace statShop {
         if(event.clickedSlotItem.hasTag("settings_menu")) {
             settingsMenu.openMenu();
         }
+        if(event.clickedSlotItem.hasTag("leaderboard_icon")) {
+            declare global "%uuid leaderboardType": num += 1;
+            openMenu();
+        }
         line iconKey = event.clickedSlotItem.getTag("upgrade") as str;
         if(namespace.has_member(statShopIcon, iconKey)) {
             line cost = event.clickedSlotItem.getTag("cost") as num;
@@ -322,31 +342,55 @@ namespace statShop {
     }
 
     function leaderboardLore(): list[txt] {
-        if(!var.exists(leaderboard)) {
-            declare saved leaderboard: dict[num] = {};
-            declare saved leaderboardNames: dict[str] = {};
-        }
-        
         for(line p of game.plotPlayerUUIDs) {
             select playersByName(p);
-            leaderboard[p] = global "%uuid stats"["tree_type"];
+            treeTypeLeaderboard[p] = global "%uuid stats"["tree_type"];
+            chatWinLeaderboard[p] = saved "%uuid chat_wins";
+            trueLogLeaderboard[p] = saved "%uuid true_logs";
             leaderboardNames[p] = selected.name.clearFormatting();
             select reset;
         }
 
-        leaderboard = leaderboard.sort("type" = "Sort by Value", order = "Descending");
+        treeTypeLeaderboard = treeTypeLeaderboard.sort("type" = "Sort by Value", order = "Descending");
+        chatWinLeaderboard = chatWinLeaderboard.sort("type" = "Sort by Value", order = "Descending");
+        trueLogLeaderboard = trueLogLeaderboard.sort("type" = "Sort by Value", order = "Descending");
         
         line txts: list[txt] = [];
         line idx = 1;
-        for(line uuid, line value of leaderboard) {
+
+        line lbType = "treeTypeLeaderboard";
+        if(global "%uuid leaderboardType" == 1) {
+            line lbType = "chatWinLeaderboard";
+            txts.append(s"<gray>Type: <yellow>Chat Wins");
+            txts.append(s"");
+        } else if(global "%uuid leaderboardType" == 2) {
+            line lbType = "trueLogLeaderboard";
+            txts.append(s"<gray>Type: <yellow>True Logs Broken");
+            txts.append(s"");
+        } else if(global "%uuid leaderboardType" == 3) {
+            txts.append(s"<gray>Type: <yellow>Donation Amounts");
+            txts.append(s"");
+        } else if(global "%uuid leaderboardType" == 4 || global "%uuid leaderboardType" == 0) {
+            global "%uuid leaderboardType" = 0;
+            txts.append(s"<gray>Type: <yellow>Tree Type Level");
+            txts.append(s"");
+        }
+
+        for(line uuid, line value of saved "%var(lbType)" as dict[num]) {
             line name = leaderboardNames[uuid];
-            line tag = loops.createChatTag(value);
-            txts.append(s"<dark_gray>%var(idx). %var(tag) <white>%var(name) ");
+            line level = treeTypeLeaderboard[uuid];
+            line tag = loops.createChatTag(level);
+            line fmtValue = util.numberFormat(value);
+            txts.append(s"<dark_gray>%var(idx). %var(tag) <white>%var(name): <green>%var(fmtValue)");
             idx++;
             if(idx > 20) {
                 break;
             }
         }
+
+        txts.append(s"");
+        txts.append(s"<yellow>Click to switch leaderboards!");
+
         return txts;
     }
 }
