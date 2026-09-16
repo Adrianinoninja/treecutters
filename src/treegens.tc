@@ -107,7 +107,7 @@ namespace treegens {
             );
         }
         if(treeType == infinite) {
-            line treeTypeSel: str = var.setToRandom(
+            line sets: list[str] = [
                 oak,
                 dark,
                 cherry,
@@ -116,7 +116,21 @@ namespace treegens {
                 solar,
                 astral,
                 yggdrasil
-            );
+            ];
+            line removalOrder: list[str] = [
+                oak,
+                dark,
+                cherry,
+                aerial
+            ];
+            line tidx = idx;
+            line tmp = 1;
+            while(tidx >= 55 && tmp <= 4) {
+                sets.removeValue(removalOrder[tmp]);
+                tidx -= 5;
+                tmp += 1;
+            }
+            line treeTypeSel: str = sets.randomize()[1];
             return growArbitraryTree(idx, treeTypeSel);
         }
         return [];
@@ -128,7 +142,9 @@ namespace treegens {
         } 
 
         declare global "%uuid treeRegenerating" = 1;
-        wait(10);
+        if(global "%uuid stats"["tree_type"] < 50) {
+            wait(10);
+        }
 
         global "%uuid brokenLogs" = [];
         declare global "%uuid blocksToBreak" = treegens.growArbitraryTree(global "%uuid stats"["tree_type"]);
