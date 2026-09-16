@@ -293,7 +293,7 @@ playerevent command {
         player.sendMessage(brokenLogs.len());
         player.sendMessage(blocksToBreak.len());
     }
-    if(event.commandArgumentEquals("city", 1)) {
+    if(event.commandArgumentEquals("city", 1) && global "%uuid stats"["tree_type"] >= 25) {
         player.teleport(
             loc(73.4768, 5, 54.5637, 1.86, -90.99)
         );

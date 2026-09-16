@@ -170,7 +170,7 @@ namespace statShop {
     function openMenu() {
         line inv = inventory.tiledMenu(3);
 
-        if(global "%uuid stats"["tree_type"] >= 7) {
+        if(global "%uuid stats"["tree_type"] >= 25) {
             if(player.y >= 33) {
                 line city_icon = item("gold_block");
                 city_icon = city_icon.setName(s"<gold>The City");
