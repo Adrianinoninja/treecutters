@@ -273,10 +273,39 @@ playerevent movementKeyChange {
         }
 
         player.launchUp(global "%uuid stats"["jump_height"] + 1, addToCurrentVel = "False");
-        player.launchForward(9/5 * (global "%uuid stats"["jump_height"]) + 9/5, addToCurrentVel = "True");
+
+        if(saved "%uuid settings"["jumpType"] == "Look-Based") {
+            player.launchForward(9/5 * (global "%uuid stats"["jump_height"]) + 9/5, addToCurrentVel = "True");
+        } else {
+            line mv = getMoveDir(1);
+            mv = mv.multiply(9/5 * (global "%uuid stats"["jump_height"]) + 9/5);
+            mv = mv.multiply(0.15);
+            player.setVelocity(mv, addToCurrentVel = "True");
+        }
 
         declare global "%uuid canDoubleJump" -= 1;
     }
+}
+
+// code originally by Frostbqte, ported to terracotta
+function getMoveDir(y: num = 0): vec {
+    line move_dir = vec(0, 0, 0);
+    if(player.isMovementKeyPressed(forward = "Pressed")) {
+        move_dir += vec(0, 0, 1);
+    }
+    if(player.isMovementKeyPressed(backward = "Pressed")) {
+        move_dir += vec(0, 0, -1);
+    }
+    if(player.isMovementKeyPressed(left = "Pressed")) {
+        move_dir += vec(1, 0, 0);
+    }
+    if(player.isMovementKeyPressed(right = "Pressed")) {
+        move_dir += vec(-1, 0, 0);
+    }
+    move_dir = move_dir.setLength(1);
+    move_dir = move_dir.rotateAroundAxis(-player.yaw, axis = "Y", unit = "Degrees");
+    move_dir = move_dir.rotateAroundAxis(-player.pitch, axis = "Z", unit = "Degrees");
+    return move_dir;
 }
 
 playerevent command {

@@ -11,13 +11,13 @@ playerevent chat {
             line logInc = logValue * (6 * 225);
         }
         if(global "%uuid stats"["tree_type"] >= 70) {
-            line logInc = logValue * 2;
+            line logInc *= 2;
         }
         if(global "%uuid stats"["tree_type"] >= 80) {
-            line logInc = logValue * 2;
+            line logInc *= 2;
         }
         if(global "%uuid stats"["tree_type"] >= 90) {
-            line logInc = logValue * 2;
+            line logInc *= 2;
         }
 
         line logRender = util.numberFormat(logInc);

@@ -42,6 +42,14 @@ namespace settings.logEffects {
     defaultSetting = "Enabled";
 }
 
+namespace settings.jumpType {
+    icon = "Feather";
+    name = "Double Jump Angle";
+    description: list[str] = ["Whether to make your double jump angle", "based on where you're looking, or what", "movement keys you're pressing."];
+    options: list[str] = ["Look-Based", "Key-Based"];
+    defaultSetting = "Look-Based";
+}
+
 namespace settingsMenu {
     function initJoin() {
         if(!var.exists(saved "%uuid settings")) {
