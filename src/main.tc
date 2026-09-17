@@ -5,6 +5,22 @@ import stats;
 import settingsMenu;
 
 playerevent join {
+
+
+    declare global woodTypeList: list[item] = [
+        item("stripped_oak_wood"),
+        item("stripped_spruce_wood"),
+        item("stripped_cherry_wood"),
+        item("stripped_warped_stem"),
+        item("stripped_crimson_stem"),
+        item("stripped_pale_oak_wood"),
+        item("pale_oak_wood"),
+        item("stripped_birch_wood"),
+        item("stripped_dark_oak_wood"),
+        item("oak_wood"),
+        item("stripped_acacia_wood")
+    ];
+    
     namespace.reload();
 
     settingsMenu.initJoin();
@@ -131,19 +147,6 @@ function startup() {
         vec(1, -1, -1),   vec(1, -1, 0),   vec(1, -1, 1),
         vec(1, 0, -1),    vec(1, 0, 0),    vec(1, 0, 1),
         vec(1, 1, -1),    vec(1, 1, 0),    vec(1, 1, 1)
-    ];
-
-    declare global woodTypeList: list[item] = [
-        item("stripped_oak_wood"),
-        item("stripped_spruce_wood"),
-        item("stripped_cherry_wood"),
-        item("stripped_warped_stem"),
-        item("stripped_crimson_stem"),
-        item("stripped_pale_oak_wood"),
-        item("pale_oak_wood"),
-        item("stripped_birch_wood"),
-        item("stripped_dark_oak_wood"),
-        item("oak_wood")
     ];
 
     declare global roomPositions: list[loc] = [];

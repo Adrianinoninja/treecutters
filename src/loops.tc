@@ -220,7 +220,7 @@ namespace loops {
             player.setSaturationLevel(20);
             player.setFoodLevel(20);
 
-            player.setNameTagVisible(visible = "Disable");
+            player.setNameTagVisible(visible = "Enable");
             line lv = global "%uuid stats"["tree_type"];
             player.setChatTag(createChatTag(lv));
             player.setChatStyle(s"<#dddddd>");

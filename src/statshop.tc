@@ -165,7 +165,7 @@ namespace statShopIcon.multishot {
     priceScaling = 10;
     maxLevel = 4;
     levelReq = 36;
-    description: list[str] = ["Each tier makes your throwing axe", "shoot an extra time.", "The extra axes will be aimed towards", "a random block on the tree.", "Each tier will also increase", "the throwing axe cooldown."];
+    description: list[str] = ["Each tier makes your throwing axe", "shoot an extra time.", "The extra axes will be aimed towards", "a random block on the tree.", "Each tier will also increase", "the throwing axe cooldown by 0.25 seconds."];
 }
 
 namespace statShopIcon.timber {
