@@ -50,6 +50,9 @@ namespace loops {
     }
 
     function generalTickables() {
+        declare saved gametime += 1;
+        declare global sessiontime += 1;
+
         select allPlayers;
         start playerLoop(targetMode = "For each in selection");
         select reset;
@@ -113,6 +116,11 @@ namespace loops {
                 tl += s"<gray>Status: <dark_red>Severe Thunderstorm\n";
                 tl += s"<gray>Global Boost: <green>+50%\n";
                 tl += s"<gray>Cost: <red>-50k/s/p\n";
+            }
+            if(weatherType == 4) {
+                tl += s"<gray>Status: <dark_blue>Hurricane\n";
+                tl += s"<gray>Global Boost: <green>+100%\n";
+                tl += s"<gray>Cost: <red>-150k/s/p\n";
             }
             line fmt = util.numberFormat(weatherMachineLogs);
             tl += s"<gray>Logs: <green>%var(fmt)\n";
@@ -267,7 +275,7 @@ namespace loops {
             color = "gradient:#770077:#bb00bb";
         }
         if(level > 99) {
-            color = "gradient:#555599:#aaaaff";
+            color = "gradient:#5555c4:#c5d2e9";
         }
         return txt.parseExpression("<dark_gray>[<%var(color)>%var(level)🪓<dark_gray>]");
     }

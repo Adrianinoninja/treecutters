@@ -113,6 +113,9 @@ namespace sweeping {
         if(weatherType == 3) {
             logValue *= 1.5;
         }
+        if(weatherType == 4) {
+            logValue *= 2;
+        }
 
         line mat = game.getBlockMaterial(block);
         if(mat != "air" && mat != "light" && !global "%uuid brokenLogs".contains(block)) {

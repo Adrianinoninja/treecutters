@@ -3,15 +3,28 @@ namespace weather {
         declare saved weatherMachineLogs: num;
         declare global weatherType: num = 0;
 
-        if(weatherMachineLogs > 200_000_000) {
-            weatherMachineLogs -= (50000 * game.playerCount)/20;
+        if(weatherMachineLogs > 250_000_000) {
+            weatherMachineLogs -= (150000 * game.playerCount)/20;
+            weatherType = 4;
+            if(game.ticksSinceStartup % 100 == 1) {
+                game.summonLightning(loc(101, 14, 62));
+            }
+            select allPlayers;
+            selected.displayParticleEffect(
+                par("Falling Water", amount = 20, spreadHoriz = 12, spreadVert = 12),
+                selected.eyeLocation
+            );
+            select reset;
+            allPlayers.setWeather(weather = "Downfall");
+        } else if(weatherMachineLogs > 100_000_000) {
+            weatherMachineLogs -= (40000 * game.playerCount)/20;
             weatherType = 3;
             if(game.ticksSinceStartup % 150 == 1) {
                 game.summonLightning(loc(101, 14, 62));
             }
             allPlayers.setWeather(weather = "Downfall");
         } else if(weatherMachineLogs > 50_000_000) {
-            weatherMachineLogs -= (20000 * game.playerCount)/20;
+            weatherMachineLogs -= (15000 * game.playerCount)/20;
             weatherType = 2;
             if(game.ticksSinceStartup % 300 == 1) {
                 game.summonLightning(loc(101, 14, 62));

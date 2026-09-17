@@ -213,6 +213,9 @@ namespace statShop {
         if(!var.exists(weatherDonationLeaderboard)) {
             declare saved weatherDonationLeaderboard: dict[num] = {};
         }
+        if(!var.exists(playtimeLeaderboard)) {
+            declare saved playtimeLeaderboard: dict[num] = {};
+        }
         lbIcon = lbIcon.setLore(leaderboardLore());
         inv.setItem(26, lbIcon);
 
@@ -346,7 +349,9 @@ namespace statShop {
             select playersByName(p);
             treeTypeLeaderboard[p] = global "%uuid stats"["tree_type"];
             chatWinLeaderboard[p] = saved "%uuid chat_wins";
+            weatherDonationLeaderboard[p] = saved "%uuid donatedToWeatherMachine";
             trueLogLeaderboard[p] = saved "%uuid true_logs";
+            playtimeLeaderboard[p] = (saved "%uuid playtime" / 20 / 60);
             leaderboardNames[p] = selected.name.clearFormatting();
             select reset;
         }
@@ -354,6 +359,8 @@ namespace statShop {
         treeTypeLeaderboard = treeTypeLeaderboard.sort("type" = "Sort by Value", order = "Descending");
         chatWinLeaderboard = chatWinLeaderboard.sort("type" = "Sort by Value", order = "Descending");
         trueLogLeaderboard = trueLogLeaderboard.sort("type" = "Sort by Value", order = "Descending");
+        weatherDonationLeaderboard = weatherDonationLeaderboard.sort("type" = "Sort by Value", order = "Descending");
+        playtimeLeaderboard = playtimeLeaderboard.sort("type" = "Sort by Value", order = "Descending");
         
         line txts: list[txt] = [];
         line idx = 1;
@@ -368,9 +375,14 @@ namespace statShop {
             txts.append(s"<gray>Type: <yellow>True Logs Broken");
             txts.append(s"");
         } else if(global "%uuid leaderboardType" == 3) {
-            txts.append(s"<gray>Type: <yellow>Donation Amounts");
+            line lbType = "weatherDonationLeaderboard";
+            txts.append(s"<gray>Type: <yellow>Weather Machine Donation Amount");
             txts.append(s"");
-        } else if(global "%uuid leaderboardType" == 4 || global "%uuid leaderboardType" == 0) {
+        } else if(global "%uuid leaderboardType" == 4) {
+            line lbType = "playtimeLeaderboard";
+            txts.append(s"<gray>Type: <yellow>Playtime (in Minutes)");
+            txts.append(s"");
+        } else if(global "%uuid leaderboardType" == 5 || global "%uuid leaderboardType" == 0) {
             global "%uuid leaderboardType" = 0;
             txts.append(s"<gray>Type: <yellow>Tree Type Level");
             txts.append(s"");
