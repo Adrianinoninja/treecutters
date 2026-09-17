@@ -23,7 +23,6 @@ namespace statShopIcon.sweep {
     stat = "sweep";
     basePrice = 15;
     priceScaling = 1.15;
-    maxLevel = 110;
     description: list[str] = ["Each tier allows you to break", "an extra adjacent block upon breaking", "a block"];
 }
 

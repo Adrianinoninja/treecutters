@@ -38,7 +38,13 @@ namespace sweeping {
             if(num.random(1, 100) <= timberLevel) {
                 player.sendTitle(s"", s"<green><bold>TIMBER!", 10, 1, 1);
                 player.playSound(snd("Axe Strip"));
-                maxBlocks = 10000;
+                maxBlocks = 0;
+
+                for(line bl of global "%uuid blocksToBreak") {
+                    safeBreak(bl);
+                    util.fastWait(1/100);
+                }
+                return [];
             }
         }
 
