@@ -10,6 +10,7 @@ namespace throwingaxe {
         player.playSound(snd("Player Attack (Sweep)"));
 
         game.spawnItemDisplay(origin, item("iron_axe"));
+        lastEntity.setTag("owner", "%default");
         line disp = lastEntity.uuid;
 
         line playerLoc = player.location;
@@ -108,6 +109,7 @@ namespace throwingaxe {
     ) {
         line dist = source.getDistance(target) * 5;
         game.spawnTextDisplay(source, s"<#cccccc>█");
+        lastEntity.setTag("owner", "%default");
         line uuid = lastEntity.uuid;
 
         select entitiesByUUID(uuid);

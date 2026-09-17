@@ -177,6 +177,7 @@ namespace sweeping {
         }
         pos = pos.align(align = "Block center", rotation = "Remove rotation", coords = "All coordinates");
         game.spawnTextDisplay(pos, s"☐");
+        lastEntity.setTag("owner", "%default");
         line disp = lastEntity.uuid;
 
         allPlayers.setEntityHidden(disp);
@@ -208,6 +209,7 @@ namespace sweeping {
         }
         block = block.align(align = "Block center", rotation = "Remove rotation", coords = "All coordinates");
         game.spawnItemDisplay(block, item(mat));
+        lastEntity.setTag("owner", "%default");
         line uuid = lastEntity.uuid;
 
         line xOff = num.random(-2, 2, rounding = "Decimal number");

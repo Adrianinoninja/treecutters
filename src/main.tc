@@ -20,7 +20,7 @@ playerevent join {
         item("oak_wood"),
         item("stripped_acacia_wood")
     ];
-    
+
     namespace.reload();
 
     settingsMenu.initJoin();
@@ -123,6 +123,10 @@ playerevent join {
 
 playerevent leave {
     global roomPositions.append(global "%uuid roomPos");
+
+    select entitiesByCondition(selectedEntity.hasTag("owner", "%default"));
+    selectedEntity.remove();
+    select reset;
 }
 
 import loops;
