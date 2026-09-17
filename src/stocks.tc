@@ -124,6 +124,22 @@ namespace stocksMenu {
         }
     }
 
+    function buy() {
+        if(saved "%uuid logs" >= stockValue) {
+            declare saved "%uuid stockCount" += 1;
+            saved "%uuid logs" -= stockValue;
+            boom(num.random(0.002, 0.003, rounding = "Decimal number"));
+        }
+    }
+
+    function sell() {
+        if(saved "%uuid stockCount" >= 1) {
+            saved "%uuid stockCount"--;
+            saved "%uuid logs" += stockValue;
+            fall(num.random(0.002, 0.003, rounding = "Decimal number"));
+        }
+    }
+
     function clicks() {
         if(event.blockLocation.getDistance(loc(103, 5, 44)) <= 1
     && player.getItemCooldown(item("acacia_hanging_sign")) == 0) {
@@ -140,18 +156,10 @@ namespace stocksMenu {
             }
         }
         if(event.blockLocation.getDistance(loc(103, 5, 41)) <= 1) {
-            if(saved "%uuid logs" >= stockValue) {
-                declare saved "%uuid stockCount" += 1;
-                saved "%uuid logs" -= stockValue;
-                boom(num.random(0.002, 0.003, rounding = "Decimal number"));
-            }
+            buy();
         }
         if(event.blockLocation.getDistance(loc(103, 5, 47)) <= 1) {
-            if(saved "%uuid stockCount" >= 1) {
-                saved "%uuid stockCount"--;
-                saved "%uuid logs" += stockValue;
-                fall(num.random(0.002, 0.003, rounding = "Decimal number"));
-            }
+            sell();
         }
     }
 

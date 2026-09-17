@@ -17,8 +17,12 @@ namespace abils {
             line blocks = sweeping.getBlockOrders(
                 (global "%uuid stats")["tree_type"],
                 rngBlock,
-                (global "%uuid stats")["sweep"]
+                (global "%uuid stats")["sweep"],
+                global "%uuid firstStrike",
+                (global "%uuid stats")["timber"],
             );
+
+            global "%uuid firstStrike" = 0;
             line t2: list[loc] = blocks.flatten();
             line l1 = player.midpointLocation;
             line l2 = rngBlock;

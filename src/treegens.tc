@@ -154,6 +154,7 @@ namespace treegens {
         }
         player.playSound(snd("Creaking Attack"));   
         global "%uuid treeRegenerating" = 0;
+        declare global "%uuid firstStrike" = 1;
     }
 
     function sizeVariables(

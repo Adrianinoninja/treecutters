@@ -17,9 +17,10 @@ namespace sweeping {
     function getBlockOrders(
         tier: num,
         origin: loc,
-        maxBlocks: num
+        maxBlocks: num,
+        firstStrike: num = 0,
+        timberLevel: num = 0
     ): list[list[loc]] {
-
         line logFamily = global log_families[num.floor(tier / 5) + 1];
         maxBlocks = maxBlocks - logFamily["toughness"];
         if(maxBlocks > 8) {
@@ -30,6 +31,15 @@ namespace sweeping {
         }
         if(maxBlocks > 32) {
             maxBlocks = 32 + ((maxBlocks - 32) * 0.5);
+        }
+
+
+        if(firstStrike == 1) {
+            if(num.random(1, 100) <= timberLevel) {
+                player.sendTitle(s"", s"<green><bold>TIMBER!", 10, 1, 1);
+                player.playSound(snd("Axe Strip"));
+                maxBlocks = 1000;
+            }
         }
 
         line breakQueue: list[list[loc]] = [];
@@ -123,7 +133,11 @@ namespace sweeping {
             saved "%uuid logs" += logValue;
             declare saved "%uuid true_logs" += 1;
         }
-        game.breakBlock(block);
+        if(saved "%uuid settings"["logEffects"] == "Enabled") {
+            game.breakBlock(block);
+        } else {
+            game.setBlock("air" as item, block);
+        }
         
         start blockFallAnim(block, mat);
 
@@ -143,7 +157,11 @@ namespace sweeping {
                         start blockFallAnim(block2, mat);
                     }
                 }
-                game.breakBlock(block2);
+                if(saved "%uuid settings"["logEffects"] == "Enabled") {
+                    game.breakBlock(block2);
+                } else {
+                    game.setBlock("air" as item, block2);
+                }
             }
             player.playSound(snd("Creaking Activate", 1, 0.5));
             start treegens.growForPlayer();
@@ -185,6 +203,9 @@ namespace sweeping {
         block: loc,
         mat: str
     ) {
+        if(saved "%uuid settings"["logEffects"] == "Disabled") {
+            endthread;
+        }
         block = block.align(align = "Block center", rotation = "Remove rotation", coords = "All coordinates");
         game.spawnItemDisplay(block, item(mat));
         line uuid = lastEntity.uuid;

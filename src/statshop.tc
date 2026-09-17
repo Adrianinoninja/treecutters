@@ -24,6 +24,7 @@ namespace statShopIcon.sweep {
     basePrice = 15;
     priceScaling = 1.15;
     maxLevel = 110;
+    description: list[str] = ["Each tier allows you to break", "an extra adjacent block upon breaking", "a block"];
 }
 
 namespace statShopIcon.logFortune {
@@ -33,6 +34,7 @@ namespace statShopIcon.logFortune {
     amount = 0.06;
     basePrice = 15;
     priceScaling = 1.9;
+    description: list[str] = ["Each tier grants +6%", "log gain."];
 }
 
 namespace statShopIcon.treeGrowthSpeed {
@@ -44,6 +46,7 @@ namespace statShopIcon.treeGrowthSpeed {
     priceScaling = 1.4;
     maxLevel = 60;
     levelReq = 6;
+    description: list[str] = ["Doubles the speed at which", "your tree regrows."];
 }
 
 namespace statShopIcon.jumpHeight {
@@ -55,6 +58,7 @@ namespace statShopIcon.jumpHeight {
     priceScaling = 1.5;
     maxLevel = 4;
     levelReq = 3;
+    description: list[str] = ["Grants an extra tier of jump", "boost, and buffs your double jump."];
 }
 
 
@@ -89,6 +93,7 @@ namespace statShopIcon.treeType {
         1000000000
     ];
     maxLevel = 100000000;
+    description: list[str] = ["Increases your tree type level,", "allowing you to unlock new tree types,", "new upgrades, and general progression."];
 }
 
 namespace statShopIcon.speed {
@@ -100,6 +105,7 @@ namespace statShopIcon.speed {
     priceScaling = 1.25;
     maxLevel = 10;
     levelReq = 11;
+    description: list[str] = ["Grants +10% walk speed per tier."];
 }
 
 namespace statShopIcon.abilityCooldown {
@@ -111,6 +117,7 @@ namespace statShopIcon.abilityCooldown {
     priceScaling = 3;
     maxLevel = 5;
     levelReq = 16;
+    description: list[str] = ["Decreases the throwing axe cooldown by 10%", "per tier."];
 }
 
 namespace statShopIcon.swingRange {
@@ -120,8 +127,9 @@ namespace statShopIcon.swingRange {
     amount = 0.5;
     basePrice = 1000;
     priceScaling = 4;
-    maxLevel = 7;
+    maxLevel = 10;
     levelReq = 21;
+    description: list[str] = ["Grants +1 block break reach per tier."];
 }
 
 namespace statShopIcon.turret {
@@ -160,6 +168,30 @@ namespace statShopIcon.multishot {
     description: list[str] = ["Each tier makes your throwing axe", "shoot an extra time.", "The extra axes will be aimed towards", "a random block on the tree.", "Each tier will also increase", "the throwing axe cooldown."];
 }
 
+namespace statShopIcon.timber {
+    material = "wooden_axe";
+    name = "Timber";
+    stat = "timber";
+    amount = 1;
+    basePrice = 200000;
+    priceScaling = 2;
+    maxLevel = 10;
+    levelReq = 41;
+    description: list[str] = ["Each tier grants a 1% chance", "to instantly fell your tree", "on your first swipe."];
+}
+
+namespace statShopIcon.extendedJumps {
+    material = "leather_boots";
+    name = "Extended Jumps";
+    stat = "triple_jumps";
+    amount = 1;
+    basePrice = 1_000_000;
+    priceScaling = 5;
+    maxLevel = 4;
+    levelReq = 46;
+    description: list[str] = ["Each tier grants an extra mid-air jump", "before you must touch the ground."];
+}
+
 import statShopIcon;
 import util;
 import treegens;
@@ -168,7 +200,7 @@ import settingsMenu;
 
 namespace statShop {
     function openMenu() {
-        line inv = inventory.tiledMenu(3);
+        line inv = inventory.tiledMenu(4);
 
         if(global "%uuid stats"["tree_type"] >= 25) {
             if(player.y >= 33) {
@@ -181,7 +213,7 @@ namespace statShop {
                     s"<yellow>Click to warp!" 
                 ]);
                 city_icon = city_icon.setTag("warp", "city");
-                inv.setItem(27, city_icon);
+                inv.setItem(36, city_icon);
             } else {
                 line city_icon = item("grass_block");
                 city_icon = city_icon.setName(s"<green>Home");
@@ -191,7 +223,7 @@ namespace statShop {
                     s"<yellow>Click to warp!" 
                 ]);
                 city_icon = city_icon.setTag("warp", "home");
-                inv.setItem(27, city_icon);
+                inv.setItem(36, city_icon);
             }
         }
 
@@ -217,12 +249,12 @@ namespace statShop {
             declare saved playtimeLeaderboard: dict[num] = {};
         }
         lbIcon = lbIcon.setLore(leaderboardLore());
-        inv.setItem(26, lbIcon);
+        inv.setItem(35, lbIcon);
 
         line settingsIcon = item("iron_ingot");
         settingsIcon = settingsIcon.setName(s"<#cccccc>Settings");
         settingsIcon = settingsIcon.setTag("settings_menu", 1);
-        inv.setItem(25, settingsIcon);
+        inv.setItem(34, settingsIcon);
 
         line slot = 1;
         for(line iconKey of namespace.getKeys(statShopIcon)) {

@@ -5,6 +5,8 @@ import stats;
 import settingsMenu;
 
 playerevent join {
+    namespace.reload();
+
     settingsMenu.initJoin();
 
     declare global log_families: list[log_family] = [
@@ -114,8 +116,11 @@ gameevent startup {
     startup();
 }
 
-function startup() {
+gameevent lagSlayRecover {
+    start loops.executePlayerLoops();
+}
 
+function startup() {
     declare global sweepVecs: list[vec] = [
         vec(-1, -1, -1), vec(-1, -1, 0), vec(-1, -1, 1),
         vec(-1, 0, -1),  vec(-1, 0, 0),  vec(-1, 0, 1),
@@ -173,8 +178,11 @@ playerevent breakBlock {
     line blocks = sweeping.getBlockOrders(
         (global "%uuid stats")["tree_type"],
         event.blockLocation,
-        (global "%uuid stats")["sweep"]
+        (global "%uuid stats")["sweep"],
+        global "%uuid firstStrike",
+        (global "%uuid stats")["timber"],
     );
+    global "%uuid firstStrike" = 0;
     sweeping.safeBreak(event.blockLocation);
     sweeping.executeSweep(saved "%uuid logs", blocks);
 }
@@ -256,7 +264,7 @@ playerevent takeDamage {
 
 playerevent movementKeyChange {
     if(event.movementKeyEquals(action = "Just pressed", key = "Jump (Space)")) {
-        if(global "%uuid canDoubleJump" == 0) {
+        if(global "%uuid canDoubleJump" <= 0) {
             endthread;
         }
         
@@ -267,11 +275,16 @@ playerevent movementKeyChange {
         player.launchUp(global "%uuid stats"["jump_height"] + 1, addToCurrentVel = "False");
         player.launchForward(9/5 * (global "%uuid stats"["jump_height"]) + 9/5, addToCurrentVel = "True");
 
-        declare global "%uuid canDoubleJump" = 0;
+        declare global "%uuid canDoubleJump" -= 1;
     }
 }
 
 playerevent command {
+    if(event.commandArgumentEquals("warp", 1)) {
+        if(event.commandArgumentEquals("stocks", 2)) {
+            player.teleport(loc(97.8883, 4, 44.4137, 0.45, -88.75));
+        }
+    }
     if(event.commandArgumentEquals("axolotl", 1) && player.hasPlotPermission(permission = "Whitelisted")) {
         select playersByName("IHaveAqInMyName");
         game.spawnMob(item("axolotl_spawn_egg"), selected.location);

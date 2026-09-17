@@ -41,7 +41,7 @@ namespace throwingaxe {
 
         line dt = 0;
         line oldPos = pos;
-        while(game.blockEquals(pos, "air")) {
+        repeat {
             dt++;
             if(dt > 30) {
                 break;
@@ -49,6 +49,17 @@ namespace throwingaxe {
             pos = pos.shiftInDirection(1, direction = "Forward");
             // pos.y -= dy;
             dy += 0.01;
+
+            for(line adj of adjacent(pos.align(), pattern = "Cube (26 blocks)", includeOrigin = "True", changeLocRot = "False")) {
+                adj = adj.align();
+                if(woodTypeList.contains(item(game.getBlockMaterial(adj)))) {
+                    select entitiesByUUID(disp);
+                    selectedEntity.remove();
+                    select reset;
+                    execBreak(pos);
+                    dt = 30;
+                }
+            }
 
             if(game.cpuUsage * 100 < 30 && dt % 3 == 1) {
                 start spawnTemporaryBeam(
@@ -79,16 +90,14 @@ namespace throwingaxe {
             );
             select reset;
 
+            
+
             wait(1);
         }
 
         select entitiesByUUID(disp);
         entity.remove();
         select reset;
-
-        pos = pos.align(align = "Block center", rotation = "Remove rotation", coords = "All coordinates");
-
-        execBreak(pos);
     }
 
     process spawnTemporaryBeam(
@@ -134,8 +143,12 @@ namespace throwingaxe {
             line blocks = sweeping.getBlockOrders(
                 (global "%uuid stats")["tree_type"], 
                 adj,
-                (global "%uuid stats")["sweep"]
+                (global "%uuid stats")["sweep"],
+                global "%uuid firstStrike",
+                (global "%uuid stats")["timber"],
             );
+
+            global "%uuid firstStrike" = 0;
             sweeping.safeBreak(adj);
             sweeping.executeSweep(saved "%uuid logs", blocks);
             break;

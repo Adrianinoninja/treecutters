@@ -150,6 +150,9 @@ namespace loops {
             didyouknow();
         }
         if(game.ticksSinceStartup % 20 == 19) {
+            if(!var.exists(global "%default logHistory")) {
+                declare global "%default logHistory": list[num] = [];
+            }
             declare global "%default currLogs": num = saved "%uuid logs";
             line diff = global "%default currLogs" - global "%default lastLogs";
             declare global "%default logSecComp": txt = s"<green>+%var(diff)/s";
@@ -199,7 +202,7 @@ namespace loops {
 
 
         if(player.isGrounded()) {
-            global "%uuid canDoubleJump" = 1;
+            global "%uuid canDoubleJump" = 1 + (global "%uuid stats")["triple_jumps"]; 
         }
 
         if(game.ticksSinceStartup % 20 == global "%uuid hashCode" % 20) {
