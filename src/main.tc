@@ -177,7 +177,7 @@ import treegens;
 import sweeping;
 import statShopIcon;
 
-playerevent breakBlock {
+lscancel playerevent breakBlock {
     if(!event.blockEquals(global woodTypeList)) {
         event.cancel();
         endthread;
@@ -194,14 +194,14 @@ playerevent breakBlock {
     sweeping.executeSweep(saved "%uuid logs", blocks);
 }
 
-playerevent placeBlock {
+lscancel playerevent placeBlock {
     event.cancel();
 }
 
 import throwingaxe;
 import stocksMenu;
 import weather;
-playerevent rightClick {
+lscancel playerevent rightClick {
     event.cancel();
     weather.donate();
     stocksMenu.clicks();
@@ -235,13 +235,13 @@ playerevent rightClick {
     }
 }
 
-playerevent clickInventorySlot {
+lscancel playerevent clickInventorySlot {
     event.cancel();
 }
 
 import statShop;
 
-playerevent swapHands {
+lscancel playerevent swapHands {
     event.cancel();
     statShop.openMenu();
 }
@@ -263,7 +263,7 @@ playerevent clickMenuSlot {
     settingsMenu.click();
 }
 
-playerevent takeDamage {
+lscancel playerevent takeDamage {
     event.cancel();
 }
 
