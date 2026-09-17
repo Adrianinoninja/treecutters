@@ -34,18 +34,15 @@ namespace sweeping {
         }
 
 
-        if(firstStrike == 1) {
-            if(num.random(1, 100) <= timberLevel) {
-                player.sendTitle(s"", s"<green><bold>TIMBER!", 10, 1, 1);
-                player.playSound(snd("Axe Strip"));
-                maxBlocks = 0;
+        if(num.random(1, 100) <= timberLevel) {
+            player.playSound(snd("Axe Strip"));
+            maxBlocks = 0;
 
-                for(line bl of global "%uuid blocksToBreak") {
-                    safeBreak(bl);
-                    util.fastWait(1/100);
-                }
-                return [];
+            for(line bl of global "%uuid blocksToBreak") {
+                safeBreak(bl);
+                util.fastWait(1/100);
             }
+            return [];
         }
 
         line breakQueue: list[list[loc]] = [];

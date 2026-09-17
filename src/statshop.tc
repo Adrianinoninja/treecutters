@@ -23,6 +23,7 @@ namespace statShopIcon.sweep {
     stat = "sweep";
     basePrice = 15;
     priceScaling = 1.15;
+    maxLevel = 130;
     description: list[str] = ["Each tier allows you to break", "an extra adjacent block upon breaking", "a block"];
 }
 
@@ -171,12 +172,12 @@ namespace statShopIcon.timber {
     material = "wooden_axe";
     name = "Timber";
     stat = "timber";
-    amount = 1;
+    amount = 0.25;
     basePrice = 200000;
     priceScaling = 2;
-    maxLevel = 10;
+    maxLevel = 12;
     levelReq = 41;
-    description: list[str] = ["Each tier grants a 1% chance", "to instantly fell your tree", "on your first swipe."];
+    description: list[str] = ["Each tier grants a 0.25% chance", "to instantly fell your tree upon", "breaking a block."];
 }
 
 namespace statShopIcon.extendedJumps {
@@ -189,6 +190,18 @@ namespace statShopIcon.extendedJumps {
     maxLevel = 4;
     levelReq = 46;
     description: list[str] = ["Each tier grants an extra mid-air jump", "before you must touch the ground."];
+}
+
+namespace statShopIcon.throwingAxeSpeed {
+    material = "diamond_axe";
+    name = "Throwing Axe Speed";
+    stat = "throwing_axe_speed";
+    amount = 3;
+    basePrice = 1_000_000;
+    priceScaling = 2;
+    maxLevel = 10;
+    levelReq = 51;
+    description: list[str] = ["Each tier makes throwing axes", "+3 blocks per second faster."];
 }
 
 import statShopIcon;
