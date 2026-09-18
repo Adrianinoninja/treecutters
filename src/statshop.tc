@@ -35,7 +35,7 @@ namespace statShopIcon.logFortune {
     amount = 0.06;
     basePrice = 15;
     priceScaling = 1.9;
-    description: list[str] = ["Each tier grants +6%", "log gain.", "(Additive with itself, multiplicative", "with other buffs.)"];
+    description: list[str] = ["Each tier grants +6%", "log gain."];
 }
 
 namespace statShopIcon.treeGrowthSpeed {
@@ -215,10 +215,10 @@ namespace statShopIcon.combo {
     stat = "combo_str";
     amount = 0.05;
     basePrice = 2_000_000;
-    priceScaling = 1.5;
+    priceScaling = 1.8;
     maxLevel = 10;
     levelReq = 56;
-    description: list[str] = ["Grants +1% Logs per 1,000 Combo per tier.", "(Additive with itself, multiplicative", "with other buffs.)"];
+    description: list[str] = ["Grants +2% Logs per 1,000 Combo per tier."];
 }
 
 import statShopIcon;

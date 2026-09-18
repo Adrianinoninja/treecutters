@@ -23,6 +23,13 @@ playerevent join {
 
     namespace.reload();
 
+    for(line p of game.plotPlayerUUIDs) {
+        select playersByName(p);
+        stats.computeStats();
+        select reset;
+    }
+    
+
     settingsMenu.initJoin();
 
     declare global log_families: list[log_family] = [

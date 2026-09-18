@@ -128,22 +128,22 @@ namespace loops {
             }
             if(weatherType == 1) {
                 tl += s"<gray>Status: <aqua>Rain\n";
-                tl += s"<gray>Global Boost: <green>+10%\n";
+                tl += s"<gray>Global Boost: <green>+20%\n";
                 tl += s"<gray>Cost: <red>-5k/s/p\n";
             }
             if(weatherType == 2) {
                 tl += s"<gray>Status: <blue>Thunderstorm\n";
-                tl += s"<gray>Global Boost: <green>+30%\n";
+                tl += s"<gray>Global Boost: <green>+50%\n";
                 tl += s"<gray>Cost: <red>-20k/s/p\n";
             }
             if(weatherType == 3) {
                 tl += s"<gray>Status: <dark_red>Severe Thunderstorm\n";
-                tl += s"<gray>Global Boost: <green>+50%\n";
+                tl += s"<gray>Global Boost: <green>+90%\n";
                 tl += s"<gray>Cost: <red>-50k/s/p\n";
             }
             if(weatherType == 4) {
                 tl += s"<gray>Status: <dark_blue>Hurricane\n";
-                tl += s"<gray>Global Boost: <green>+100%\n";
+                tl += s"<gray>Global Boost: <green>+150%\n";
                 tl += s"<gray>Cost: <red>-150k/s/p\n";
             }
             line fmt = util.numberFormat(weatherMachineLogs);
@@ -326,10 +326,10 @@ namespace loops {
             color = "gradient:#5555c4:#c5d2e9";
         }
         if(level > 104) {
-            color = "pride:trans";
+            color = "pride:pan";
         }
         if(level > 109) {
-            color = "pride:pan";
+            color = "pride:trans";
         }
         return txt.parseExpression("<dark_gray>[<%var(color)>%var(level)🪓<dark_gray>]");
     }
