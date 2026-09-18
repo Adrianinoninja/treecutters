@@ -37,7 +37,7 @@ namespace loops {
             }
             if(chatGameSolution == 67) {
                 setupChatGameHidden();
-                endthread();
+                return;
             }
             gamePrompt = "Solve %var(gamePrompt).";
         }
@@ -45,7 +45,7 @@ namespace loops {
             chatGameSolution = str.setToString(num.random(1, 200, rounding = "Whole number"));
             if(chatGameSolution == 67) {
                 setupChatGameHidden();
-                endthread();
+                return;
             }
             gameTypeTxt = "GUESS THE NUMBER!";
             gamePrompt = "A number from 1 to 200 has been selected. Guess it!";
