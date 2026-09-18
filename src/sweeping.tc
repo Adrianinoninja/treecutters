@@ -200,9 +200,8 @@ namespace sweeping {
         block2: loc
     ) {
         line mt = game.getBlockMaterial(block2);
-        line bs = game.getBlockSound(item(mt), soundType = "Break Sound");
-        line pt = par("Block", amount = 20, spreadHoriz = 0.5, spreadVert = 0.5);
-        pt = pt.setMaterial(item(mt));
+        line bs = game.getBlockSound(mt as item, soundType = "Break Sound");
+        line pt = par("Block", amount = 20, spreadHoriz = 0.5, spreadVert = 0.5, material = mt);
         player.playSound(bs, block2);
         player.displayParticleEffect(pt, block2);
         game.setBlock("air" as item, block2);
