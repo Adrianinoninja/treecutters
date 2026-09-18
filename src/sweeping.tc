@@ -157,7 +157,7 @@ namespace sweeping {
             declare saved "%uuid true_logs" += 1;
         }
         if(saved "%uuid settings"["logEffects"] == "Enabled" || saved "%uuid settings"["logEffects"] == "Particles Only") {
-            game.breakBlock(block);
+            visualBreak(block);
         } else {
             game.setBlock("air" as item, block);
         }
@@ -185,7 +185,7 @@ namespace sweeping {
                     }
                 }
                 if(saved "%uuid settings"["logEffects"] == "Enabled" || saved "%uuid settings"["logEffects"] == "Particles Only") {
-                    game.breakBlock(block2);
+                    visualBreak(block2);
                 } else {
                     game.setBlock("air" as item, block2);
                 }
@@ -194,6 +194,18 @@ namespace sweeping {
             player.playSound(snd("Creaking Activate", 1, 0.5));
             start treegens.growForPlayer();
         }
+    }
+
+    function visualBreak(
+        block2: loc
+    ) {
+        line mt = game.getBlockMaterial(block2);
+        line bs = game.getBlockSound(item(mt), soundType = "Break Sound");
+        line pt = par("Block", amount = 20, spreadHoriz = 0.5, spreadVert = 0.5);
+        pt = pt.setMaterial(item(mt));
+        player.playSound(bs, block2);
+        player.displayParticleEffect(pt, block2);
+        game.setBlock("air" as item, block2);
     }
 
     // the square animation made when a tree hit it's cutoff point
@@ -239,6 +251,8 @@ namespace sweeping {
         }
         block = block.align(align = "Block center", rotation = "Remove rotation", coords = "All coordinates");
         game.spawnItemDisplay(block, item(mat));
+        allPlayers.setEntityHidden(lastEntity.uuid);
+        player.setEntityHidden(lastEntity.uuid, hidden = "Disable");
         lastEntity.setTag("owner", "%default");
         line uuid = lastEntity.uuid;
 
