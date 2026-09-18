@@ -41,7 +41,7 @@ namespace loops {
                 chatGameSolution = str.setToString(a * b - c);
                 gamePrompt = "Solve %var(a) * %var(b) - %var(c)";
             }
-            if(chatGameSolution == 67) {
+            if(chatGameSolution == "67") {
                 setupChatGameHidden();
                 return;
             }
@@ -49,7 +49,7 @@ namespace loops {
         }
         if(gameType == 3) {
             chatGameSolution = str.setToString(num.random(1, 200, rounding = "Whole number"));
-            if(chatGameSolution == 67) {
+            if(chatGameSolution == "67") {
                 setupChatGameHidden();
                 return;
             }
