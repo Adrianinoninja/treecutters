@@ -47,7 +47,11 @@ playerevent join {
         log_family(2000, 45, "Infinitum IX"),
         log_family(2100, 45, "Infinitum X"),
         log_family(2200, 45, "Infinitum XI"),
-        log_family(2300, 45, "Infinitum XII")
+        log_family(2300, 45, "Infinitum XII"),
+        log_family(2400, 45, "Infinitum XIII"),
+        log_family(2500, 45, "Infinitum XIV"),
+        log_family(2600, 45, "Infinitum XV"),
+        log_family(2700, 45, "Infinitum XVI")
     ];
 
     declare saved "%uuid statShop": dict[num];

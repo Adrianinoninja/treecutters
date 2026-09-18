@@ -11,16 +11,16 @@ playerevent chat {
             line logInc = logValue * (6 * 225);
         }
         if(global "%uuid stats"["tree_type"] >= 60) {
-            line logInc *= 1.5;
+            line logInc *= 2;
         }
         if(global "%uuid stats"["tree_type"] >= 65) {
-            line logInc *= 1.5;
+            line logInc *= 2;
         }
         if(global "%uuid stats"["tree_type"] >= 70) {
-            line logInc *= 1.5;
+            line logInc *= 2;
         }
         if(global "%uuid stats"["tree_type"] >= 85) {
-            line logInc *= 1.5;
+            line logInc *= 2;
         }
         if(global "%uuid stats"["tree_type"] >= 80) {
             line logInc *= 1.5;
@@ -29,6 +29,9 @@ playerevent chat {
             line logInc *= 1.5;
         }
         if(global "%uuid stats"["tree_type"] >= 90) {
+            line logInc *= 1.5;
+        }
+        if(global "%uuid stats"["tree_type"] >= 100) {
             line logInc *= 1.5;
         }
 
@@ -167,6 +170,25 @@ namespace loops {
     }
     
     process playerLoop() {
+        global "%uuid combo": num *= 0.99;
+        global "%uuid combo" = global "%uuid combo".round();
+
+        if(global "%uuid combo" < 0) {
+            global "%uuid combo" = 0;
+        }
+
+        if(global "%uuid combo" >= 2500) {
+            global "%uuid combo" = 2500;
+        }
+
+        if(global "%uuid stats"["combo_str"] > 0) {
+            player.setBossBar(
+                s"<blue>Combo: %var(%uuid combo)",
+                global "%uuid combo",
+                2500,
+                1
+            );
+        }
         declare saved "%uuid playtime" += 1;
         if(game.ticksSinceStartup % (60 * 20) == 0 && game.plotPlayerUUIDs[1] == player.uuid) {
             didyouknow();
@@ -302,6 +324,12 @@ namespace loops {
         }
         if(level > 99) {
             color = "gradient:#5555c4:#c5d2e9";
+        }
+        if(level > 104) {
+            color = "pride:trans";
+        }
+        if(level > 109) {
+            color = "pride:pan";
         }
         return txt.parseExpression("<dark_gray>[<%var(color)>%var(level)🪓<dark_gray>]");
     }

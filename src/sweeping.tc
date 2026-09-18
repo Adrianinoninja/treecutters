@@ -116,6 +116,7 @@ namespace sweeping {
         }
         line logValue = log_families[num.floor(global "%uuid stats"["tree_type"]/5)+1]["value"];
         logValue *= global "%uuid stats"["fortune"] + 1;
+        logValue *= 1 + (global "%uuid stats"["combo_str"] * (global "%uuid combo" * 0.001));
 
         if(weatherType == 1) {
             logValue *= 1.1;
@@ -144,6 +145,9 @@ namespace sweeping {
         
         start blockFallAnim(block, mat);
 
+
+        declare global "%uuid combo": num += 1;
+
         line brokenSoFar = global "%uuid brokenLogs".len();
         line brokenReq = global "%uuid blocksToBreak".len();
         if(
@@ -156,6 +160,7 @@ namespace sweeping {
                     global "%uuid brokenLogs".append(block2);
                     saved "%uuid logs" += logValue;
                     saved "%uuid true_logs" += 1;
+                    global "%uuid combo": num += 1;
                     if(game.cpuUsage * 100 < 30) {
                         start blockFallAnim(block2, mat);
                     }
@@ -165,6 +170,7 @@ namespace sweeping {
                 } else {
                     game.setBlock("air" as item, block2);
                 }
+
             }
             player.playSound(snd("Creaking Activate", 1, 0.5));
             start treegens.growForPlayer();
