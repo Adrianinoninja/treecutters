@@ -333,8 +333,10 @@ playerevent command {
         player.sendMessage(s"<click:open_url:'https://discord.gg/DHEYJB9UX3'>https://discord.gg/DHEYJB9UX3</click>");
     }
     if(event.commandArgumentEquals("warp", 1)) {
-        if(event.commandArgumentEquals("stocks", 2)) {
-            player.teleport(loc(97.8883, 4, 44.4137, 0.45, -88.75));
+        if(global "%uuid stats"["tree_type"] >= 25) {
+            if(event.commandArgumentEquals("stocks", 2)) {
+                player.teleport(loc(97.8883, 4, 44.4137, 0.45, -88.75));
+            }
         }
     }
     if(event.commandArgumentEquals("axolotl", 1) && player.hasPlotPermission(permission = "Whitelisted")) {
