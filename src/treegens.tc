@@ -24,7 +24,9 @@ namespace treegens {
     meteoric = "meteoric";
     tall_meteoric = "tall_meteoric";
 
-
+    // grows a tree for a player at their room
+    // a tree type can optionally be specified to override 
+    // should not be called directly, this does not have any safety checks
     function growArbitraryTree(
         idx: num,
         treeType: str = "default"
@@ -37,6 +39,7 @@ namespace treegens {
             individualSize = small;
         }
         if(treeType == "default") {
+            // if a player is >=lv50, give them infinite otherwise tier them up normally
             line treeType = [
                 oak, dark, cherry, warped, molten, aerial, lunar, solar, astral, yggdrasil, 
                 infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, infinite, 
@@ -125,6 +128,9 @@ namespace treegens {
             );
         }
         if(treeType == infinite) {
+            // funky algorithm for handling tree types
+            // - every 5 lvs above 50, remove the weakest tree type
+            // - add in new trees if the level is met
             line sets: list[str] = [
                 oak,
                 dark,
@@ -157,9 +163,14 @@ namespace treegens {
             line treeTypeSel: str = sets.randomize()[1];
             return growArbitraryTree(idx, treeTypeSel);
         }
+        // this fallback should generally be impossible
         return [];
     }
 
+    // regrow a tree for a player
+    // this is recommended to be called instead of growArbitraryTree directly,
+    // as it is smart enough to know the context, if a tree can even be grown again, etc.
+    // also automatically handles the tree state management and parameter passing
     process growForPlayer() {
         if(global "%uuid treeRegenerating" == 1) {
             endthread;
@@ -181,12 +192,17 @@ namespace treegens {
         declare global "%uuid firstStrike" = 1;
     }
 
+    // returns the data for each size of tree
     function sizeVariables(
         size: str
     ): [list[vec], num, num, num] {
+        // the valid offsets to build trunks with
         line log_positions: list[vec];
+        // the height of the base trunk
         line height: num;
+        // the amount of branches to spin off (generally)
         line branchReqs: num;
+        // the size of the meteor primitive in radius
         line meteorSize: num;
         if(size == tiny) {
             log_positions = [
@@ -258,6 +274,7 @@ namespace treegens {
         return [log_positions, height, branchReqs, meteorSize];
     }
 
+    // builds random branches from a given locatio
     function buildBranches(
         outputPositions: var[list[loc]],
         root: loc,
@@ -295,6 +312,7 @@ namespace treegens {
         return endcaps;
     }
 
+    // builds a trunk out from a given location
     function buildTrunk(
         outputPositions: var[list[loc]],
         root: loc,
@@ -318,6 +336,7 @@ namespace treegens {
         }
     }
 
+    // builds a meteor (sphere) for a given location
     function buildMeteor(
         outputPositions: var[list[loc]],
         root: loc,

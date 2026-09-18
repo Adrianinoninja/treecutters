@@ -6,7 +6,7 @@ import settingsMenu;
 
 playerevent join {
 
-
+    // types of wood that the player can break
     declare global woodTypeList: list[item] = [
         item("stripped_oak_wood"),
         item("stripped_spruce_wood"),
@@ -32,6 +32,9 @@ playerevent join {
 
     settingsMenu.initJoin();
 
+    // types of trees in the game
+    // log families are responsible for the toughness, the log value,
+    // and the in-game naming
     declare global log_families: list[log_family] = [
         log_family(1, 0, "Oak"),
         log_family(3, 6, "Darkwood"),
@@ -80,19 +83,10 @@ playerevent join {
     player.enableBlockModification(
         global woodTypeList
     );
-    // player.givePotionEffect(
-    //     pot("Jump Boost", 4, 10000000),
-    //     particles = "None",
-    //     showIcon = "False"
-    // );
-    // player.givePotionEffect(
-    //     pot("Speed", 7, 10000000),
-    //     particles = "None",
-    //     showIcon = "False"
-    // );
 
-    declare global "%uuid roomPos": loc = roomPositions.pop();
+    // tries to allocate a room for the player, kicks them for palyer limit if not available
     declare global "%uuid hashCode": num = num.random(0, 2147000000, rounding = "Whole number");
+    declare global "%uuid roomPos": loc = roomPositions.pop();
     if(global "%uuid roomPos" == 0) {
         player.kick();
     }
@@ -418,6 +412,8 @@ playerevent command {
         select reset;
         player.sendMessage(s"Sent %var(playerName) %var(amount) logs");
     }
+    // originally used for the automatic tree type value calculation
+    // dropped in favor of manual calculations for lv 50+
     if(event.commandEquals("test_trees") && player.hasPlotPermission(permission = "Owner")) {
         line entries: list[num] = [];
         for(line i of range(0, 47)) {

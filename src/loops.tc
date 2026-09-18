@@ -42,6 +42,7 @@ playerevent chat {
         declare global hintType: num = 0;
         declare saved "%uuid chat_wins": num += 1;
     }
+    // exclusively for the number guessing game
     if(global hintType == 1) {
         line realVal = num.parse(chatGameSolution);
         line checkVal = num.parse(event.message);
@@ -55,6 +56,7 @@ playerevent chat {
         }
     }
     
+    // meow check from the did you know message
     if(num.random(1, 100000000, rounding = "Whole number") == 1 && event.message.startsWith("meow", ignoreCase = "True")) {
         allPlayers.sendMessage(s"<green><bold>%default GOT THE BILLION LOGS!");
         saved "%uuid logs" += 1_000_000_000;
@@ -66,6 +68,9 @@ import loops;
 import weather;
 
 namespace loops {
+    // the master loop running everything on tick
+    // really should not be edited as hotreloading this loop while in-game
+    // causes lagslays
     process executePlayerLoops() {
         repeat {
             generalTickables();
@@ -73,6 +78,7 @@ namespace loops {
         }
     }
 
+    // actual general every-tick game logic goes here
     function generalTickables() {
         declare saved gametime += 1;
         declare global sessiontime += 1;
@@ -89,6 +95,7 @@ namespace loops {
         weather.tick();
     }
 
+    // generates the data shown in the tab list
     function generateScoreboard() {
         if(game.timestamp - lastTime > 3) {
             declare global lastTime: num = game.timestamp;
@@ -102,6 +109,8 @@ namespace loops {
                 logs[selected.name.clearFormatting()] = saved "%uuid logs";
                 select reset;
             }
+
+            // shows players in custom tab, sorted by level
             players = players.sort("type" = "Sort by Value", order = "Descending");
             for(line player, line level of players) {
                 line lc = util.numberFormat(logs[player]);
@@ -109,6 +118,7 @@ namespace loops {
                 tl += s"%var(tag) <#dddddd>%var(player) <dark_gray>%var(lc)<reset>\n";
             }
 
+            // general game data
             line cpu = game.cpuUsage * 100;
             line pc = game.playerCount;
             tl += s"\n<gray>Players Online: <aqua>%var(pc)\n";
@@ -122,6 +132,7 @@ namespace loops {
                 tl += s"<red>LAG: Speed-based animations been slowed down for performance.\n";
             }
 
+            // weather machine data
             tl += s"\n<aqua><bold>WEATHER MACHINE<reset>\n";
             if(weatherType == 0) {
                 tl += s"<gray>Status: <red>Inactive\n";
@@ -155,6 +166,7 @@ namespace loops {
         }
     }
 
+    // sends a random did you know message when called
     function didyouknow() {
         line tip: txt = var.setToRandom(
             s"You can Swap Hands to open your upgrde menu!",
@@ -169,7 +181,9 @@ namespace loops {
         select reset;
     }
     
+    // general loop data for each player
     process playerLoop() {
+        // combo management
         global "%uuid combo": num *= 0.99;
         global "%uuid combo" = global "%uuid combo".round();
 
@@ -189,10 +203,14 @@ namespace loops {
                 1
             );
         }
+
+        // general counters
         declare saved "%uuid playtime" += 1;
         if(game.ticksSinceStartup % (60 * 20) == 0 && game.plotPlayerUUIDs[1] == player.uuid) {
             didyouknow();
         }
+
+        // logs per second counter
         if(game.ticksSinceStartup % 20 == 19) {
             if(!var.exists(global "%default logHistory")) {
                 declare global "%default logHistory": list[num] = [];
@@ -205,6 +223,8 @@ namespace loops {
         if(game.ticksSinceStartup % 20 == 0) {
             declare global "%default lastLogs": num = saved "%uuid logs";
         }
+        // send actionbar and tablist every 5 ticks
+        // hashCode is to distribute the computation to prevent high cpu
         if(game.ticksSinceStartup % 5 == global "%uuid hashCode" % 5) {
             line brokenSoFar = global "%uuid brokenLogs".len();
             line brokenReq = global "%uuid blocksToBreak".len();
@@ -246,10 +266,12 @@ namespace loops {
         }
 
 
+        // reset double jumps
         if(player.isGrounded()) {
             global "%uuid canDoubleJump" = 1 + (global "%uuid stats")["triple_jumps"]; 
         }
 
+        // set up the player's visual and client effects
         if(game.ticksSinceStartup % 20 == global "%uuid hashCode" % 20) {
             player.givePotionEffect(pot("Night Vision", 1, 100000), particles = "None", showIcon = "False");
 

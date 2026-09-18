@@ -4,6 +4,7 @@ namespace weather {
         declare global weatherType: num = 0;
 
         if(weatherMachineLogs > 250_000_000) {
+            // hurricane
             weatherMachineLogs -= (150000 * game.playerCount)/20;
             weatherType = 4;
             if(game.ticksSinceStartup % 100 == 1) {
@@ -17,6 +18,7 @@ namespace weather {
             select reset;
             allPlayers.setWeather(weather = "Downfall");
         } else if(weatherMachineLogs > 100_000_000) {
+            // severe thunderstorm
             weatherMachineLogs -= (40000 * game.playerCount)/20;
             weatherType = 3;
             if(game.ticksSinceStartup % 150 == 1) {
@@ -24,6 +26,7 @@ namespace weather {
             }
             allPlayers.setWeather(weather = "Downfall");
         } else if(weatherMachineLogs > 50_000_000) {
+            // thunderstorm
             weatherMachineLogs -= (15000 * game.playerCount)/20;
             weatherType = 2;
             if(game.ticksSinceStartup % 300 == 1) {
@@ -31,10 +34,12 @@ namespace weather {
             }
             allPlayers.setWeather(weather = "Downfall");
         } else if(weatherMachineLogs > 10_000_000) {
+            // rain
             weatherMachineLogs -= (5000 * game.playerCount)/20;
             weatherType = 1;
             allPlayers.setWeather(weather = "Downfall");
         } else {
+            // inactive, no weather
             weatherType = 0;
             allPlayers.setWeather(weather = "Clear");
         }

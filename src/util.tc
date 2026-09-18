@@ -1,4 +1,6 @@
 namespace util {
+    // runs a wait every freq times
+    // e.g 1/32 => every 32 executions, wait a tick
     function fastWait(freq: num) {
         line oftency = 1 / freq;
         local __fastWait: num;
@@ -12,6 +14,8 @@ namespace util {
         }
     }
 
+    // formats a number to me in a comma-seperated format when rounded
+    // e.g 1234.567 -> 1,234
     function numberFormat(value: num): str {
         line regex = "\\d{1,3}(?=(\\d{3})*$)";
         line captures = str.getAllRegexMatches(str.setToString(value.round()), regex);

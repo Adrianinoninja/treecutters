@@ -1,4 +1,6 @@
 namespace loops {
+    // leader function executing in the global loop
+    // to make sure the chat game can actually be ran
     function setupChatGame() {
         if(game.ticksSinceStartup % 3000 != 0) {
             return;
@@ -9,14 +11,18 @@ namespace loops {
         setupChatGameHidden();
     }
 
+    // actually runs the chat game
     function setupChatGameHidden(gameType = 0) {
         declare global chatGameSolution: str = "";
 
         if(gameType == 0) {
             gameType = num.random(1, 5, rounding = "Whole number");
         }
+        // the leading part, e.g QUICK MATH!
         line gameTypeTxt: str = "";
+        // the actual question the players must answer
         line gamePrompt: str = "";
+        
         if(gameType == 1) {
             gameTypeTxt = "QUICK MATH!";
 
