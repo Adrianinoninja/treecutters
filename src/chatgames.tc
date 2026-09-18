@@ -35,10 +35,18 @@ namespace loops {
                 chatGameSolution = str.setToString(a * b - c);
                 gamePrompt = "Solve %var(a) * %var(b) - %var(c)";
             }
+            if(chatGameSolution == 67) {
+                setupChatGameHidden();
+                endthread();
+            }
             gamePrompt = "Solve %var(gamePrompt).";
         }
         if(gameType == 3) {
             chatGameSolution = str.setToString(num.random(1, 200, rounding = "Whole number"));
+            if(chatGameSolution == 67) {
+                setupChatGameHidden();
+                endthread();
+            }
             gameTypeTxt = "GUESS THE NUMBER!";
             gamePrompt = "A number from 1 to 200 has been selected. Guess it!";
             global hintType = 1;
@@ -111,7 +119,7 @@ namespace loops {
                 "spruce",
                 "walnut",
                 "willow",
-
+                "olive",
                 "sprout",
                 "sprouting",
                 "flower",
