@@ -128,7 +128,7 @@ namespace stocksMenu {
         if(saved "%uuid logs" >= stockValue) {
             declare saved "%uuid stockCount" += 1;
             saved "%uuid logs" -= stockValue;
-            boom(num.random(0.002, 0.003, rounding = "Decimal number"));
+            stockValue += num.random(10000, 15000);
         }
     }
 
@@ -136,7 +136,7 @@ namespace stocksMenu {
         if(saved "%uuid stockCount" >= 1) {
             saved "%uuid stockCount"--;
             saved "%uuid logs" += stockValue;
-            fall(num.random(0.002, 0.003, rounding = "Decimal number"));
+            stockValue -= num.random(10000, 15000);
         }
     }
 
@@ -177,7 +177,7 @@ namespace stocksMenu {
                     s"",
                     s"<green><bold>BUY",
                     s"",
-                    s"<gray>Your Stocks: " + util.numberFormat(saved "%uuid stockCount")
+                    s"<gray>Stocks: " + util.numberFormat(saved "%uuid stockCount")
                 ]
             );
             selected.displaySignText(
@@ -186,7 +186,7 @@ namespace stocksMenu {
                     s"",
                     s"<red><bold>SELL",
                     s"",
-                    s"<gray>Your Stocks: " + util.numberFormat(saved "%uuid stockCount")
+                    s"<gray>Stocks: " + util.numberFormat(saved "%uuid stockCount")
                 ]
             );
             select reset;

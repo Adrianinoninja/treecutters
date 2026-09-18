@@ -1,4 +1,5 @@
 import loops;
+import updateMenu;
 
 namespace statShopIcon {
     schema: namespace {
@@ -268,6 +269,11 @@ namespace statShop {
         settingsIcon = settingsIcon.setTag("settings_menu", 1);
         inv.setItem(34, settingsIcon);
 
+        line updateIcon = item("lectern");
+        updateIcon = updateIcon.setName(s"<#cccccc>Update Log");
+        updateIcon = updateIcon.setTag("update_menu", 1);
+        inv.setItem(33, updateIcon);
+
         line slot = 1;
         for(line iconKey of namespace.getKeys(statShopIcon)) {
             line levelReq = statShopIcon[iconKey].levelReq;
@@ -347,6 +353,9 @@ namespace statShop {
     }
 
     function clickStatShopIcon() {
+        if(event.clickedSlotItem.hasTag("update_menu")) {
+            updateMenu.openMenu();
+        }
         if(event.clickedSlotItem.hasTag("settings_menu")) {
             settingsMenu.openMenu();
         }

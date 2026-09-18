@@ -10,14 +10,26 @@ playerevent chat {
         if(global "%uuid stats"["tree_type"] >= 55) {
             line logInc = logValue * (6 * 225);
         }
+        if(global "%uuid stats"["tree_type"] >= 60) {
+            line logInc *= 1.5;
+        }
+        if(global "%uuid stats"["tree_type"] >= 65) {
+            line logInc *= 1.5;
+        }
         if(global "%uuid stats"["tree_type"] >= 70) {
-            line logInc *= 2;
+            line logInc *= 1.5;
+        }
+        if(global "%uuid stats"["tree_type"] >= 85) {
+            line logInc *= 1.5;
         }
         if(global "%uuid stats"["tree_type"] >= 80) {
-            line logInc *= 2;
+            line logInc *= 1.5;
+        }
+        if(global "%uuid stats"["tree_type"] >= 85) {
+            line logInc *= 1.5;
         }
         if(global "%uuid stats"["tree_type"] >= 90) {
-            line logInc *= 2;
+            line logInc *= 1.5;
         }
 
         line logRender = util.numberFormat(logInc);
@@ -146,7 +158,8 @@ namespace loops {
             s"You can double jump mid-air, if you have a high enough Jump Boost!",
             s"The game is completely open-source at <click:open_url:'https://github.com/akarahdev/treecutters'>https://github.com/akarahdev/treecutters</click>",
             s"Calc is short for calculator, for those new to the stream.",
-            s"Meowing gives you a 0.000001% chance to instantly get a billion logs."
+            s"Meowing gives you a 0.000001% chance to instantly get a billion logs.",
+            s"We have a discord at <click:open_url:'https://discord.gg/DHEYJB9UX3'>https://discord.gg/DHEYJB9UX3</click>."
         );
         select playersByCondition(saved "%uuid settings"["helpfulTips"] == "Enabled");
         selected.sendMessage(s"<gold><bold>DID YOU KNOW? <reset><gray>%var(tip)");
@@ -164,7 +177,8 @@ namespace loops {
             }
             declare global "%default currLogs": num = saved "%uuid logs";
             line diff = global "%default currLogs" - global "%default lastLogs";
-            declare global "%default logSecComp": txt = s"<green>+%var(diff)/s";
+            line fmt = util.numberFormat(diff);
+            declare global "%default logSecComp": txt = s"<green>+%var(fmt)/s";
         }
         if(game.ticksSinceStartup % 20 == 0) {
             declare global "%default lastLogs": num = saved "%uuid logs";

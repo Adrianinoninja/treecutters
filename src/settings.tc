@@ -38,7 +38,7 @@ namespace settings.logEffects {
     icon = "stripped_cherry_wood";
     name = "Log Effects";
     description: list[str] = ["Whether to send particle and visual", "effects when chopping trees.", "Only recommended to disable if", "the effects are causing lag."];
-    options: list[str] = ["Enabled", "Disabled"];
+    options: list[str] = ["Enabled", "Log Only", "Particles Only", "Disabled"];
     defaultSetting = "Enabled";
 }
 

@@ -1,0 +1,58 @@
+import update;
+
+namespace update {
+    schema: namespace {
+        date: str;
+        changes: list[str];
+    };
+}
+
+namespace update.sep13 {
+    date = "September 13th";
+    changes: list[str] = ["+ Released the game!"];
+}
+
+namespace update.sep14 {
+    date = "September 14th";
+    changes: list[str] = ["+ Ran a birthday promo for +15% logs!", "+ Added the city", "+ Added a tree type level leaderboard", "+ Added Turret upgrade"];
+}
+
+namespace update.sep15 {
+    date = "September 15th";
+    changes: list[str] = ["+ Added stock market", "+ Added settings menu"];
+}
+
+namespace update.sep16 {
+    date = "September 16th";
+    changes: list[str] = ["+ Added weather machine", "+ Added logs per second counter", "+ Added optional double jump settings", "+ Added triple jump and timber upgrades"];
+}
+
+namespace update.sep17th {
+    date = "September 17th";
+    changes: list[str] = ["+ Added Level 55+ tree types", "+ Improved throwing axe mechanics", "+ Fixed issues involving entities not despawning", "+ Added update logs"];
+}
+
+namespace updateMenu {
+    function openMenu() {
+        line inv = inventory.tiledMenu(4);
+
+        line slot = 1;
+        for(line iconKey of namespace.getKeys(update)) {
+            line date = update[iconKey].date;
+            line changes = update[iconKey].changes;
+
+            line icon = item("acacia_boat");
+            icon = icon.setName(s"<green>%var(date)");
+            for(line l of changes) {
+                icon = icon.addLore(s"<gray>%var(l)");
+            }
+
+            inv.setItem(slot, icon);
+            
+            slot++;
+        }
+
+        inv.openForSelection();
+    }
+}
+

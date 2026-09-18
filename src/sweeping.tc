@@ -136,7 +136,7 @@ namespace sweeping {
             saved "%uuid logs" += logValue;
             declare saved "%uuid true_logs" += 1;
         }
-        if(saved "%uuid settings"["logEffects"] == "Enabled") {
+        if(saved "%uuid settings"["logEffects"] == "Enabled" || saved "%uuid settings"["logEffects"] == "Particles Only") {
             game.breakBlock(block);
         } else {
             game.setBlock("air" as item, block);
@@ -160,7 +160,7 @@ namespace sweeping {
                         start blockFallAnim(block2, mat);
                     }
                 }
-                if(saved "%uuid settings"["logEffects"] == "Enabled") {
+                if(saved "%uuid settings"["logEffects"] == "Enabled" || saved "%uuid settings"["logEffects"] == "Particles Only") {
                     game.breakBlock(block2);
                 } else {
                     game.setBlock("air" as item, block2);
@@ -207,7 +207,7 @@ namespace sweeping {
         block: loc,
         mat: str
     ) {
-        if(saved "%uuid settings"["logEffects"] == "Disabled") {
+        if(saved "%uuid settings"["logEffects"] == "Disabled" || saved "%uuid settings"["logEffects"] == "Particles Only") {
             endthread;
         }
         block = block.align(align = "Block center", rotation = "Remove rotation", coords = "All coordinates");

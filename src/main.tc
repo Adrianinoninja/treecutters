@@ -316,6 +316,9 @@ function getMoveDir(y: num = 0): vec {
 }
 
 playerevent command {
+    if(event.commandArgumentEquals("discord", 1)) {
+        player.sendMessage(s"<click:open_url:'https://discord.gg/DHEYJB9UX3'>https://discord.gg/DHEYJB9UX3</click>");
+    }
     if(event.commandArgumentEquals("warp", 1)) {
         if(event.commandArgumentEquals("stocks", 2)) {
             player.teleport(loc(97.8883, 4, 44.4137, 0.45, -88.75));
