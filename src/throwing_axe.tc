@@ -51,18 +51,7 @@ namespace throwingaxe {
             // pos.y -= dy;
             dy += 0.01;
 
-            if(game.ticksSinceStartup % 2 == 1) {
-                for(line adj of adjacent(pos.align(), pattern = "Cube (26 blocks)", includeOrigin = "True", changeLocRot = "False")) {
-                    adj = adj.align();
-                    if(woodTypeList.contains(item(game.getBlockMaterial(adj)))) {
-                        select entitiesByUUID(disp);
-                        selectedEntity.remove();
-                        select reset;
-                        execBreak(pos);
-                        dt = 30;
-                    }
-                }
-            }
+            p1(pos, disp, dt);
 
             if(game.cpuUsage * 100 < 30 && dt % 3 == 1) {
                 start spawnTemporaryBeam(
@@ -93,14 +82,35 @@ namespace throwingaxe {
             );
             select reset;
 
-            
-
             wait(1);
         }
 
         select entitiesByUUID(disp);
         entity.remove();
         select reset;
+    }
+
+    function p1(
+        pos: loc,
+        disp: str,
+        dt: var[num]
+    ) {
+        if(game.ticksSinceStartup % 2 == 1) {
+            for(line adj of adjacent(pos.align(), pattern = "Cube (26 blocks)", includeOrigin = "True", changeLocRot = "False")) {
+                adj = adj.align();
+                if(woodTypeList.contains(item(game.getBlockMaterial(adj)))) {
+                    select entitiesByUUID(disp);
+                    selectedEntity.remove();
+                    select reset;
+                    execBreak(pos);
+                    dt = 30;
+                }
+            }
+
+            if(game.getBlockMaterial(pos.align()) != "air") {
+                dt = 30;
+            }
+        }
     }
 
     process spawnTemporaryBeam(

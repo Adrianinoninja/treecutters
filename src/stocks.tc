@@ -128,7 +128,7 @@ namespace stocksMenu {
         if(saved "%uuid logs" >= stockValue) {
             declare saved "%uuid stockCount" += 1;
             saved "%uuid logs" -= stockValue;
-            stockValue += num.random(10000, 15000);
+            stockValue += num.random(5000, 7000);
         }
     }
 
@@ -136,13 +136,12 @@ namespace stocksMenu {
         if(saved "%uuid stockCount" >= 1) {
             saved "%uuid stockCount"--;
             saved "%uuid logs" += stockValue;
-            stockValue -= num.random(10000, 15000);
+            stockValue -= num.random(5000, 7000);
         }
     }
 
     function clicks() {
-        if(event.blockLocation.getDistance(loc(103, 5, 44)) <= 1
-    && player.getItemCooldown(item("acacia_hanging_sign")) == 0) {
+        if(event.blockLocation.getDistance(loc(103, 5, 44)) <= 1 && player.getItemCooldown(item("acacia_hanging_sign")) == 0) {
             player.setItemCooldown(item("acacia_hanging_sign"), 20);
             line pos = loc(107, 4, 40);
             for(line x of range(0, historicalStocks.len(), 25)) {

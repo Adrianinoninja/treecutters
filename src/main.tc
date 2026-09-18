@@ -327,6 +327,14 @@ function getMoveDir(y: num = 0): vec {
 }
 
 playerevent command {
+    if(event.commandArgumentEquals("bc", 1) && player.hasPlotPermission(permission = "Developer or builder")) {
+        line st = event.command.trim(4);        
+        allPlayers.sendMessage(s"<strikethrough><dark_gray><space:40>");
+        allPlayers.sendMessage(s"<green><bold>BROADCAST <reset><gray>(by %default>");
+        allPlayers.sendMessage(txt.parseExpression(st));
+        allPlayers.sendMessage(s"<strikethrough><dark_gray><space:40>");
+        allPlayers.playSound(snd("Enchantment Table Use"));
+    }
     if(event.commandArgumentEquals("discord", 1)) {
         player.sendMessage(s"<click:open_url:'https://discord.gg/DHEYJB9UX3'>https://discord.gg/DHEYJB9UX3</click>");
     }
@@ -406,6 +414,7 @@ playerevent command {
         line amount = num.parse(event.commandArguments[3].replace("_", ""));
         select playersByName(playerName);
         saved "%uuid logs" += amount;
+        selected.sendMessage(s"You got granted %var(amount) logs.");
         select reset;
         player.sendMessage(s"Sent %var(playerName) %var(amount) logs");
     }

@@ -33,6 +33,9 @@ namespace treegens {
         if(idx >= 55) {
             individualSize = "mega";
         }
+        if(idx == 25) {
+            individualSize = small;
+        }
         if(treeType == "default") {
             line treeType = [
                 oak, dark, cherry, warped, molten, aerial, lunar, solar, astral, yggdrasil, 
