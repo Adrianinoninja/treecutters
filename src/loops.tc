@@ -169,7 +169,7 @@ namespace loops {
     // sends a random did you know message when called
     function didyouknow() {
         line tip: txt = var.setToRandom(
-            s"You can Swap Hands to open your upgrde menu!",
+            s"You can Swap Hands to open your upgrade menu!",
             s"You can double jump mid-air, if you have a high enough Jump Boost!",
             s"The game is completely open-source at <click:open_url:'https://github.com/akarahdev/treecutters'>https://github.com/akarahdev/treecutters</click>",
             s"Calc is short for calculator, for those new to the stream.",
