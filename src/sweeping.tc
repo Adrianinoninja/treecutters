@@ -14,6 +14,13 @@ extend log_family {
 }
 
 namespace sweeping {
+    // reimplementation of aaxper's algorithm ported to terracotta
+    // with treecutting-specific calculations included
+
+    // take 2 arrays A and B
+    // put the origin in A
+    // get blocks adjacent to A and put it in B if not already in A or B
+    // rinse and repeat until you have enough blocks
     function getBlockOrders(
         tier: num,
         origin: loc,
@@ -21,6 +28,7 @@ namespace sweeping {
         firstStrike: num = 0,
         timberLevel: num = 0
     ): list[list[loc]] {
+        // calculate the max blocks based off toughness
         line logFamily = global log_families[num.floor(tier / 5) + 1];
         maxBlocks = maxBlocks - logFamily["toughness"];
         if(maxBlocks > 8) {
@@ -34,6 +42,8 @@ namespace sweeping {
         }
 
 
+        // activate timber skill, done here
+        // as to not litter code all over the place
         if(num.random(1, 100) <= timberLevel) {
             player.playSound(snd("Axe Strip"));
             maxBlocks = 0;
@@ -45,6 +55,7 @@ namespace sweeping {
             return [];
         }
 
+        // core algorithm implemented here
         line breakQueue: list[list[loc]] = [];
         line currentBlockList: list[loc] = [origin];
         line breaksNextTick: list[loc] = [];
@@ -79,6 +90,7 @@ namespace sweeping {
         return breakQueue;
     }
 
+    // takes a list of list of blocks, flattens them, and breaks them all
     function executeSweep(
         incrementOnBlock: var[num],
         blocks: list[list[loc]]
@@ -93,6 +105,7 @@ namespace sweeping {
         }
     }
 
+    // takes a flattened list of blocks, and breaks them all
     function executeSweepFlattened(
         incrementOnBlock: var[num],
         blocks: list[loc]
@@ -106,6 +119,8 @@ namespace sweeping {
         }
     }
 
+    // safely breaks a block if it is possible to do so,
+    // grants rewards in the process
     function safeBreak(
         block: loc
     ) {
@@ -181,6 +196,7 @@ namespace sweeping {
         }
     }
 
+    // the square animation made when a tree hit it's cutoff point
     process treeClearAnim(
         pos: loc
     ) {
@@ -213,6 +229,7 @@ namespace sweeping {
 
     }
 
+    // the process that runs the animation for a falling log
     process blockFallAnim(
         block: loc,
         mat: str
@@ -260,19 +277,5 @@ namespace sweeping {
         
         
         select reset;
-    }
-
-    function logCap(tier: num): num {
-        return [
-            2000,
-            6000,
-            18000,
-            30000,
-            45000,
-            70000,
-            120000,
-            170000,
-            240000
-        ][num.min(num.floor(tier/5),7)+1];
     }
 }

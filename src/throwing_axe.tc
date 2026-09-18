@@ -51,6 +51,7 @@ namespace throwingaxe {
             // pos.y -= dy;
             dy += 0.01;
 
+            // actual breaking logic for the axe
             p1(pos, disp, dt);
 
             if(game.cpuUsage * 100 < 30 && dt % 3 == 1) {
@@ -61,6 +62,8 @@ namespace throwingaxe {
                 line oldPos = pos;
             }
 
+            // claude came up with this math but i think it's something like
+            // spin the axe visually along it's forward axis, based on the spinAngle
             line crossFD = f0.cross(dir);
             line rotAxis = crossFD.setLength(1);
             line rotAngle = num.atan2(crossFD.len(), f0.dot(dir));
@@ -70,6 +73,10 @@ namespace throwingaxe {
             entity.setDisplayTeleportDuration(1);
             entity.setDisplayInterpolation(1);
             entity.teleport(pos);
+            // here we apply the rotations in the order
+            // we use mc's builtin left/right rotation so we don't have to
+            // do a bunch of weird vector math to get it in one rotation
+            // the axe is never scaled so the difference is only in ordering
             entity.setDisplayRotationFromAxisAngle(
                 rotAxis,
                 rotAngle,
@@ -90,6 +97,8 @@ namespace throwingaxe {
         select reset;
     }
 
+    // extracted into seperate function to prevent lagslays
+    // if the function needs to be modified
     function p1(
         pos: loc,
         disp: str,
@@ -113,6 +122,11 @@ namespace throwingaxe {
         }
     }
 
+    // spawns a text display that acts as a line between two locations,
+    // fading out over time
+    // basically, the text spawns at the source, faces towards the target,
+    // and the scale is adjusted such that it intercepts the two points
+    // we apply a transform to center it, allowing it to look smooth
     process spawnTemporaryBeam(
         source: loc,
         target: loc
@@ -127,14 +141,17 @@ namespace throwingaxe {
         entity.setTextDisplayBackground(0);
         entity.setTextDisplayTextOpacity(50);
         entity.setDisplayBillboard("type" = "Fixed");
+
+        // set up the entity's scale to stretch between the two positions
         line scale = vec(1, dist, 1);
         entity.setDisplayScale(scale);
         entity.setDisplayRotationFromEulerAngles(90, 0, 0);
 
-        // line translation = vec(-scale.x*0.0125, -scale.y*0.125, scale.z);
+        // magic centering alignment translation
         line translation = vec.rotateAroundAxis(vec(-0.13, 0.01, 0.0), 90);
         entity.setDisplayTranslation(translation);
 
+        // actual fadeout anim
         for(line x of range(50, 0, -2)) {
             entity.setTextDisplayTextOpacity(x);
             wait();
