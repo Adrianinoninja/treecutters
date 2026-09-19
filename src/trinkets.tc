@@ -1,43 +1,94 @@
+import util;
+
 namespace trinket {
     schema: namespace {
         center: loc;
         name: str;
-        logValueBonus: num;
-        stats: dict[num];
+        localLogValueBonus: num = 0;
+        globalLogValueBonus: num = 0;
+        stats: dict[num] = {};
         shopWeight: num = 10;
+        cost: num;
+        icon: item;
     };
 }
 
 namespace trinket.helix {
     center = loc(5, 15, 94);
     name = "Helix";
-    logValueBonus = 20;
+    localLogValueBonus = 30;
+    globalLogValueBonus = 10;
     stats: dict[num] = {
         "sweep": 3,
         "fortune": 2
     };
     shopWeight = 1;
+    cost = 1_000_000_000;
+    icon = item("acacia_wood");
 }
 
 namespace trinket.ovation {
     center = loc(14, 15, 94);
     name = "Ovation";
-    logValueBonus = 10;
+    localLogValueBonus = 10;
+    globalLogValueBonus = 3;
     stats: dict[num] = {
         "sweep": 1
     };
+    cost = 500_000_000;
+    icon = item("obsidian");
 }
 
 namespace trinket.atom {
     center = loc(23, 15, 94);
     name = "Atom";
-    logValueBonus = 10;
+    localLogValueBonus = 5;
+    globalLogValueBonus = 1;
     stats: dict[num] = {
         "fortune": 1
     };
+    cost = 250_000_000;
+    icon = item("light_blue_wool");
 }
 
-type trinketShopEntry: { id: str };
+namespace trinket.fechten {
+    center = loc(3, 15, 101);
+    name = "Fechten";
+    localLogValueBonus = 5;
+    globalLogValueBonus = 1;
+    stats: dict[num] = {
+        "fortune": 1
+    };
+    cost = 250_000_000;
+    icon = item("oak_planks");
+}
+
+namespace trinket.lilGoob {
+    center = loc(12, 15, 101);
+    name = "Lil' Goob";
+    localLogValueBonus = 5;
+    globalLogValueBonus = 1;
+    stats: dict[num] = {
+        "fortune": 1
+    };
+    cost = 250_000_000;
+    icon = item("creeper_spawn_egg");
+}
+
+namespace trinket.sierpinski {
+    center = loc(21, 15, 101);
+    name = "Sierpinski";
+    localLogValueBonus = 5;
+    globalLogValueBonus = 1;
+    stats: dict[num] = {
+        "fortune": 1
+    };
+    cost = 250_000_000;
+    icon = item("sponge");
+}
+
+
+type trinketEntry: { id: str, level: num };
 
 import trinket;
 import trinketShopMenu;
@@ -50,7 +101,7 @@ namespace trinketShopMenu {
         allPlayers.sendMessage(s"<bold><yellow>SHOP REFILL! <reset><gray>The trinket shop just got refilled!");
         allPlayers.playSound(snd("Pling", 2, 1));
 
-        declare global trinketShopEntries: list[trinketShopEntry] = [];
+        declare saved trinketShopEntries: list[trinketEntry] = [];
 
         line sumWeight = 0;
         for(line key of namespace.getKeys(trinket)) {
@@ -66,23 +117,130 @@ namespace trinketShopMenu {
                     break;
                 }
             }
-            trinketShopEntries.append({ id: key } as trinketShopEntry);
+            trinketShopEntries.append({ id: key, level: 1 } as trinketEntry);
         }
     }
 
-    function openMenu() {
+    function trinketIcon(id: str, level: num = 1): item {
+        line icon = trinket[id].icon;       
+        line cost = trinket[id].cost;
+        line name = trinket[id].name;
+        line localValue = trinket[id].localLogValueBonus;
+        line globalValue = trinket[id].globalLogValueBonus;
+        line costFmt = util.numberFormat(cost);
+        icon = icon.setName(s"<#00ff00>%var(name)");
+        icon = icon.addLore(s"<#777777>Level %var(level)<#555555>/1");
+        icon = icon.addLore(s"");
+        icon = icon.addLore(s"<#999999>Value: <#00ff00>%var(costFmt)");
+        icon = icon.addLore(s"");
+        icon = icon.addLore(s"<#777777>Personal Log Bonus: <#00aa00>+%var(localValue)%");
+        icon = icon.addLore(s"<#777777>Global Log Bonus: <#00aa00>+%var(globalValue)%");
+        line stats = trinket[id].stats;
+        if(stats.len() != 0) {
+            icon = icon.addLore(s"");
+            if(stats["sweep"] > 0) {
+                icon = icon.addLore(s"<#777777>Sweep: <#00aa00>+%entry(stats,sweep)");
+            }
+            if(stats["fortune"] > 0) {
+                icon = icon.addLore(s"<#777777>Fortune: <#00aa00>+%entry(stats,fortune)");
+            }
+        }
+
+        return icon;
+    }
+
+    function createMenu(): inventory {
         line inv = inventory.tiledMenu(4);
+        inv.setId("trinket_shop");
+
+        line idx = 1;
+        for(line elem of trinketShopEntries) {
+            line icon = trinketIcon(elem["id"]);
+            icon = icon.setTag("buy_trinket_idx", idx);
+            icon = icon.addLore(s"");
+            icon = icon.addLore(s"<yellow>Click to buy!");
+            inv.setItem(idx, icon);
+            idx++;
+        }
+
+        return inv;
+    }
+
+    function openMenu(): inventory {
+        line inv = createMenu();
         inv.openForSelection();
+        return inv;
     }
 
     function clicks() {
-        
+        line trinketIdx = event.item.getTag("buy_trinket_idx") as num;
+        if(trinketIdx >= 1) {
+            line entry = trinketShopEntries[trinketIdx];
+
+            if(saved "%uuid logs" >= trinket[entry["id"]].cost) {
+                saved "%uuid logs" -= trinket[entry["id"]].cost;
+                
+                line rng = num.random(10, 1_000_000_000_000, rounding = "Whole number");
+                line rngStr = str.setToString(rng);
+
+                saved "%uuid trinketInventory"[rngStr] = entry;
+
+                trinketShopEntries.remove(trinketIdx);
+
+                for(line pl of game.plotPlayerUUIDs) {
+                    select playersByName(pl);
+                    if(global "%uuid openInventory"["id"] == "trinket_shop") {
+                        line inv = trinketShopMenu.createMenu();
+                        inv.updateForSelection();
+                    }
+                    select reset;
+                }
+            }
+        }
     }
 }
 
 namespace trinketOwnershipMenu {
     function openMenu() {
+        declare global trinketPositions: list[vec] = [
+            vec(20.5, 4.5, 20.5), 
+            vec(-19.5, 4.5, 20.5), 
+            vec(-19.5, 4.5, -19.5), 
+            vec(20.5, 4.5, -19.5)
+        ];
+
+        line trinketIdx = trinketPositions.find(global "%uuid targetShulkerVec");
+        if(trinketIdx == 0) {
+            player.sendMessage("<red><bold>ERROR! <reset><gray>I couldn't find a trinket position for you. :( Please report this issue!");
+            player.sendMessage("<dark_gray>Debug Info:");
+            player.sendMessage("<dark_gray>Trinket Positions: %var(trinketPositions)");
+            player.sendMessage("<dark_gray>Your Position: %var(%uuid targetShulkerVec)");
+            return;
+        }
+
         line inv = inventory.tiledMenu(4);
+
+        if(!var.exists(saved "%uuid trinketSelections")) {
+            declare saved "%uuid trinketSelections": list[num] = [0, 0, 0, 0];
+            declare saved "%uuid trinketInventory": dict[trinketEntry] = {};
+        }
+
+        line idx = 1;
+        for(line rngId, line elem of saved "%uuid trinketInventory") {
+            line icon = trinketShopMenu.trinketIcon(elem["id"]);
+
+            if(saved "%uuid trinketSelections".contains(rngId)) {
+                icon = icon.addLore(s"");
+                icon = icon.addLore(s"<green><bold>ALREADY IN USE!");
+            } else {
+
+                icon = icon.addLore(s"");
+                icon = icon.addLore(s"<yellow>Click to equip!");
+            }
+
+            inv.setItem(idx, icon);
+            idx++;
+        }
 
         line shopIcon = item("gold_ingot");
         shopIcon = shopIcon.setName(s"<yellow>Trinket Shop");
@@ -94,6 +252,9 @@ namespace trinketOwnershipMenu {
     function clicks() {
         if(event.item.hasTag("open_trinket_shop")) {
             trinketShopMenu.openMenu();
+        }
+        if(event.item.hasTag("open_trinket_placer")) {
+            trinketOwnershipMenu.openMenu();
         }
     }
 }

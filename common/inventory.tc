@@ -1,6 +1,6 @@
 declare global "%uuid openInventory": inventory;
 
-type inventory: { rows: num, slots: list[item] };
+type inventory: { rows: num, slots: list[item], id: str };
 
 extend inventory {
     function constructor(rows: num): inventory {
@@ -12,7 +12,11 @@ extend inventory {
         for(line idx of range(1, rows * 9)) {
             baseList.append(item("air"));
         }
-        return { rows: rows, slots: baseList } as inventory;
+        return { rows: rows, slots: baseList, id: "unknown" } as inventory;
+    }
+
+    function setId(this: var[inventory], id: str) {
+        this["id"] = id;
     }
 
     function setItem(this: var[inventory], slot: num, i: item) {
@@ -70,6 +74,12 @@ extend inventory {
 
         global "%uuid openInventory": inventory = this;
 
+        for(line idx of range(1, this["rows"] * 9)) {
+            player.setInventoryMenuItem(idx, this["slots"][idx]);
+        }
+    }
+
+    function updateForSelection(this: var[inventory]) {
         for(line idx of range(1, this["rows"] * 9)) {
             player.setInventoryMenuItem(idx, this["slots"][idx]);
         }

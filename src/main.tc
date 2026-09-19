@@ -260,6 +260,10 @@ lscancel playerevent swapHands {
     statShop.openMenu();
 }
 
+playerevent closeInventory {
+    global "%uuid openInventory" = 0 as inventory;
+}
+
 playerevent clickMenuSlot {
     if(event.item.hasTag("warp", "home")) {
         player.teleport(
