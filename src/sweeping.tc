@@ -148,7 +148,7 @@ namespace sweeping {
             logMul += 1.5;
         }
         if(weatherType == 5) {
-            logMul += 2.1;
+            logMul += 2.5;
         }
 
         logValue *= logMul;
