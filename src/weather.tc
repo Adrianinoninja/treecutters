@@ -70,10 +70,10 @@ namespace weather {
                 saved "%uuid logs" -= counts * 1_000_000;
                 weatherMachineLogs += counts * 1_000_000;
                 declare saved "%uuid donatedToWeatherMachine": num += counts * 1_000_000;
-                player.playSound(snd("Chest Open"));
+                player.playSound(snd("Chest Open"), source = "Blocks");
             } else {
                 player.sendMessage(s"<gray>You need at least <green>1,000,000 <gray>logs to power the weather machine.");
-                player.playSound(snd("Chest Locked"));
+                player.playSound(snd("Chest Locked"), source = "Blocks");
             }
         }
     }

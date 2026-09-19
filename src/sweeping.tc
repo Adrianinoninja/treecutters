@@ -45,7 +45,7 @@ namespace sweeping {
         // activate timber skill, done here
         // as to not litter code all over the place
         if(num.random(1, 100) <= timberLevel) {
-            player.playSound(snd("Axe Strip"));
+            player.playSound(snd("Axe Strip"), source = "Players");
             maxBlocks = 0;
 
             for(line bl of global "%uuid blocksToBreak") {
@@ -194,7 +194,7 @@ namespace sweeping {
                 }
 
             }
-            player.playSound(snd("Creaking Activate", 1, 0.5));
+            player.playSound(snd("Creaking Activate", 1, 0.5), source = "Players");
             start treegens.growForPlayer();
         }
     }
@@ -205,7 +205,7 @@ namespace sweeping {
         line mt = game.getBlockMaterial(block2);
         line bs = game.getBlockSound(mt as item, soundType = "Break Sound");
         line pt = par("Block", amount = 20, spreadHoriz = 0.5, spreadVert = 0.5, material = mt);
-        player.playSound(bs, block2);
+        player.playSound(bs, block2, source = "Blocks");
         player.displayParticleEffect(pt, block2);
         game.setBlock("air" as item, block2);
     }

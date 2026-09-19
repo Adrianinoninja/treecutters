@@ -104,8 +104,8 @@ namespace stocksMenu {
         historicalStocks.append(stockValue);
         stockValue *= 1 + scale;
         updateValue();
-        if(stockValue >= 3_000_000) {
-            stockValue = 3_000_000;
+        if(stockValue >= 5_000_000) {
+            stockValue = 5_000_000;
         }
         while(historicalStocks.len() > 5000) {
             historicalStocks.remove(0);
@@ -130,8 +130,8 @@ namespace stocksMenu {
             saved "%uuid logs" -= stockValue;
             stockValue += num.random(5000, 7000);
 
-            if(stockValue >= 3_000_000) {
-                stockValue = 3_000_000;
+            if(stockValue >= 5_000_000) {
+                stockValue = 5_000_000;
             }
         }
     }
