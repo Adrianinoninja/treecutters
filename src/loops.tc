@@ -4,7 +4,7 @@ import abils;
 
 playerevent chat {
     // currently only contains DropExitJoin
-    if((event.message.contains("67"))) {
+    if((event.message == ("67"))) {
         allPlayers.sendMessage("<yellow>%default <red>Tried Saying 67 But we banned it <newline>MOHAHAHAHAHAHA");
         event.cancel();
     }
