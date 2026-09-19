@@ -48,13 +48,11 @@ namespace updateMenu {
 
         line icon = item("diamond");
 
-        icon = icon.addLore(s"");
-        icon = icon.addLore(s"<aqua><bold>GitHub Contributors");
-        icon = icon.addLore(s"");
-        icon = icon.addLore(s"<gold>Endistic");
-        icon = icon.addLore(s"<gray>Froogile");
-        icon = icon.addLore(s"<gray>yair0211");
-        icon = icon.addLore(s"<gray>Barfl");
+        icon = icon.setName(s"<aqua><bold>GitHub Contributors");
+        icon = icon.addLore(s"<dark_gray>- <gold>Endistic");
+        icon = icon.addLore(s"<dark_gray>- <gray>Froogile");
+        icon = icon.addLore(s"<dark_gray>- <gray>yair0211");
+        icon = icon.addLore(s"<dark_gray>- <gray>Barfl");
 
         inv.setItem(32, icon);
 
