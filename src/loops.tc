@@ -232,7 +232,8 @@ namespace loops {
             line fmtLogs = util.numberFormat(saved "%uuid logs");
 
             line components: list[txt] = [];
-            components.append(s"<dark_green>╟ <green>%var(fmtLogs) Logs");
+            // colors by GodwolfGaming100
+            components.append(s"<#996947>╟ <#FFC09E>%var(fmtLogs) Logs");
 
             if(global "%default logSecComp" != 0 && saved "%uuid settings"["logSecActionBar"] == "Enabled") {
                 components.append(global "%default logSecComp");
@@ -262,6 +263,12 @@ namespace loops {
 
             if(player.isStandingOnBlock(item("light_blue_stained_glass"))) {
                 player.teleport(global "%uuid roomPos".shiftAllAxes(6, 6, 6));
+            }
+
+            if(player.location.y < 0) {
+                player.teleport(
+                    (global "%uuid roomPos").shiftAllAxes(-6, 3, -6)
+                );
             }
         }
 
