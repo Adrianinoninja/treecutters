@@ -129,6 +129,10 @@ namespace stocksMenu {
             declare saved "%uuid stockCount" += 1;
             saved "%uuid logs" -= stockValue;
             stockValue += num.random(5000, 7000);
+
+            if(stockValue >= 3_000_000) {
+                stockValue = 3_000_000;
+            }
         }
     }
 
@@ -137,6 +141,9 @@ namespace stocksMenu {
             saved "%uuid stockCount"--;
             saved "%uuid logs" += stockValue;
             stockValue -= num.random(5000, 7000);
+            if(stockValue <= 100_000) {
+                stockValue = 100_000;
+            }
         }
     }
 
