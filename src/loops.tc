@@ -11,7 +11,7 @@ playerevent chat {
         default.sendMessage("you have been 67 banned");
         event.cancel();
     }
-    if(global chatGameSolution.len() != 0 && event.message.matches(global chatGameSolutions, ignoreCase = "True")) { 
+    if(global chatGameSolutions.len() != 0 && event.message.matches(global chatGameSolutions, ignoreCase = "True")) { 
         for (line chatGameSolution of global chatGameSolutions) {
             if(event.message.matches(chatGameSolution, ignoreCase = "True")) {
                 break;
@@ -50,14 +50,14 @@ playerevent chat {
 
         line logRender = util.numberFormat(logInc);
         allPlayers.sendMessage(s"<dark_gray>The person earned %var(logRender) logs!");
-        chatGameSolution = "";
+        chatGameSolutions = [""];
         saved "%uuid logs" += logInc;
         declare global hintType: num = 0;
         declare saved "%uuid chat_wins": num += 1;
     }
     // exclusively for the number guessing game
     if(global hintType == 1) {
-        line realVal = num.parse(chatGameSolution);
+        line realVal = num.parse(chatGameSolutions[1]);
         line checkVal = num.parse(event.message);
         if(checkVal != 0) {
             event.cancel();

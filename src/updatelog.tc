@@ -46,15 +46,15 @@ namespace updateMenu {
     function openMenu() {
         line inv = inventory.tiledMenu(4);
 
-        line icon = item("diamond")
+        line icon = item("diamond");
 
         icon = icon.addLore(s"");
-        icon = icon.addLore(s"<aqua><bold>GitHub Contributors")
-        icon = icon.addLore(s"")
-        icon = icon.addLore(s"<gold>Endistic")
-        icon = icon.addLore(s"<gray>Froogile")
-        icon = icon.addLore(s"<gray>yair0211")
-        icon = icon.addLore(s"<gray>Barfl")
+        icon = icon.addLore(s"<aqua><bold>GitHub Contributors");
+        icon = icon.addLore(s"");
+        icon = icon.addLore(s"<gold>Endistic");
+        icon = icon.addLore(s"<gray>Froogile");
+        icon = icon.addLore(s"<gray>yair0211");
+        icon = icon.addLore(s"<gray>Barfl");
 
         inv.setItem(32, icon);
 
