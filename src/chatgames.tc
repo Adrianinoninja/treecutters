@@ -13,7 +13,7 @@ namespace loops {
 
     // actually runs the chat game
     function setupChatGameHidden(gameType = 0) {
-        declare global chatGameSolution: str = "";
+        declare global chatGameSolutions: list[str] = [];
 
         if(gameType == 0) {
             gameType = num.random(1, 5, rounding = "Whole number");
@@ -32,24 +32,24 @@ namespace loops {
             
             line equationType = num.random(1, 3, rounding = "Whole number");
             if(equationType == 1) {
-                chatGameSolution = str.setToString(a + b * c);
+                chatGameSolutions.append(str.setToString(a + b * c));
                 gamePrompt = "Solve %var(a) + %var(b) * %var(c)";
             } else if(equationType == 2) {
-                chatGameSolution = str.setToString(a * b * c);
+                chatGameSolutions.append(str.setToString(a * b * c));
                 gamePrompt = "Solve %var(a) * %var(b) * %var(c)";
             } else if(equationType == 3) {
-                chatGameSolution = str.setToString(a * b - c);
+                chatGameSolutions.append(str.setToString(a * b - c));
                 gamePrompt = "Solve %var(a) * %var(b) - %var(c)";
             }
-            if(chatGameSolution == "67") {
+            if(chatGameSolutions.contains("67")) {
                 setupChatGameHidden();
                 return;
             }
             gamePrompt = "Solve %var(gamePrompt).";
         }
         if(gameType == 3) {
-            chatGameSolution = str.setToString(num.random(1, 200, rounding = "Whole number"));
-            if(chatGameSolution == "67") {
+            chatGameSolutions.append(str.setToString(num.random(1, 200, rounding = "Whole number")));
+            if(chatGameSolutions.contains("67")) {
                 setupChatGameHidden();
                 return;
             }
@@ -58,42 +58,42 @@ namespace loops {
             global hintType = 1;
         }
         if(gameType == 4) {
-            line syllogies = {
-                "DF": "DiamondFire",
-                "HTML": "Hypertext Markup Language",
-                "6!": "720",
-                "meow": "meow",
-                "LASER": "Light Amplification by Stimulated Emission of Radiation",
-                "CEO": "Chief Executive Officer",
-                "All humans are mortal. Aristotle is human, therefore...": "Aristotle is mortal",
-                "The cat is either gray or black. The cat is gray, therefore...": "the cat is not black",
-                "If it rains, the grass gets wet. It is raining, therefore...": "the grass is wet",
-                "(-b ± (sqrt(b^2-4ac)/(2a))": "quadratic formula",
-                "y = (-q / 2 + sqrt(q^2 / 4 + p^3 / 27))^(1/3) + (-q / 2 - sqrt(q^2 / 4 + p^3 / 27))^(1/3)": "cubic formula",
-                "x = [ -(b ± sqrt(b^2 - 4ac + 4ay)) ± sqrt( (b ± sqrt(b^2 - 4ac + 4ay))^2 - 8ay ± [16a^2d - 8aby]/sqrt(b^2 - 4ac + 4ay) ) ] / (4a)": "quartic formula",
-                "Who created this dopamine rush?": "Endistic",
-                "SMotS": "Scattered Mirror of the Storm"
+            line syllogies: dict[list[str]] = {
+                "DF": ["DiamondFire"],
+                "HTML": ["Hypertext Markup Language"],
+                "6!": ["720"],
+                "meow": ["meow"],
+                "LASER": ["Light Amplification by Stimulated Emission of Radiation"],
+                "CEO": ["Chief Executive Officer"],
+                "All humans are mortal. Aristotle is human, therefore...": ["Aristotle is mortal"],
+                "The cat is either gray or black. The cat is gray, therefore...": ["the cat is not black"],
+                "If it rains, the grass gets wet. It is raining, therefore...": ["the grass is wet"],
+                "(-b ± (sqrt(b^2-4ac)/(2a))": ["quadratic formula"],
+                "y = (-q / 2 + sqrt(q^2 / 4 + p^3 / 27))^(1/3) + (-q / 2 - sqrt(q^2 / 4 + p^3 / 27))^(1/3)": ["cubic formula"],
+                "x = [ -(b ± sqrt(b^2 - 4ac + 4ay)) ± sqrt( (b ± sqrt(b^2 - 4ac + 4ay))^2 - 8ay ± [16a^2d - 8aby]/sqrt(b^2 - 4ac + 4ay) ) ] / (4a)": ["quartic formula"],
+                "Who created this dopamine rush?": ["Endistic"],
+                "SMotS": ["Scattered Mirror of the Storm"]
             };
             line rng = var.setToRandom(syllogies.getKeys()) as str;
             gameTypeTxt = "SYLLOGISM!";
             gamePrompt = "What is `%var(rng)`?";
-            chatGameSolution = syllogies[rng] as str;
-            print(chatGameSolution);
+            chatGameSolutions.appendList(syllogies[rng]);
+            print(chatGameSolutions[chatGameSolutions.len() - 1]);
         }
         if(gameType == 5) {
-            line syllogies = {
-                "What has a face, but can't smile?": "Clock",
-                "What has many keys, but can't open a single lock?": "Piano",
-                "What lives if you feed it, but dies if you give it a drink?": "Fire",
-                "What has a head and a tail, but no body?": "Coin",
-                "What can you catch, but not throw?": "A cold",
-                "What sound does an itty bitty cute little kitty cat make?": "meow"
+            line syllogies: dict[list[str]] = {
+                "What has a face, but can't smile?": ["Clock"],
+                "What has many keys, but can't open a single lock?": ["Piano"],
+                "What lives if you feed it, but dies if you give it a drink?": ["Fire"],
+                "What has a head and a tail, but no body?": ["Coin"],
+                "What can you catch, but not throw?": ["A cold"],
+                "What sound does an itty bitty cute little kitty cat make?": ["meow"]
             };
             line rng = var.setToRandom(syllogies.getKeys()) as str;
             gameTypeTxt = "RIDDLE!";
             gamePrompt = "%var(rng)";
-            chatGameSolution = syllogies[rng] as str;
-            print(chatGameSolution);
+            chatGameSolutions.appendList(syllogies[rng]);
+            print(chatGameSolutions[chatGameSolutions.len() - 1]);
         }
         if(gameType == 2) {
             line words: list[str] = [
@@ -175,7 +175,7 @@ namespace loops {
             line outstr = scrambled.join("");
             gameTypeTxt = "QUICK SCRAMBLE!";
             gamePrompt = "Unscramble the word '%var(outstr)'!";
-            chatGameSolution = sel;
+            chatGameSolutions.append(sel);
         }
         allPlayers.sendMessage(s"<green><bold>%var(gameTypeTxt) <reset><gray>%var(gamePrompt)");
     }
