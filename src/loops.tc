@@ -1,6 +1,8 @@
 import stats;
 import util;
 import abils;
+import sweeping;
+import trinketShopMenu;
 
 playerevent chat {
     global peopleWhoCant67: list[str] = ["908cd8fa-cc5d-4e5e-a941-4fd2fe6671e9"]; // list of people who are banned from saying 67
@@ -102,6 +104,18 @@ namespace loops {
             loops.setupChatGame();
         }
 
+        if(game.ticksSinceStartup % 20 == 0) {
+            if(saved trinketShopRestockTimer <= 0) {
+                declare saved trinketShopRestockTimer: num = 60*5;
+                trinketShopMenu.rerollShop();
+            }
+            trinketShopRestockTimer--;
+        }
+
+        if(game.ticksSinceStartup % 20 == 0) {
+            sweeping.calculateGlobalLogMul();
+        }
+
         stocksMenu.tick();
         weather.tick();
     }
@@ -174,7 +188,12 @@ namespace loops {
                 tl += s"<gray>Cost: <red>-300k/s/p\n";
             }
             line fmt = util.numberFormat(weatherMachineLogs);
-            tl += s"<gray>Logs: <green>%var(fmt)\n";
+            tl += s"<gray>Logs: <green>%var(fmt)\n\n";
+            tl += s"<reset><yellow><bold>GLOBAL BUFFS\n<reset>";
+            tl += s"<reset><gray>Trinkets: <green>+%var(globalTrinketBuff)%";
+            tl += "\n\n";
+            tl += s"<reset><blue><bold>TIMERS\n<reset>";
+            tl += s"<reset><gray>Trinket Shop Restock: <yellow>%var(trinketShopRestockTimer)s";
 
             tl = tl + s"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
             
@@ -242,6 +261,8 @@ namespace loops {
         // send actionbar and tablist every 5 ticks
         // hashCode is to distribute the computation to prevent high cpu
         if(game.ticksSinceStartup % 5 == global "%uuid hashCode" % 5) {
+            sweeping.calculateLocalLogMul();
+
             line brokenSoFar = global "%uuid brokenLogs".len();
             line brokenReq = global "%uuid blocksToBreak".len();
             line totalPerc = ((brokenSoFar / (brokenReq * (0.9 - global "%uuid stats"["cutoff_rate"]))) * 100).round().min(100);
@@ -375,6 +396,12 @@ namespace loops {
         }
         if(level > 109) {
             color = "gradient:#5BCEFA:#F5A9B8";
+        }
+        if(level > 114) {
+            color = "gradient:#FFF433:#FFFFFF";
+        }
+        if(level > 119) {
+            color = "gradient:#D60270:#0038A8";
         }
         return txt.parseExpression("<dark_gray>[<%var(color)>%var(level)🪓<dark_gray>]");
     }

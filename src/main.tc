@@ -105,13 +105,19 @@ playerevent join {
         ignoreAir = "False"
     );
 
+
+
     start treegens.growForPlayer();
 
 
 
     stats.computeStats();
     
-    wait(60);
+    wait(20);
+
+    trinketOwnershipMenu.placeForPlayer();
+
+    wait(40);
 
 
     player.sendMessage(s"");
@@ -146,6 +152,14 @@ gameevent lagSlayRecover {
 }
 
 function startup() {
+
+    declare global trinketPositions: list[vec] = [
+        vec(20.5, 4.5, 20.5), 
+        vec(-19.5, 4.5, 20.5), 
+        vec(-19.5, 4.5, -19.5), 
+        vec(20.5, 4.5, -19.5)
+    ];
+
     declare global sweepVecs: list[vec] = [
         vec(-1, -1, -1), vec(-1, -1, 0), vec(-1, -1, 1),
         vec(-1, 0, -1),  vec(-1, 0, 0),  vec(-1, 0, 1),
@@ -206,10 +220,19 @@ lscancel playerevent placeBlock {
 import throwingaxe;
 import stocksMenu;
 import weather;
+import trinketOwnershipMenu;
 lscancel playerevent rightClick {
     event.cancel();
     weather.donate();
     stocksMenu.clicks();
+    if(event.blockEquals(item("lime_shulker_box"))) {
+        declare global "%uuid targetShulkerVec": vec = vec.between(
+            global "%uuid roomPos",
+            event.blockLocation
+        );
+        declare global "%uuid targetShulkerPos": loc = event.blockLocation;
+        trinketOwnershipMenu.openMenu();
+    }
     if(player.mainHandItem.getTag("axe") != 0) {
         if(player.getItemCooldown(player.mainHandItem) != 0) {
             endthread;
@@ -251,6 +274,10 @@ lscancel playerevent swapHands {
     statShop.openMenu();
 }
 
+playerevent closeInventory {
+    global "%uuid openInventory" = 0 as inventory;
+}
+
 playerevent clickMenuSlot {
     if(event.item.hasTag("warp", "home")) {
         player.teleport(
@@ -266,6 +293,8 @@ playerevent clickMenuSlot {
     }
     statShop.clickStatShopIcon();
     settingsMenu.click();
+    trinketOwnershipMenu.clicks();
+    trinketShopMenu.clicks();
 }
 
 lscancel playerevent takeDamage {
@@ -320,7 +349,12 @@ function getMoveDir(y: num = 0): vec {
     return move_dir;
 }
 
+import trinketShopMenu;
+
 playerevent command {
+    if(event.commandArgumentEquals("rr", 1) && player.hasPlotPermission(permission = "Developer or builder")) {
+        trinketShopMenu.rerollShop();
+    }
     if(event.commandArgumentEquals("bc", 1) && player.hasPlotPermission(permission = "Developer or builder")) {
         line st = event.command.trim(4);        
         allPlayers.sendMessage(s"<strikethrough><dark_gray><space:40>");
