@@ -1,6 +1,7 @@
 import stats;
 import util;
 import abils;
+import sweeping;
 
 playerevent chat {
     global peopleWhoCant67: list[str] = ["908cd8fa-cc5d-4e5e-a941-4fd2fe6671e9"]; // list of people who are banned from saying 67
@@ -95,6 +96,10 @@ namespace loops {
         
         if(game.ticksSinceStartup % 1000 == 0) {
             loops.setupChatGame();
+        }
+
+        if(game.ticksSinceStartup % 20 == 0) {
+            sweeping.calculateGlobalLogMul();
         }
 
         stocksMenu.tick();
@@ -237,6 +242,8 @@ namespace loops {
         // send actionbar and tablist every 5 ticks
         // hashCode is to distribute the computation to prevent high cpu
         if(game.ticksSinceStartup % 5 == global "%uuid hashCode" % 5) {
+            sweeping.calculateLocalLogMul();
+
             line brokenSoFar = global "%uuid brokenLogs".len();
             line brokenReq = global "%uuid blocksToBreak".len();
             line totalPerc = ((brokenSoFar / (brokenReq * (0.9 - global "%uuid stats"["cutoff_rate"]))) * 100).round().min(100);

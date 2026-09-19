@@ -32,10 +32,10 @@ namespace statShopIcon.logFortune {
     material = "spruce_sapling";
     name = "Fortune";
     stat = "fortune";
-    amount = 0.06;
+    amount = 0.08;
     basePrice = 15;
     priceScaling = 1.9;
-    description: list[str] = ["Each tier grants +6%", "log gain."];
+    description: list[str] = ["Each tier grants +8%", "log gain."];
 }
 
 namespace statShopIcon.treeGrowthSpeed {
