@@ -1,6 +1,8 @@
 import stats;
 import util;
 import abils;
+import sweeping;
+import trinketShopMenu;
 
 playerevent chat {
     global peopleWhoCant67: list[str] = ["908cd8fa-cc5d-4e5e-a941-4fd2fe6671e9"]; // list of people who are banned from saying 67
@@ -9,7 +11,12 @@ playerevent chat {
         default.sendMessage("you have been 67 banned");
         event.cancel();
     }
-    if(global chatGameSolution.len() != 0 && event.message.matches(global chatGameSolution, ignoreCase = "True")) {
+    if(global chatGameSolutions.len() != 0 && event.message.matches(global chatGameSolutions, ignoreCase = "True")) { 
+        for (line chatGameSolution of global chatGameSolutions) {
+            if(event.message.matches(chatGameSolution, ignoreCase = "True")) {
+                break;
+            }
+        }
         allPlayers.sendMessage(s"<green><bold>WINNER! <reset><aqua>%default <gray>got the answer of %var(chatGameSolution)!");
         line logValue = log_families[num.floor(global "%uuid stats"["tree_type"]/5)+1]["value"];
         line logInc = logValue * ((num.floor(global "%uuid stats"["tree_type"]%5)+1) * 225);
@@ -43,14 +50,14 @@ playerevent chat {
 
         line logRender = util.numberFormat(logInc);
         allPlayers.sendMessage(s"<dark_gray>The person earned %var(logRender) logs!");
-        chatGameSolution = "";
+        chatGameSolutions = [""];
         saved "%uuid logs" += logInc;
         declare global hintType: num = 0;
         declare saved "%uuid chat_wins": num += 1;
     }
     // exclusively for the number guessing game
     if(global hintType == 1) {
-        line realVal = num.parse(chatGameSolution);
+        line realVal = num.parse(chatGameSolutions[1]);
         line checkVal = num.parse(event.message);
         if(checkVal != 0) {
             event.cancel();
@@ -95,6 +102,18 @@ namespace loops {
         
         if(game.ticksSinceStartup % 1000 == 0) {
             loops.setupChatGame();
+        }
+
+        if(game.ticksSinceStartup % 20 == 0) {
+            if(saved trinketShopRestockTimer <= 0) {
+                declare saved trinketShopRestockTimer: num = 60*5;
+                trinketShopMenu.rerollShop();
+            }
+            trinketShopRestockTimer--;
+        }
+
+        if(game.ticksSinceStartup % 20 == 0) {
+            sweeping.calculateGlobalLogMul();
         }
 
         stocksMenu.tick();
@@ -169,7 +188,12 @@ namespace loops {
                 tl += s"<gray>Cost: <red>-300k/s/p\n";
             }
             line fmt = util.numberFormat(weatherMachineLogs);
-            tl += s"<gray>Logs: <green>%var(fmt)\n";
+            tl += s"<gray>Logs: <green>%var(fmt)\n\n";
+            tl += s"<reset><yellow><bold>GLOBAL BUFFS\n<reset>";
+            tl += s"<reset><gray>Trinkets: <green>+%var(globalTrinketBuff)%";
+            tl += "\n\n";
+            tl += s"<reset><blue><bold>TIMERS\n<reset>";
+            tl += s"<reset><gray>Trinket Shop Restock: <yellow>%var(trinketShopRestockTimer)s";
 
             tl = tl + s"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
             
@@ -237,6 +261,8 @@ namespace loops {
         // send actionbar and tablist every 5 ticks
         // hashCode is to distribute the computation to prevent high cpu
         if(game.ticksSinceStartup % 5 == global "%uuid hashCode" % 5) {
+            sweeping.calculateLocalLogMul();
+
             line brokenSoFar = global "%uuid brokenLogs".len();
             line brokenReq = global "%uuid blocksToBreak".len();
             line totalPerc = ((brokenSoFar / (brokenReq * (0.9 - global "%uuid stats"["cutoff_rate"]))) * 100).round().min(100);
@@ -370,6 +396,12 @@ namespace loops {
         }
         if(level > 109) {
             color = "gradient:#5BCEFA:#F5A9B8";
+        }
+        if(level > 114) {
+            color = "gradient:#FFF433:#FFFFFF";
+        }
+        if(level > 119) {
+            color = "gradient:#D60270:#0038A8";
         }
         return txt.parseExpression("<dark_gray>[<%var(color)>%var(level)🪓<dark_gray>]");
     }

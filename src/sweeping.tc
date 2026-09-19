@@ -1,5 +1,6 @@
 import treegens;
 import util;
+import trinket;
 
 type log_family: {
     value: num,
@@ -119,21 +120,8 @@ namespace sweeping {
         }
     }
 
-    // safely breaks a block if it is possible to do so,
-    // grants rewards in the process
-    function safeBreak(
-        block: loc
-    ) {
-        block = block.align(align = "Block center", rotation = "Remove rotation", coords = "All coordinates");
-        if(global "%uuid treeRegenerating" == 1) {
-            event.cancel();
-            return;
-        }
-        line logValue = log_families[num.floor(global "%uuid stats"["tree_type"]/5)+1]["value"];
-
-        line logMul = 1;
-        logMul += global "%uuid stats"["fortune"];
-        logMul += (global "%uuid stats"["combo_str"] * (global "%uuid combo" * 0.002));
+    function calculateGlobalLogMul(): num {
+        line logMul = 0;
 
         if(weatherType == 1) {
             logMul += 0.2;
@@ -151,7 +139,48 @@ namespace sweeping {
             logMul += 2.5;
         }
 
-        logValue *= logMul;
+        declare global globalTrinketBuff = 0;
+        for(line p of game.plotPlayerUUIDs) {
+            select playersByName(p);
+            for(line rngId of saved "%uuid trinketSelections") {
+                line globalBuff = trinket[saved "%uuid trinketInventory"["%var(rngId)"]["id"]].globalLogValueBonus;
+                
+                globalTrinketBuff += globalBuff;
+            }
+            select reset;
+        }
+
+        globalTrinketBuff = globalTrinketBuff.exponent(0.9);
+        globalTrinketBuff = globalTrinketBuff.round();
+
+        logMul += (globalTrinketBuff / 100);
+
+        declare global "globalLogMul": num = logMul;
+
+        return logMul;
+    }
+
+    function calculateLocalLogMul(): num {
+        line logMul = 0;
+        logMul += global "%uuid stats"["fortune"];
+        logMul += (global "%uuid stats"["combo_str"] * (global "%uuid combo" * 0.002));
+        declare global "%uuid logMul": num = logMul;
+        declare global "%uuid logValue" = log_families[num.floor(global "%uuid stats"["tree_type"]/5)+1]["value"];
+        return logMul;
+    }
+
+    // safely breaks a block if it is possible to do so,
+    // grants rewards in the process
+    function safeBreak(
+        block: loc
+    ) {
+        block = block.align(align = "Block center", rotation = "Remove rotation", coords = "All coordinates");
+        if(global "%uuid treeRegenerating" == 1) {
+            event.cancel();
+            return;
+        }
+        
+        line logValue = global "%uuid logValue" * (1 + global "%uuid logMul" + global globalLogMul);
 
         line mat = game.getBlockMaterial(block);
         if(mat != "air" && mat != "light" && !global "%uuid brokenLogs".contains(block)) {

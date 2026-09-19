@@ -34,12 +34,27 @@ namespace update.sep17th {
 
 namespace update.sep18th {
     date = "September 18th";
-    changes: list[str] = ["+ Optimized certain visual effects", ""];
+    changes: list[str] = ["+ Optimized certain visual effects"];
+}
+
+namespace update.sep19th {
+    date = "September 19th";
+    changes: list[str] = ["+ Added trinkets", "+ Added tree type levels 106-120", "+ Buffed Fortune from 6% -> 8%"];
 }
 
 namespace updateMenu {
     function openMenu() {
         line inv = inventory.tiledMenu(4);
+
+        line icon = item("diamond");
+
+        icon = icon.setName(s"<aqua><bold>GitHub Contributors");
+        icon = icon.addLore(s"<dark_gray>- <gold>Endistic");
+        icon = icon.addLore(s"<dark_gray>- <gray>Froogile");
+        icon = icon.addLore(s"<dark_gray>- <gray>yair0211");
+        icon = icon.addLore(s"<dark_gray>- <gray>Barfl");
+
+        inv.setItem(32, icon);
 
         line slot = 1;
         for(line iconKey of namespace.getKeys(update)) {
