@@ -72,7 +72,7 @@ namespace loops {
                 "y = (-q / 2 + sqrt(q^2 / 4 + p^3 / 27))^(1/3) + (-q / 2 - sqrt(q^2 / 4 + p^3 / 27))^(1/3)": "cubic formula",
                 "x = [ -(b ± sqrt(b^2 - 4ac + 4ay)) ± sqrt( (b ± sqrt(b^2 - 4ac + 4ay))^2 - 8ay ± [16a^2d - 8aby]/sqrt(b^2 - 4ac + 4ay) ) ] / (4a)": "quartic formula",
                 "Who created this dopamine rush?": "Endistic",
-                "SMOTS": "Scattered Mirror Of The Storm"
+                "SMOTS": "Scattered Mirror of The Storm"
             };
             line rng = var.setToRandom(syllogies.getKeys()) as str;
             gameTypeTxt = "SYLLOGISM!";
