@@ -2,6 +2,7 @@ import stats;
 import util;
 import abils;
 import sweeping;
+import trinketShopMenu;
 
 playerevent chat {
     global peopleWhoCant67: list[str] = ["908cd8fa-cc5d-4e5e-a941-4fd2fe6671e9"]; // list of people who are banned from saying 67
@@ -99,6 +100,14 @@ namespace loops {
         }
 
         if(game.ticksSinceStartup % 20 == 0) {
+            if(saved trinketShopRestockTimer <= 0) {
+                declare saved trinketShopRestockTimer: num = 60*5;
+                trinketShopMenu.rerollShop();
+            }
+            trinketShopRestockTimer--;
+        }
+
+        if(game.ticksSinceStartup % 20 == 0) {
             sweeping.calculateGlobalLogMul();
         }
 
@@ -174,7 +183,12 @@ namespace loops {
                 tl += s"<gray>Cost: <red>-300k/s/p\n";
             }
             line fmt = util.numberFormat(weatherMachineLogs);
-            tl += s"<gray>Logs: <green>%var(fmt)\n";
+            tl += s"<gray>Logs: <green>%var(fmt)\n\n";
+            tl += s"<reset><yellow><bold>GLOBAL BUFFS\n<reset>";
+            tl += s"<reset><gray>Trinkets: <green>+%var(globalTrinketBuff)%";
+            tl += "\n\n";
+            tl += s"<reset><blue><bold>TIMERS\n<reset>";
+            tl += s"<reset><gray>Trinket Shop Restock: <yellow>%var(trinketShopRestockTimer)s";
 
             tl = tl + s"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
             

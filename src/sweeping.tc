@@ -139,14 +139,21 @@ namespace sweeping {
             logMul += 2.5;
         }
 
+        declare global globalTrinketBuff = 0;
         for(line p of game.plotPlayerUUIDs) {
             select playersByName(p);
             for(line rngId of saved "%uuid trinketSelections") {
                 line globalBuff = trinket[saved "%uuid trinketInventory"["%var(rngId)"]["id"]].globalLogValueBonus;
-                logMul += (globalBuff / 100);
+                
+                globalTrinketBuff += globalBuff;
             }
             select reset;
         }
+
+        globalTrinketBuff = globalTrinketBuff.exponent(0.9);
+        globalTrinketBuff = globalTrinketBuff.round();
+
+        logMul += (globalTrinketBuff / 100);
 
         declare global "globalLogMul": num = logMul;
 
@@ -158,6 +165,7 @@ namespace sweeping {
         logMul += global "%uuid stats"["fortune"];
         logMul += (global "%uuid stats"["combo_str"] * (global "%uuid combo" * 0.002));
         declare global "%uuid logMul": num = logMul;
+        declare global "%uuid logValue" = log_families[num.floor(global "%uuid stats"["tree_type"]/5)+1]["value"];
         return logMul;
     }
 
@@ -171,8 +179,8 @@ namespace sweeping {
             event.cancel();
             return;
         }
-        line logValue = log_families[num.floor(global "%uuid stats"["tree_type"]/5)+1]["value"];
-        logValue *= 1 + global "%uuid logMul" + global globalLogMul;
+        
+        line logValue = global "%uuid logValue" * (1 + global "%uuid logMul" + global globalLogMul);
 
         line mat = game.getBlockMaterial(block);
         if(mat != "air" && mat != "light" && !global "%uuid brokenLogs".contains(block)) {
