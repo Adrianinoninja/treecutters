@@ -187,7 +187,7 @@ namespace treegens {
             global "%uuid blocksToBreak" = treegens.growArbitraryTree(global "%uuid stats"["tree_type"]);
             wait(1);
         }
-        player.playSound(snd("Creaking Attack"));   
+        player.playSound(snd("Creaking Attack"), source = "Blocks");   
         global "%uuid treeRegenerating" = 0;
         declare global "%uuid firstStrike" = 1;
     }
@@ -303,7 +303,7 @@ namespace treegens {
                 if(game.getBlockMaterial(pathPos) == "air") {
                     game.setBlock(mat, pathPos);
                     outputPositions.append(pathPos);
-                    player.playSound(snd("Wood Place"), pathPos);
+                    player.playSound(snd("Wood Place"), pathPos, source = "Blocks");
                     util.fastWait(1/(global "%uuid stats"["tree_growth"]));
                 }
             }
@@ -328,7 +328,7 @@ namespace treegens {
                     continue;
                 }
                 game.setBlock(mat, added);
-                player.playSound(snd("Wood Place"), added);
+                player.playSound(snd("Wood Place"), added, source = "Blocks");
                 outputPositions.append(added);
                 util.fastWait(1/(global "%uuid stats"["tree_growth"]));
             }
@@ -354,7 +354,7 @@ namespace treegens {
             if(gr.getDistance(root) <= size) {
                 outputPositions.append(gr);
                 game.setBlock(mat, gr);
-                player.playSound(snd("Wood Place"), gr);
+                player.playSound(snd("Wood Place"), gr, source = "Blocks");
             }
         }
         wait(1);

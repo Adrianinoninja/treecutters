@@ -337,6 +337,9 @@ playerevent command {
             if(event.commandArgumentEquals("stocks", 2)) {
                 player.teleport(loc(97.8883, 4, 44.4137, 0.45, -88.75));
             }
+            if(event.commandArgumentEquals("home", 2)) {
+                player.teleport((global "%uuid roomPos").shiftAllAxes(-6, 3, -6));
+            }
         }
     }
     if(event.commandArgumentEquals("axolotl", 1) && player.hasPlotPermission(permission = "Whitelisted")) {

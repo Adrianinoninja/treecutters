@@ -5,9 +5,11 @@ namespace throwingaxe {
         origin: loc,
         target: loc = loc(0, 0, 0)
     ) {
-        player.playSound(snd("Trident Throw"));
-        player.playSound(snd("Armor Equip (Leather)"));
-        player.playSound(snd("Player Attack (Sweep)"));
+        player.sendAttackAnimation();
+
+        player.playSound(snd("Trident Throw"), source = "Players");
+        player.playSound(snd("Armor Equip (Leather)"), source = "Players");
+        player.playSound(snd("Player Attack (Sweep)"), source = "Players");
 
         game.spawnItemDisplay(origin, item("iron_axe"));
         lastEntity.setTag("owner", "%default");
