@@ -4,8 +4,8 @@ import abils;
 
 playerevent chat {
     // currently only contains DropExitJoin
-    if((event.message == ("67"))) {
-        allPlayers.sendMessage("<yellow>%default <red>Tried Saying 67 But we banned it <newline>MOHAHAHAHAHAHA");
+    if(event.message == "67") {
+        allPlayers.sendMessage("<dark_gray>%default Tried saying 67, But we banned it. <dark_red>L");
         event.cancel();
     }
     if(global chatGameSolution.len() != 0 && event.message.matches(global chatGameSolution, ignoreCase = "True")) {
