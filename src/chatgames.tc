@@ -41,10 +41,12 @@ namespace loops {
                 chatGameSolution = str.setToString(a * b - c);
                 gamePrompt = "Solve %var(a) * %var(b) - %var(c)";
             }
-            if(chatGameSolution == "67") {
-                setupChatGameHidden();
-                return;
-            }
+            // no, yair
+            
+            // if(chatGameSolution == "67") {
+            //     setupChatGameHidden();
+            //     return;
+            // }
             gamePrompt = "Solve %var(gamePrompt).";
         }
         if(gameType == 3) {
