@@ -16,11 +16,10 @@ namespace trinket {
 namespace trinket.helix {
     center = loc(3, 15, 92);
     name = "Helix";
-    localLogValueBonus = 30;
+    localLogValueBonus = 60;
     globalLogValueBonus = 10;
     stats: dict[num] = {
-        "sweep": 3,
-        "fortune": 2
+        "sweep": 4
     };
     shopWeight = 1;
     cost = 1_000_000_000;
@@ -30,10 +29,11 @@ namespace trinket.helix {
 namespace trinket.ovation {
     center = loc(12, 15, 92);
     name = "Ovation";
-    localLogValueBonus = 10;
+    localLogValueBonus = 6;
     globalLogValueBonus = 3;
     stats: dict[num] = {
-        "sweep": 1
+        "sweep": 1,
+        "timber": 0.5
     };
     cost = 500_000_000;
     icon = item("obsidian");
@@ -42,10 +42,12 @@ namespace trinket.ovation {
 namespace trinket.atom {
     center = loc(21, 15, 92);
     name = "Atom";
-    localLogValueBonus = 5;
-    globalLogValueBonus = 1;
+    localLogValueBonus = 3;
+    globalLogValueBonus = 2;
     stats: dict[num] = {
-        "fortune": 1
+        "sweep": 1,
+        "multishot": 1,
+        "throwing_axe_speed": 10
     };
     cost = 250_000_000;
     icon = item("light_blue_wool");
@@ -54,37 +56,74 @@ namespace trinket.atom {
 namespace trinket.fechten {
     center = loc(3, 15, 101);
     name = "Fechten";
-    localLogValueBonus = 5;
-    globalLogValueBonus = 1;
+    localLogValueBonus = 1;
+    globalLogValueBonus = 5;
     stats: dict[num] = {
-        "fortune": 1
+        "sweep": 3,
+        "walk_speed": 20
     };
-    cost = 250_000_000;
+    cost = 150_000_000;
     icon = item("oak_planks");
 }
 
 namespace trinket.lilGoob {
     center = loc(12, 15, 101);
     name = "Lil' Goob";
-    localLogValueBonus = 5;
+    localLogValueBonus = 2;
     globalLogValueBonus = 1;
     stats: dict[num] = {
-        "fortune": 1
+        "cutoff_rate": 3
     };
-    cost = 250_000_000;
-    icon = item("creeper_spawn_egg");
+    cost = 150_000_000;
+    icon = item("armor_stand");
 }
 
 namespace trinket.sierpinski {
     center = loc(21, 15, 101);
     name = "Sierpinski";
-    localLogValueBonus = 5;
+    localLogValueBonus = 2;
+    globalLogValueBonus = 1;
+    stats: dict[num] = {
+        "sweep": 4
+    };
+    cost = 350_000_000;
+    icon = item("sponge");
+}
+
+namespace trinket.annihilation {
+    center = loc(3, 15, 110);
+    name = "Annihiliation";
+    localLogValueBonus = 2;
+    globalLogValueBonus = 10;
+    stats: dict[num] = {
+        "timber": 1
+    };
+    cost = 650_000_000;
+    icon = item("diamond_sword");
+}
+
+namespace trinket.transmutation {
+    center = loc(12, 15, 110);
+    name = "Transmutation";
+    localLogValueBonus = 1;
+    globalLogValueBonus = 5;
+    stats: dict[num] = {
+        "sweep": 3
+    };
+    cost = 350_000_000;
+    icon = item("enchanting_table");
+}
+
+namespace trinket.sharpness {
+    center = loc(21, 15, 110);
+    name = "Sharpness";
+    localLogValueBonus = 2;
     globalLogValueBonus = 1;
     stats: dict[num] = {
         "fortune": 1
     };
-    cost = 250_000_000;
-    icon = item("sponge");
+    cost = 20_000_000;
+    icon = item("enchanted_book");
 }
 
 
@@ -143,6 +182,21 @@ namespace trinketShopMenu {
             }
             if(stats["fortune"] > 0) {
                 icon = icon.addLore(s"<#777777>Fortune: <#00aa00>+%entry(stats,fortune)");
+            }
+            if(stats["timber"] > 0) {
+                icon = icon.addLore(s"<#777777>Timber: <#00aa00>+%entry(stats,timber)%");
+            }
+            if(stats["walk_speed"] > 0) {
+                icon = icon.addLore(s"<#777777>Walk Speed: <#00aa00>+%entry(stats,walk_speed)5");
+            }
+            if(stats["cutoff_rate"] > 0) {
+                icon = icon.addLore(s"<#777777>Cut-off Rate: <#00aa00>-%entry(stats,cutoff_rate)%");
+            }
+            if(stats["multishot"] > 0) {
+                icon = icon.addLore(s"<#777777>Meowltishots: <#00aa00>+%entry(stats,multishot)");
+            }
+            if(stats["throwing_axe_speed"] > 0) {
+                icon = icon.addLore(s"<#777777>Throwing Axe Speed: <#00aa00>+%entry(stats,throwing_axe_speed)");
             }
         }
 
