@@ -1,5 +1,6 @@
 import treegens;
 import util;
+import trinket;
 
 type log_family: {
     value: num,
@@ -149,6 +150,13 @@ namespace sweeping {
         }
         if(weatherType == 5) {
             logMul += 2.5;
+        }
+
+
+
+        for(line rngId of saved "%uuid trinketSelections") {
+            line localBuff = trinket[saved "%uuid trinketInventory"["%var(rngId)"]["id"]].localLogValueBonus;
+            logMul += (localBuff / 100);
         }
 
         logValue *= logMul;

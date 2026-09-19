@@ -105,13 +105,19 @@ playerevent join {
         ignoreAir = "False"
     );
 
+
+
     start treegens.growForPlayer();
 
 
 
     stats.computeStats();
     
-    wait(60);
+    wait(20);
+
+    trinketOwnershipMenu.placeForPlayer();
+
+    wait(40);
 
 
     player.sendMessage(s"");
@@ -146,6 +152,14 @@ gameevent lagSlayRecover {
 }
 
 function startup() {
+
+    declare global trinketPositions: list[vec] = [
+        vec(20.5, 4.5, 20.5), 
+        vec(-19.5, 4.5, 20.5), 
+        vec(-19.5, 4.5, -19.5), 
+        vec(20.5, 4.5, -19.5)
+    ];
+
     declare global sweepVecs: list[vec] = [
         vec(-1, -1, -1), vec(-1, -1, 0), vec(-1, -1, 1),
         vec(-1, 0, -1),  vec(-1, 0, 0),  vec(-1, 0, 1),
