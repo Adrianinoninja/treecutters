@@ -187,7 +187,7 @@ namespace trinketShopMenu {
                 icon = icon.addLore(s"<#777777>Timber: <#00aa00>+%entry(stats,timber)%");
             }
             if(stats["walk_speed"] > 0) {
-                icon = icon.addLore(s"<#777777>Walk Speed: <#00aa00>+%entry(stats,walk_speed)5");
+                icon = icon.addLore(s"<#777777>Walk Speed: <#00aa00>+%entry(stats,walk_speed)%");
             }
             if(stats["cutoff_rate"] > 0) {
                 icon = icon.addLore(s"<#777777>Cut-off Rate: <#00aa00>-%entry(stats,cutoff_rate)%");
