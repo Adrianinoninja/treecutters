@@ -36,3 +36,64 @@ namespace trinket.atom {
         "fortune": 1
     };
 }
+
+type trinketShopEntry: { id: str };
+
+import trinket;
+import trinketShopMenu;
+import trinketOwnershipMenu;
+
+
+
+namespace trinketShopMenu {
+    function rerollShop() {
+        allPlayers.sendMessage(s"<bold><yellow>SHOP REFILL! <reset><gray>The trinket shop just got refilled!");
+        allPlayers.playSound(snd("Pling", 2, 1));
+
+        declare global trinketShopEntries: list[trinketShopEntry] = [];
+
+        line sumWeight = 0;
+        for(line key of namespace.getKeys(trinket)) {
+            sumWeight += trinket[key].shopWeight;
+        }
+
+        for(line rng of range(0, 5)) {
+            line weight = num.random(0, sumWeight, rounding = "Whole number");
+            line key: str;
+            for(key of namespace.getKeys(trinket)) {
+                weight -= trinket[key].shopWeight;
+                if(weight <= 0) {
+                    break;
+                }
+            }
+            trinketShopEntries.append({ id: key } as trinketShopEntry);
+        }
+    }
+
+    function openMenu() {
+        line inv = inventory.tiledMenu(4);
+        inv.openForSelection();
+    }
+
+    function clicks() {
+        
+    }
+}
+
+namespace trinketOwnershipMenu {
+    function openMenu() {
+        line inv = inventory.tiledMenu(4);
+
+        line shopIcon = item("gold_ingot");
+        shopIcon = shopIcon.setName(s"<yellow>Trinket Shop");
+        shopIcon = shopIcon.setTag("open_trinket_shop", 1);
+        inv.setItem(36, shopIcon);
+        inv.openForSelection();
+    }
+
+    function clicks() {
+        if(event.item.hasTag("open_trinket_shop")) {
+            trinketShopMenu.openMenu();
+        }
+    }
+}

@@ -206,10 +206,19 @@ lscancel playerevent placeBlock {
 import throwingaxe;
 import stocksMenu;
 import weather;
+import trinketOwnershipMenu;
 lscancel playerevent rightClick {
     event.cancel();
     weather.donate();
     stocksMenu.clicks();
+    if(event.blockEquals(item("lime_shulker_box"))) {
+        declare global "%uuid targetShulkerVec": vec = vec.between(
+            global "%uuid roomPos",
+            event.blockLocation
+        );
+        declare global "%uuid targetShulkerPos": loc = event.blockLocation;
+        trinketOwnershipMenu.openMenu();
+    }
     if(player.mainHandItem.getTag("axe") != 0) {
         if(player.getItemCooldown(player.mainHandItem) != 0) {
             endthread;
@@ -266,6 +275,8 @@ playerevent clickMenuSlot {
     }
     statShop.clickStatShopIcon();
     settingsMenu.click();
+    trinketOwnershipMenu.clicks();
+    trinketShopMenu.clicks();
 }
 
 lscancel playerevent takeDamage {
@@ -320,7 +331,12 @@ function getMoveDir(y: num = 0): vec {
     return move_dir;
 }
 
+import trinketShopMenu;
+
 playerevent command {
+    if(event.commandArgumentEquals("rr", 1) && player.hasPlotPermission(permission = "Developer or builder")) {
+        trinketShopMenu.rerollShop();
+    }
     if(event.commandArgumentEquals("bc", 1) && player.hasPlotPermission(permission = "Developer or builder")) {
         line st = event.command.trim(4);        
         allPlayers.sendMessage(s"<strikethrough><dark_gray><space:40>");

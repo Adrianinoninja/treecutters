@@ -68,7 +68,7 @@ extend inventory {
             player.expandInventoryMenu();
         }
 
-        global "%uuid openInventory" = this;
+        global "%uuid openInventory": inventory = this;
 
         for(line idx of range(1, this["rows"] * 9)) {
             player.setInventoryMenuItem(idx, this["slots"][idx]);
