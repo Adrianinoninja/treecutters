@@ -4,7 +4,22 @@ namespace weather {
         declare global weatherType: num = 0;
 
         
-        if(weatherMachineLogs > 400_000_000) {
+        
+        if(weatherMachineLogs > 500_000_000) {
+            // meownado
+            weatherMachineLogs -= (400000 * game.playerCount)/20;
+            weatherType = 6;
+            if(game.ticksSinceStartup % 100 == 1) {
+                game.summonLightning(loc(101, 14, 62));
+            }
+            select allPlayers;
+            selected.displayParticleEffect(
+                par("Heart", amount = 20, spreadHoriz = 16, spreadVert = 16, motion = vec(0, -2, -20), motionVariation = 0),
+                selected.eyeLocation
+            );
+            select reset;
+            allPlayers.setWeather(weather = "Downfall");
+        } else if(weatherMachineLogs > 400_000_000) {
             // tornado
             weatherMachineLogs -= (300000 * game.playerCount)/20;
             weatherType = 5;
