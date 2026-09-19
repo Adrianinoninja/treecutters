@@ -29,7 +29,12 @@ namespace update.sep16 {
 
 namespace update.sep17th {
     date = "September 17th";
-    changes: list[str] = ["+ Added Level 55+ tree types", "+ Improved throwing axe mechanics", "+ Fixed issues involving entities not despawning", "+ Added update logs", "+ Added combo system", "+ Buffs are now additive"];
+    changes: list[str] = ["+ Added Level 55+ tree types", "+ Improved throwing axe mechanics", "+ Fixed issues involving entities not despawning", "+ Added update logs", "+ Added combo system", "+ Buffs are now additive", "+ Level cap is now 105"];
+}
+
+namespace update.sep18th {
+    date = "September 18th";
+    changes: list[str] = ["+ Optimized certain visual effects", ""];
 }
 
 namespace updateMenu {
