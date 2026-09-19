@@ -9,7 +9,12 @@ playerevent chat {
         default.sendMessage("you have been 67 banned");
         event.cancel();
     }
-    if(global chatGameSolution.len() != 0 && event.message.matches(global chatGameSolution, ignoreCase = "True")) {
+    if(global chatGameSolution.len() != 0 && event.message.matches(global chatGameSolutions, ignoreCase = "True")) { 
+        for (line chatGameSolution of global chatGameSolutions) {
+            if(event.message.matches(chatGameSolution, ignoreCase = "True")) {
+                break;
+            }
+        }
         allPlayers.sendMessage(s"<green><bold>WINNER! <reset><aqua>%default <gray>got the answer of %var(chatGameSolution)!");
         line logValue = log_families[num.floor(global "%uuid stats"["tree_type"]/5)+1]["value"];
         line logInc = logValue * ((num.floor(global "%uuid stats"["tree_type"]%5)+1) * 225);
