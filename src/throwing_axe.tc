@@ -1,5 +1,12 @@
 import sweeping;
 
+type trail_beam_anim: {
+    uuid: str,
+    opacity: num
+};
+
+declare global "%uuid trailBeams": list[trail_beam_anim] = [];
+
 namespace throwingaxe {
     process throw(
         origin: loc,
@@ -57,8 +64,8 @@ namespace throwingaxe {
             p1(pos, disp, dt);
 
             if(game.cpuUsage * 100 < 30 && dt % 3 == 1) {
-                start spawnTemporaryBeam(
-                    oldPos.shiftAllDirections(0, -0.25, 0), 
+                queueTrailBeam(
+                    oldPos.shiftAllDirections(0, -0.25, 0),
                     pos.shiftAllDirections(0, -0.25, 0)
                 );
                 line oldPos = pos;
@@ -125,11 +132,12 @@ namespace throwingaxe {
     }
 
     // spawns a text display that acts as a line between two locations,
-    // fading out over time
-    // basically, the text spawns at the source, faces towards the target,
+    // then queues it into the shared runTrailBeamAnims loop to fade out over time,
+    // rather than starting a dedicated process per segment.
+    // the text spawns at the source, faces towards the target,
     // and the scale is adjusted such that it intercepts the two points
     // we apply a transform to center it, allowing it to look smooth
-    process spawnTemporaryBeam(
+    function queueTrailBeam(
         source: loc,
         target: loc
     ) {
@@ -152,15 +160,31 @@ namespace throwingaxe {
         // magic centering alignment translation
         line translation = vec.rotateAroundAxis(vec(-0.13, 0.01, 0.0), 90);
         entity.setDisplayTranslation(translation);
-
-        // actual fadeout anim
-        for(line x of range(50, 0, -2)) {
-            entity.setTextDisplayTextOpacity(x);
-            wait();
-        }
-
-        entity.remove();
         select reset;
+
+        global "%uuid trailBeams".append({
+            uuid: uuid,
+            opacity: 50
+        } as trail_beam_anim);
+    }
+
+    process runTrailBeamAnims() {
+        repeat {
+            line stillFading: list[trail_beam_anim] = [];
+            for(line beam of global "%uuid trailBeams") {
+                beam["opacity"] = beam["opacity"] - 2;
+                select entitiesByUUID(beam["uuid"]);
+                if(beam["opacity"] <= 0) {
+                    entity.remove();
+                } else {
+                    entity.setTextDisplayTextOpacity(beam["opacity"]);
+                    stillFading.append(beam);
+                }
+                select reset;
+            }
+            global "%uuid trailBeams" = stillFading;
+            wait(1);
+        }
     }
 
     function execBreak(

@@ -14,6 +14,19 @@ extend log_family {
     }
 }
 
+type falling_block_anim: {
+    uuid: str,
+    target: loc,
+    pitch: num,
+    yaw: num,
+    roll: num,
+    duration: num,
+    phase: num,
+    ticksLeft: num
+};
+
+declare global "%uuid fallingBlocks": list[falling_block_anim] = [];
+
 namespace sweeping {
     // reimplementation of aaxper's algorithm ported to terracotta
     // with treecutting-specific calculations included
@@ -194,7 +207,7 @@ namespace sweeping {
             game.setBlock("air" as item, block);
         }
         
-        start blockFallAnim(block, mat);
+        queueBlockFallAnim(block, mat);
 
 
         declare global "%uuid combo": num += 1;
@@ -213,7 +226,7 @@ namespace sweeping {
                     saved "%uuid true_logs" += 1;
                     global "%uuid combo": num += 1;
                     if(game.cpuUsage * 100 < 30) {
-                        start blockFallAnim(block2, mat);
+                        queueBlockFallAnim(block2, mat);
                     }
                 }
                 if(saved "%uuid settings"["logEffects"] == "Enabled" || saved "%uuid settings"["logEffects"] == "Particles Only") {
@@ -272,13 +285,12 @@ namespace sweeping {
 
     }
 
-    // the process that runs the animation for a falling log
-    process blockFallAnim(
+    function queueBlockFallAnim(
         block: loc,
         mat: str
     ) {
         if(saved "%uuid settings"["logEffects"] == "Disabled" || saved "%uuid settings"["logEffects"] == "Particles Only") {
-            endthread;
+            return;
         }
         block = block.align(align = "Block center", rotation = "Remove rotation", coords = "All coordinates");
         game.spawnItemDisplay(block, item(mat));
@@ -289,7 +301,6 @@ namespace sweeping {
 
         line xOff = num.random(-2, 2, rounding = "Decimal number");
         line zOff = num.random(-2, 2, rounding = "Decimal number");
-
 
         line pitchOff = num.random(-90, 90, rounding = "Decimal number");
         line yawOff = num.random(-90, 90, rounding = "Decimal number");
@@ -302,25 +313,53 @@ namespace sweeping {
                 select entitiesByUUID(uuid);
                 selectedEntity.remove();
                 select reset;
-                endthread;
+                return;
             }
         }
 
         line distDown = num.abs(block.y - tempLoc.y);
         line distTime = num.ceil(distDown * 3);
 
-        wait(1);
-        select entitiesByUUID(uuid);
+        global "%uuid fallingBlocks".append({
+            uuid: uuid,
+            target: block.shiftAllAxes(xOff, -distDown, zOff),
+            pitch: pitchOff,
+            yaw: yawOff,
+            roll: rollOff,
+            duration: distTime,
+            phase: 0,
+            ticksLeft: 0
+        } as falling_block_anim);
+    }
 
-        entity.setDisplayTeleportDuration(distTime);
-        entity.setDisplayInterpolation(distTime);
-        wait(1);
-        entity.teleport(block.shiftAllAxes(xOff, -distDown, zOff));
-        entity.setDisplayRotationFromEulerAngles(pitchOff, yawOff, rollOff);
-        wait(distTime);
-        entity.remove();
-        
-        
-        select reset;
+    process runFallingBlockAnims() {
+        repeat {
+            line stillFalling: list[falling_block_anim] = [];
+            for(line anim of global "%uuid fallingBlocks") {
+                select entitiesByUUID(anim["uuid"]);
+                if(anim["phase"] == 0) {
+                    entity.setDisplayTeleportDuration(anim["duration"]);
+                    entity.setDisplayInterpolation(anim["duration"]);
+                    anim["phase"] = 1;
+                    stillFalling.append(anim);
+                } else if(anim["phase"] == 1) {
+                    entity.teleport(anim["target"]);
+                    entity.setDisplayRotationFromEulerAngles(anim["pitch"], anim["yaw"], anim["roll"]);
+                    anim["phase"] = 2;
+                    anim["ticksLeft"] = anim["duration"];
+                    stillFalling.append(anim);
+                } else {
+                    anim["ticksLeft"] = anim["ticksLeft"] - 1;
+                    if(anim["ticksLeft"] <= 0) {
+                        entity.remove();
+                    } else {
+                        stillFalling.append(anim);
+                    }
+                }
+                select reset;
+            }
+            global "%uuid fallingBlocks" = stillFalling;
+            wait(1);
+        }
     }
 }
