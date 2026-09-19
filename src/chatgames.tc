@@ -62,17 +62,20 @@ namespace loops {
                 "DF": ["DiamondFire"],
                 "HTML": ["Hypertext Markup Language"],
                 "6!": ["720"],
+                "6!!": ["48"], // double factorial
+                "6!!!": ["8"], // triple factorial
                 "meow": ["meow"],
                 "LASER": ["Light Amplification by Stimulated Emission of Radiation"],
                 "CEO": ["Chief Executive Officer"],
                 "All humans are mortal. Aristotle is human, therefore...": ["Aristotle is mortal"],
                 "The cat is either gray or black. The cat is gray, therefore...": ["the cat is not black"],
                 "If it rains, the grass gets wet. It is raining, therefore...": ["the grass is wet"],
-                "(-b ± (sqrt(b^2-4ac)/(2a))": ["quadratic formula"],
-                "y = (-q / 2 + sqrt(q^2 / 4 + p^3 / 27))^(1/3) + (-q / 2 - sqrt(q^2 / 4 + p^3 / 27))^(1/3)": ["cubic formula"],
-                "x = [ -(b ± sqrt(b^2 - 4ac + 4ay)) ± sqrt( (b ± sqrt(b^2 - 4ac + 4ay))^2 - 8ay ± [16a^2d - 8aby]/sqrt(b^2 - 4ac + 4ay) ) ] / (4a)": ["quartic formula"],
+                "(-b ± (sqrt(b^2-4ac)/(2a))": ["quadratic formula","quadratic equation"],
+                "y = (-q / 2 + sqrt(q^2 / 4 + p^3 / 27))^(1/3) + (-q / 2 - sqrt(q^2 / 4 + p^3 / 27))^(1/3)": ["cubic formula","cubic equation"],
+                "x = [ -(b ± sqrt(b^2 - 4ac + 4ay)) ± sqrt( (b ± sqrt(b^2 - 4ac + 4ay))^2 - 8ay ± [16a^2d - 8aby]/sqrt(b^2 - 4ac + 4ay) ) ] / (4a)": ["quartic formula", "quartic equation"],
                 "Who created this dopamine rush?": ["Endistic"],
-                "SMotS": ["Scattered Mirror of the Storm"]
+                "SMotS": ["Scattered Mirror of the Storm"],
+                "mb6fbhsphdrcb": ["Roboboost","moving block 6-frame bunnyhop subpixel hyperdash reverse cornerboost"]
             };
             line rng = var.setToRandom(syllogies.getKeys()) as str;
             gameTypeTxt = "SYLLOGISM!";
@@ -87,7 +90,7 @@ namespace loops {
                 "What lives if you feed it, but dies if you give it a drink?": ["Fire"],
                 "What has a head and a tail, but no body?": ["Coin"],
                 "What can you catch, but not throw?": ["A cold"],
-                "What sound does an itty bitty cute little kitty cat make?": ["meow"]
+                "What sound does an itty bitty cute little kitty cat make?": ["meow","purr","mew","nya","mrrp","mrrow","I'm a cat"]
             };
             line rng = var.setToRandom(syllogies.getKeys()) as str;
             gameTypeTxt = "RIDDLE!";
@@ -160,7 +163,8 @@ namespace loops {
                 "hatsune miku",
                 "kagamine rin",
                 "kagamine len",
-                "adachi rei"
+                "adachi rei",
+                "jeremaster"
             ];
             line sel = words[num.random(1, words.len() - 1, rounding = "Whole number")];
             line scrambled: list[str] = sel.split("");
