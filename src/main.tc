@@ -324,7 +324,7 @@ playerevent command {
     if(event.commandArgumentEquals("bc", 1) && player.hasPlotPermission(permission = "Developer or builder")) {
         line st = event.command.trim(4);        
         allPlayers.sendMessage(s"<strikethrough><dark_gray><space:40>");
-        allPlayers.sendMessage(s"<green><bold>BROADCAST <reset><gray>(by %default>");
+        allPlayers.sendMessage(s"<green><bold>BROADCAST <reset><gray>(by %default)");
         allPlayers.sendMessage(txt.parseExpression(st));
         allPlayers.sendMessage(s"<strikethrough><dark_gray><space:40>");
         allPlayers.playSound(snd("Enchantment Table Use"));
@@ -369,7 +369,7 @@ playerevent command {
             loc(73.4768, 5, 54.5637, 1.86, -90.99)
         );
     }
-    if(event.commandArgumentEquals("profile", 1)) {
+    if(event.commandArgumentEquals("profile", 1) || event.commandArgumentEquals("stats", 1)) {
         line p = event.commandArguments[2] as str;
         if(!game.hasPlayer(p)) {
             player.sendMessage(s"player isn't online :(");
