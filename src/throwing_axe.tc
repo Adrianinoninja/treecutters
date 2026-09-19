@@ -5,6 +5,8 @@ namespace throwingaxe {
         origin: loc,
         target: loc = loc(0, 0, 0)
     ) {
+        player.sendAttackAnimation();
+        
         player.playSound(snd("Trident Throw"));
         player.playSound(snd("Armor Equip (Leather)"));
         player.playSound(snd("Player Attack (Sweep)"));

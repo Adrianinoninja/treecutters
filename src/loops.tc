@@ -157,6 +157,11 @@ namespace loops {
                 tl += s"<gray>Global Boost: <green>+150%\n";
                 tl += s"<gray>Cost: <red>-150k/s/p\n";
             }
+            if(weatherType == 5) {
+                tl += s"<gray>Status: <dark_gray>Tornado\n";
+                tl += s"<gray>Global Boost: <green>+210%\n";
+                tl += s"<gray>Cost: <red>-300k/s/p\n";
+            }
             line fmt = util.numberFormat(weatherMachineLogs);
             tl += s"<gray>Logs: <green>%var(fmt)\n";
 
@@ -218,7 +223,7 @@ namespace loops {
             declare global "%default currLogs": num = saved "%uuid logs";
             line diff = global "%default currLogs" - global "%default lastLogs";
             line fmt = util.numberFormat(diff);
-            declare global "%default logSecComp": txt = s"<green>+%var(fmt)/s";
+            declare global "%default logSecComp": txt = s"<#CC9F8E>+%var(fmt)/s";
         }
         if(game.ticksSinceStartup % 20 == 0) {
             declare global "%default lastLogs": num = saved "%uuid logs";
@@ -241,7 +246,7 @@ namespace loops {
 
             if(saved "%uuid stockCount" >= 1) {
                 line fmt = util.numberFormat(saved stockValue);
-                components.append(s"<gray>Stock Price: <green>%var(fmt)");
+                components.append(s"<#cccccc>Stock Price: <#00fff00>%var(fmt)");
             }
 
             components.append(s"<gray>%var(totalPerc)%");
