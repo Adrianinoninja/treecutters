@@ -155,7 +155,7 @@ namespace loops {
             if(weatherType == 3) {
                 tl += s"<gray>Status: <dark_red>Severe Thunderstorm\n";
                 tl += s"<gray>Global Boost: <green>+90%\n";
-                tl += s"<gray>Cost: <red>-50k/s/p\n";
+                tl += s"<gray>Cost: <red>-40k/s/p\n";
             }
             if(weatherType == 4) {
                 tl += s"<gray>Status: <dark_blue>Hurricane\n";
@@ -164,7 +164,7 @@ namespace loops {
             }
             if(weatherType == 5) {
                 tl += s"<gray>Status: <dark_gray>Tornado\n";
-                tl += s"<gray>Global Boost: <green>+210%\n";
+                tl += s"<gray>Global Boost: <green>+250%\n";
                 tl += s"<gray>Cost: <red>-300k/s/p\n";
             }
             line fmt = util.numberFormat(weatherMachineLogs);
