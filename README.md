@@ -1,7 +1,16 @@
 # Treecutting
 Treecutting is a DiamondFire game, you can play it at `treecutting.diamondfire.games`.
 
+## Source
+This project uses a special fork of Terracotta: https://github.com/akarahdev/terracotta-custom-types-and-ns
+Advanced editing may want to adopt this fork locally.
+If Terracotta interests you, please show some support to Owlfroggy: https://github.com/Owlfroggy/terracotta
+
 ## License
+
+Treecutting use the GPL v3 License.
+I did this because I want to encourage open-source work in the DiamondFire community.
+If you're interested, I also recommend putting your DiamondFire games under a similar license.
 
 Treecutting
 Copyright (C) 2026  Endistic Akarah
