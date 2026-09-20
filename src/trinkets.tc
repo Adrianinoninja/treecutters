@@ -21,7 +21,7 @@ namespace trinket.absolution {
     stats: dict[num] = {
         "timber": 1
     };
-    shopWeight = 2;
+    shopWeight = 1;
     cost = 1_000_000_000;
     icon = item("fletching_table");
 }
@@ -35,7 +35,7 @@ namespace trinket.helix {
         "sweep": 4,
         "fortune": 10
     };
-    shopWeight = 2;
+    shopWeight = 1;
     cost = 1_000_000_000;
     icon = item("acacia_wood");
 }
