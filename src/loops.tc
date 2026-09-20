@@ -295,7 +295,7 @@ namespace loops {
 
             line brokenSoFar = global "%uuid brokenLogs".len();
             line brokenReq = global "%uuid blocksToBreak".len();
-            line totalPerc = ((brokenSoFar / (brokenReq * (0.9 - global "%uuid stats"["cutoff_rate"]))) * 100).round().min(100);
+            line totalPerc = ((brokenSoFar / (brokenReq * (0.9 - (global "%uuid stats"["cutoff_rate"] / 100)))) * 100).round().min(100);
             line fmtLogs = util.numberFormat(saved "%uuid logs");
 
             line components: list[txt] = [];

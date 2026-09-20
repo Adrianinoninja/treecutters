@@ -2,9 +2,8 @@ import statShopIcon;
 import trinket;
 
 /** 
- * STATS
- * sweep: int - Number of blocks to break
- * fortune: decimal - Raw value
+ * All stats are raw forms of their stat equivalents.
+ * For percentage stats, each 1 stat value corresponds to a +1% buff.
  */
 
 namespace stats {

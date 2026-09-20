@@ -32,7 +32,7 @@ namespace statShopIcon.logFortune {
     material = "spruce_sapling";
     name = "Fortune";
     stat = "fortune";
-    amount = 0.08;
+    amount = 8;
     basePrice = 15;
     priceScaling = 1.9;
     description: list[str] = ["Each tier grants +8%", "log gain."];
@@ -157,7 +157,7 @@ namespace statShopIcon.cutoffRate {
     material = "netherite_axe";
     name = "Cut-off Rate";
     stat = "cutoff_rate";
-    amount = 0.01;
+    amount = 1;
     basePrice = 50000;
     priceScaling = 3;
     maxLevel = 10;
