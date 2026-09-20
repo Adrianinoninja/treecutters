@@ -135,8 +135,8 @@ namespace statShopIcon.swingRange {
     stat = "swing_range";
     amount = 0.5;
     basePrice = 1000;
-    priceScaling = 4;
-    maxLevel = 10;
+    priceScaling = 3.5;
+    maxLevel = 15;
     levelReq = 21;
     description: list[str] = ["Grants +1 block break reach per tier."];
 }

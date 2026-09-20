@@ -169,7 +169,7 @@ namespace loops {
             }
             if(weatherType == 2) {
                 tl += s"<gray>Status: <blue>Thunderstorm\n";
-                tl += s"<gray>Cost: <red>-20k/s/p\n";
+                tl += s"<gray>Cost: <red>-15k/s/p\n";
             }
             if(weatherType == 3) {
                 tl += s"<gray>Status: <dark_red>Severe Thunderstorm\n";
