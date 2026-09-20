@@ -6,11 +6,12 @@ import trinketShopMenu;
 import throwingaxe;
 
 playerevent chat {
-    global peopleWhoCant67: list[str] = ["908cd8fa-cc5d-4e5e-a941-4fd2fe6671e9"]; // list of people who are banned from saying 67
-    global banned67Phrases: list[str] = ["67", "6 7", "sixty seven", "sixty-seven", "sixtyseven", "six seven", "six-seven", "sixseven"];
+    global peopleWhoCant67: list[str] = ["DropExitJoin", "Criscomec", "ducktacular", "doyoulikemyhat", "Nuggetz_yipee", "Arid181"]; // list of people who are banned from saying 67
+    global banned67Phrases: list[str] = ["67", "6 7", "6-7", "6'7", "6\"7", "6'7", "б7", "sixty seven", "sixty-seven", "sixtyseven", "six seven", "six-seven", "sixseven"];
     // currently only contains DropExitJoin
-    if((global peopleWhoCant67.contains(default.uuid)) && (event.message.contains(banned67Phrases, ignoreCase = "True"))) {
+    if((global peopleWhoCant67.contains(default.name)) && (event.message.contains(banned67Phrases, ignoreCase = "True"))) {
         default.sendMessage("you have been 67 banned");
+        game.summonLightning(default.location);
         event.cancel();
     }
     if(global chatGameSolutions.len() != 0 && event.message.matches(global chatGameSolutions, ignoreCase = "True")) { 
