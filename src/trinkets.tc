@@ -22,7 +22,7 @@ namespace trinket.absolution {
         "timber": 1
     };
     shopWeight = 1;
-    cost = 1_000_000_000;
+    cost = 3_000_000_000;
     icon = item("fletching_table");
 }
 
