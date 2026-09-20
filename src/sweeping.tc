@@ -156,6 +156,11 @@ namespace sweeping {
         for(line p of game.plotPlayerUUIDs) {
             select playersByName(p);
             for(line rngId of saved "%uuid trinketSelections") {
+                // skip if no trinket is selected
+                if (rngId == 0) {
+                    continue;
+                }
+
                 line globalBuff = trinket[saved "%uuid trinketInventory"["%var(rngId)"]["id"]].globalLogValueBonus;
                 
                 globalTrinketBuff += globalBuff;
@@ -177,6 +182,19 @@ namespace sweeping {
         line logMul = 0;
         logMul += global "%uuid stats"["fortune"];
         logMul += (global "%uuid stats"["combo_str"] * (global "%uuid combo" * 0.002));
+
+        line localTrinketBuff = 0;
+        for(line rngId of saved "%uuid trinketSelections") {
+            if(rngId == 0) {
+                continue;
+            }
+
+            localTrinketBuff += trinket[
+                saved "%uuid trinketInventory"["%var(rngId)"]["id"]
+            ].localLogValueBonus;
+        }
+        logMul += localTrinketBuff / 100;
+
         declare global "%uuid logMul": num = logMul;
         declare global "%uuid logValue" = log_families[num.floor(global "%uuid stats"["tree_type"]/5)+1]["value"];
         return logMul;
