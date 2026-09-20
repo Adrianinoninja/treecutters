@@ -206,7 +206,11 @@ namespace loops {
             }
             if(weatherType == 7) {
                 tl += s"<gray>Status: <red>Multi-Vortex Supercell\n";
-                tl += s"<gray>Cost: <red>-700k/s/p\n";
+                tl += s"<gray>Cost: <red>-800k/s/p\n";
+            }
+            if(weatherType == 8) {
+                tl += s"<gray>Status: <red>EF-6 Multi-Vortex Supercell\n";
+                tl += s"<gray>Cost: <red>-1.1m/s/p\n";
             }
             line fmt = util.numberFormat(weatherMachineLogs);
             tl += s"<gray>Logs: <green>%var(fmt)\n\n";
@@ -232,6 +236,9 @@ namespace loops {
             }
             if(weatherType == 7) {
                 tl += s"<gray>Weather Machine: <green>+500%\n";
+            }
+            if(weatherType == 8) {
+                tl += s"<gray>Weather Machine: <green>+700%\n";
             }
             tl += "\n\n";
             tl += s"<reset><blue><bold>TIMERS\n<reset>";

@@ -165,6 +165,10 @@ namespace sweeping {
             // waowaowawaow
             logMul += 5;
         }
+        if(weatherType == 8) {
+            // waowaowawaow
+            logMul += 7;
+        }
 
         declare global globalTrinketBuff = 0;
         for(line p of game.plotPlayerUUIDs) {
