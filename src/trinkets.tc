@@ -36,7 +36,7 @@ namespace trinket.helix {
         "fortune": 10
     };
     shopWeight = 1;
-    cost = 1_000_000_000;
+    cost = 2_000_000_000;
     icon = item("acacia_wood");
 }
 
