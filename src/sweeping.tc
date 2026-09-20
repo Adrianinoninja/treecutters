@@ -45,6 +45,7 @@ namespace sweeping {
         // calculate the max blocks based off toughness
         line logFamily = global log_families[num.floor(tier / 5) + 1];
         maxBlocks = maxBlocks - logFamily["toughness"];
+
         if(maxBlocks > 8) {
             maxBlocks = 8 + ((maxBlocks - 8) * 0.5);
         }

@@ -139,15 +139,29 @@ namespace loops {
 
             // shows players in custom tab, sorted by level
             players = players.sort("type" = "Sort by Value", order = "Descending");
+            line idx = 0;
+
+            line oftency = 1;
+            if(game.playerCount >= 12) {
+                oftency = 2;
+            }
+
             for(line player, line level of players) {
                 line lc = util.numberFormat(logs[player]);
                 line tag = createChatTag(level);
-                tl += s"%var(tag) <#dddddd>%var(player) <dark_gray>%var(lc)<reset>\n";
+                tl += s"%var(tag) <#dddddd>%var(player) <dark_gray>%var(lc)<reset>";
+                if(idx % oftency == 1) {
+                    tl += s"\n";
+                } else {
+                    tl += s"<space:7>";
+                }
+                idx++;
             }
 
             // general game data
             line cpu = game.cpuUsage * 100;
             line pc = game.playerCount;
+
             tl += s"\n<gray>Players Online: <aqua>%var(pc)\n";
             tl += s"<gray>CPU Usage: <green>%var(cpu)<dark_green>%\n";
 

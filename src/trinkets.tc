@@ -29,8 +29,8 @@ namespace trinket.absolution {
 namespace trinket.helix {
     center = loc(3, 15, 92);
     name = "Helix";
-    localLogValueBonus = 70;
-    globalLogValueBonus = 10;
+    localLogValueBonus = 65;
+    globalLogValueBonus = 5;
     stats: dict[num] = {
         "sweep": 4,
         "timber": 0.5
