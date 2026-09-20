@@ -156,6 +156,10 @@ namespace sweeping {
             // all of you are going to die
             logMul += 3.5;
         }
+        if(weatherType == 7) {
+            // waowaowawaow
+            logMul += 5;
+        }
 
         declare global globalTrinketBuff = 0;
         for(line p of game.plotPlayerUUIDs) {
