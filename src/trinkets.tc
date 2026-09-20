@@ -147,7 +147,7 @@ namespace trinketShopMenu {
             sumWeight += trinket[key].shopWeight;
         }
 
-        for(line rng of range(0, 5)) {
+        for(line rng of range(0, game.playerCount)) {
             line weight = num.random(0, sumWeight, rounding = "Whole number");
             line key: str;
             for(key of namespace.getKeys(trinket)) {
@@ -260,6 +260,7 @@ namespace trinketOwnershipMenu {
         for(line pos of trinketPositions) {
             line rngId = saved "%uuid trinketSelections"[idx];
             if(rngId == 0) {
+                idx++;
                 continue;
             }
             line trinketEntryValue = saved "%uuid trinketInventory"["%var(rngId)"];
@@ -321,15 +322,20 @@ namespace trinketOwnershipMenu {
     function clicks() {
         if(event.item.hasTag("open_trinket_shop")) {
             trinketShopMenu.openMenu();
+            wait(2);
+            trinketOwnershipMenu.placeForPlayer();
         }
         if(event.item.hasTag("open_trinket_placer")) {
             trinketOwnershipMenu.openMenu();
+            wait(2);
+            trinketOwnershipMenu.placeForPlayer();
         }
         line id = event.item.getTag("equip_trinket_by_id") as num;
         if(id != 0) {
             saved "%uuid trinketSelections"[global "%uuid trinketIdx"] = id;
             trinketOwnershipMenu.openMenu();
+            wait(2);
+            trinketOwnershipMenu.placeForPlayer();
         }
-        trinketOwnershipMenu.placeForPlayer();
     }
 }

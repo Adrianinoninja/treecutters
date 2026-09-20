@@ -354,9 +354,6 @@ function getMoveDir(y: num = 0): vec {
 import trinketShopMenu;
 
 playerevent command {
-    if(event.commandArgumentEquals("rr", 1) && player.hasPlotPermission(permission = "Developer or builder")) {
-        trinketShopMenu.rerollShop();
-    }
     if(event.commandArgumentEquals("bc", 1) && player.hasPlotPermission(permission = "Developer or builder")) {
         line st = event.command.trim(4);        
         allPlayers.sendMessage(s"<strikethrough><dark_gray><space:40>");
