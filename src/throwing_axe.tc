@@ -64,10 +64,12 @@ namespace throwingaxe {
             p1(pos, disp, dt);
 
             if(game.cpuUsage * 100 < 30 && dt % 3 == 1) {
-                queueTrailBeam(
-                    oldPos.shiftAllDirections(0, -0.25, 0),
-                    pos.shiftAllDirections(0, -0.25, 0)
-                );
+                if(game.cpuUsage * 100 < 60) {
+                    queueTrailBeam(
+                        oldPos.shiftAllDirections(0, -0.25, 0),
+                        pos.shiftAllDirections(0, -0.25, 0)
+                    );
+                }
                 line oldPos = pos;
             }
 

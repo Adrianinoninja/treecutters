@@ -123,7 +123,7 @@ namespace loops {
 
     // generates the data shown in the tab list
     function generateScoreboard() {
-        if(game.timestamp - lastTime > 3) {
+        if(game.timestamp - lastTime >= 1) {
             declare global lastTime: num = game.timestamp;
 
             declare global tl = s"\n<green><bold>TREECUTTING<reset>\n\n\n";
@@ -275,6 +275,12 @@ namespace loops {
             line diff = global "%default currLogs" - global "%default lastLogs";
             line fmt = util.numberFormat(diff);
             declare global "%default logSecComp": txt = s"<#CC9F8E>+%var(fmt)/s";
+
+
+            global "%default logHistory".append(diff);
+            if(global "%default logHistory".len() > 60) {
+                global "%default logHistory".remove(1);
+            }
         }
         if(game.ticksSinceStartup % 20 == 0) {
             declare global "%default lastLogs": num = saved "%uuid logs";

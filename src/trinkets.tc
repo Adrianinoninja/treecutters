@@ -171,6 +171,15 @@ namespace trinketShopMenu {
             }
             trinketShopEntries.append({ id: key, level: 1 } as trinketEntry);
         }
+
+        for(line pl of game.plotPlayerUUIDs) {
+            select playersByName(pl);
+            if(global "%uuid openInventory"["id"] == "trinket_shop") {
+                line inv = trinketShopMenu.createMenu();
+                inv.updateForSelection();
+            }
+            select reset;
+        }
     }
 
     function trinketIcon(id: str, level: num = 1): item {

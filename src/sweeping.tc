@@ -207,7 +207,9 @@ namespace sweeping {
             game.setBlock("air" as item, block);
         }
         
-        queueBlockFallAnim(block, mat);
+        if(game.cpuUsage * 100 < 40) {
+            queueBlockFallAnim(block, mat);
+        }
 
 
         declare global "%uuid combo": num += 1;
