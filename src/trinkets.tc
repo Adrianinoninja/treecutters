@@ -19,7 +19,7 @@ namespace trinket.absolution {
     localLogValueBonus = 30;
     globalLogValueBonus = 60;
     stats: dict[num] = {
-        "sweep": 5
+        "timber": 1
     };
     shopWeight = 1;
     cost = 3_000_000_000;
@@ -29,12 +29,11 @@ namespace trinket.absolution {
 namespace trinket.helix {
     center = loc(3, 15, 92);
     name = "Helix";
-    localLogValueBonus = 60;
+    localLogValueBonus = 70;
     globalLogValueBonus = 10;
     stats: dict[num] = {
         "sweep": 4,
-        "fortune": 10,
-        "timber": 1
+        "timber": 0.5
     };
     shopWeight = 1;
     cost = 2_000_000_000;
@@ -138,11 +137,9 @@ namespace trinket.transmutation {
 namespace trinket.sharpness {
     center = loc(21, 15, 110);
     name = "Sharpness";
-    localLogValueBonus = 2;
+    localLogValueBonus = 7;
     globalLogValueBonus = 2;
-    stats: dict[num] = {
-        "fortune": 5
-    };
+    stats: dict[num] = {};
     shopWeight = 10;
     cost = 20_000_000;
     icon = item("enchanted_book");

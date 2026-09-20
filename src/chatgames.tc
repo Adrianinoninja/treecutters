@@ -18,6 +18,7 @@ namespace loops {
         if(gameType == 0) {
             gameType = num.random(1, 5, rounding = "Whole number");
         }
+
         // the leading part, e.g QUICK MATH!
         line gameTypeTxt: str = "";
         // the actual question the players must answer
