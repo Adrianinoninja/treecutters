@@ -180,7 +180,7 @@ namespace sweeping {
 
     function calculateLocalLogMul(): num {
         line logMul = 0;
-        logMul += global "%uuid stats"["fortune"];
+        logMul += global "%uuid stats"["fortune"] / 100;
         logMul += (global "%uuid stats"["combo_str"] * (global "%uuid combo" * 0.002));
 
         line localTrinketBuff = 0;
@@ -235,7 +235,7 @@ namespace sweeping {
         line brokenSoFar = global "%uuid brokenLogs".len();
         line brokenReq = global "%uuid blocksToBreak".len();
         if(
-            brokenSoFar / brokenReq >= 0.9 - global "%uuid stats"["cutoff_rate"]
+            brokenSoFar / brokenReq >= 0.9 - (global "%uuid stats"["cutoff_rate"] / 100)
         ) {
             start treeClearAnim(block);
             for(line block2 of global "%uuid blocksToBreak") {
