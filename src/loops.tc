@@ -7,8 +7,9 @@ import throwingaxe;
 
 playerevent chat {
     global peopleWhoCant67: list[str] = ["908cd8fa-cc5d-4e5e-a941-4fd2fe6671e9"]; // list of people who are banned from saying 67
+    global banned67Phrases: list[txt] = ["67", "6 7", "sixty seven", "sixty-seven", "sixtyseven", "six seven", "six-seven", "sixseven"];
     // currently only contains DropExitJoin
-    if((global peopleWhoCant67.contains(default.uuid)) && (event.message.contains("67"))) {
+    if((global peopleWhoCant67.contains(default.uuid)) && (event.message.contains(global banned67Phrases, ignoreCase = "True"))) {
         default.sendMessage("you have been 67 banned");
         event.cancel();
     }
