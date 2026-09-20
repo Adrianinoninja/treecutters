@@ -63,7 +63,7 @@ namespace loops {
                 "HTML": ["Hypertext Markup Language"],
                 "6!": ["720"],
                 "6!!": ["48"], // double factorial
-                "6!!!": ["8"], // triple factorial
+                "6!!!": ["18"], // triple factorial
                 "meow": ["meow"],
                 "LASER": ["Light Amplification by Stimulated Emission of Radiation"],
                 "CEO": ["Chief Executive Officer"],
