@@ -308,6 +308,7 @@ playerevent clickMenuSlot {
     settingsMenu.click();
     trinketOwnershipMenu.clicks();
     trinketShopMenu.clicks();
+    stats.computeStats();
 }
 
 lscancel playerevent takeDamage {

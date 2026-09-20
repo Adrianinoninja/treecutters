@@ -1,4 +1,5 @@
 import statShopIcon;
+import trinket;
 
 namespace stats {
     // stats basically power every mechanic in the game based on upgrades
@@ -14,6 +15,20 @@ namespace stats {
             line stat = statShopIcon[iconKey].stat;
             line amount = statShopIcon[iconKey].amount;
             stats[stat] += amount * level;
+        }
+
+        if(var.exists(saved "%uuid trinketSelections") && var.exists(saved "%uuid trinketInventory")) {
+            for(line rngId of saved "%uuid trinketSelections") {
+                if(rngId == 0) {
+                    continue;
+                }
+
+                line entry = saved "%uuid trinketInventory"["%var(rngId)"];
+
+                for(line stat, line amount of trinket[entry["id"]].stats) {
+                    stats[stat] += amount * entry["level"]; // scale by trinket level
+                }
+            }
         }
 
         if(stats["jump_height"] >= 1) {
