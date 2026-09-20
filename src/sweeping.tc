@@ -194,7 +194,7 @@ namespace sweeping {
             game.setBlock("air" as item, block);
         }
         
-        start blockFallAnim(block, mat);
+        // start blockFallAnim(block, mat);
 
 
         declare global "%uuid combo": num += 1;
@@ -213,7 +213,7 @@ namespace sweeping {
                     saved "%uuid true_logs" += 1;
                     global "%uuid combo": num += 1;
                     if(game.cpuUsage * 100 < 30) {
-                        start blockFallAnim(block2, mat);
+                        // start blockFallAnim(block2, mat);
                     }
                 }
                 if(saved "%uuid settings"["logEffects"] == "Enabled" || saved "%uuid settings"["logEffects"] == "Particles Only") {

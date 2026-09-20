@@ -157,6 +157,9 @@ namespace loops {
                 tl += s"<red>LAG: Speed-based animations been slowed down for performance.\n";
             }
 
+            tl += s"<red>LAG: Block falling animations have been temporarily disabled manually for performance.\n";
+            tl += s"<red>Please check out https://github.com/akarahdev/treecutters/issues/23 if you want to see it back.\n";
+
             // weather machine data
             tl += s"\n<aqua><bold>WEATHER MACHINE<reset>\n";
             if(weatherType == 0) {
@@ -164,33 +167,43 @@ namespace loops {
             }
             if(weatherType == 1) {
                 tl += s"<gray>Status: <aqua>Rain\n";
-                tl += s"<gray>Global Boost: <green>+20%\n";
                 tl += s"<gray>Cost: <red>-5k/s/p\n";
             }
             if(weatherType == 2) {
                 tl += s"<gray>Status: <blue>Thunderstorm\n";
-                tl += s"<gray>Global Boost: <green>+50%\n";
                 tl += s"<gray>Cost: <red>-20k/s/p\n";
             }
             if(weatherType == 3) {
                 tl += s"<gray>Status: <dark_red>Severe Thunderstorm\n";
-                tl += s"<gray>Global Boost: <green>+90%\n";
                 tl += s"<gray>Cost: <red>-40k/s/p\n";
             }
             if(weatherType == 4) {
                 tl += s"<gray>Status: <dark_blue>Hurricane\n";
-                tl += s"<gray>Global Boost: <green>+150%\n";
                 tl += s"<gray>Cost: <red>-150k/s/p\n";
             }
             if(weatherType == 5) {
                 tl += s"<gray>Status: <dark_gray>Tornado\n";
-                tl += s"<gray>Global Boost: <green>+250%\n";
                 tl += s"<gray>Cost: <red>-300k/s/p\n";
             }
             line fmt = util.numberFormat(weatherMachineLogs);
             tl += s"<gray>Logs: <green>%var(fmt)\n\n";
             tl += s"<reset><yellow><bold>GLOBAL BUFFS\n<reset>";
-            tl += s"<reset><gray>Trinkets: <green>+%var(globalTrinketBuff)%";
+            tl += s"<reset><gray>Trinkets: <green>+%var(globalTrinketBuff)%\n";
+            if(weatherType == 1) {
+                tl += s"<gray>Weather Machine: <green>+20%\n";
+            }
+            if(weatherType == 2) {
+                tl += s"<gray>Weather Machine: <green>+50%\n";
+            }
+            if(weatherType == 3) {
+                tl += s"<gray>Weather Machine: <green>+90%\n";
+            }
+            if(weatherType == 4) {
+                tl += s"<gray>Weather Machine: <green>+150%\n";
+            }
+            if(weatherType == 5) {
+                tl += s"<gray>Weather Machine: <green>+250%\n";
+            }
             tl += "\n\n";
             tl += s"<reset><blue><bold>TIMERS\n<reset>";
             tl += s"<reset><gray>Trinket Shop Restock: <yellow>%var(trinketShopRestockTimer)s";
