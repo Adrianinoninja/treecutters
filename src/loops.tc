@@ -185,6 +185,11 @@ namespace loops {
                 tl += s"<gray>Status: <dark_gray>Tornado\n";
                 tl += s"<gray>Cost: <red>-300k/s/p\n";
             }
+            if(weatherType == 6) {
+                tl += s"<gray>Status: <yellow>meownado\n";
+                tl += s"<gray>Global Boost: <green>+350%\n";
+                tl += s"<gray>Cost: <red>-500k/s/p\n";
+            }
             line fmt = util.numberFormat(weatherMachineLogs);
             tl += s"<gray>Logs: <green>%var(fmt)\n\n";
             tl += s"<reset><yellow><bold>GLOBAL BUFFS\n<reset>";
