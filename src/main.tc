@@ -108,8 +108,6 @@ playerevent join {
 
 
     start treegens.growForPlayer();
-    start sweeping.runFallingBlockAnims();
-    start throwingaxe.runTrailBeamAnims();
 
 
 
@@ -136,6 +134,19 @@ playerevent join {
 
 playerevent leave {
     global roomPositions.append(global "%uuid roomPos");
+
+    
+    for(line thing of global "%uuid trailBeams") {
+        select entitiesByUUID(thing["uuid"]);
+        selectedEntity.remove();
+        select reset;
+    }
+
+    for(line thing of global "%uuid fallingBlocks") {
+        select entitiesByUUID(thing["uuid"]);
+        selectedEntity.remove();
+        select reset;
+    }
 
     select entitiesByCondition(selectedEntity.hasTag("owner", "%default"));
     selectedEntity.remove();

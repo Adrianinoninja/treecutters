@@ -3,6 +3,7 @@ import util;
 import abils;
 import sweeping;
 import trinketShopMenu;
+import throwingaxe;
 
 playerevent chat {
     global peopleWhoCant67: list[str] = ["908cd8fa-cc5d-4e5e-a941-4fd2fe6671e9"]; // list of people who are banned from saying 67
@@ -183,9 +184,9 @@ namespace loops {
                 tl += s"<gray>Cost: <red>-300k/s/p\n";
             }
             if(weatherType == 6) {
-                tl += s"<gray>Status: <yellow>Earthquake\n";
+                tl += s"<gray>Status: <yellow>Supercell\n";
                 tl += s"<gray>Global Boost: <green>+350%\n";
-                tl += s"<gray>Cost: <red>-500k/s/p\n";
+                tl += s"<gray>Cost: <red>-400k/s/p\n";
             }
             line fmt = util.numberFormat(weatherMachineLogs);
             tl += s"<gray>Logs: <green>%var(fmt)\n\n";
@@ -233,6 +234,11 @@ namespace loops {
     
     // general loop data for each player
     process playerLoop() {
+
+
+        start sweeping.runFallingBlockAnims();
+        start throwingaxe.runTrailBeamAnims();
+
         // combo management
         global "%uuid combo": num *= 0.99;
         global "%uuid combo" = global "%uuid combo".round();

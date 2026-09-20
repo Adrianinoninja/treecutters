@@ -6,7 +6,7 @@ namespace weather {
         
         
         if(weatherMachineLogs > 500_000_000) {
-            // earthquake
+            // supercell
             weatherMachineLogs -= (400000 * game.playerCount)/20;
             weatherType = 6;
             if(game.ticksSinceStartup % 100 == 1) {

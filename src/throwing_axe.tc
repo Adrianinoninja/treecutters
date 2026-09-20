@@ -169,22 +169,19 @@ namespace throwingaxe {
     }
 
     process runTrailBeamAnims() {
-        repeat {
-            line stillFading: list[trail_beam_anim] = [];
-            for(line beam of global "%uuid trailBeams") {
-                beam["opacity"] = beam["opacity"] - 2;
-                select entitiesByUUID(beam["uuid"]);
-                if(beam["opacity"] <= 0) {
-                    entity.remove();
-                } else {
-                    entity.setTextDisplayTextOpacity(beam["opacity"]);
-                    stillFading.append(beam);
-                }
-                select reset;
+        line stillFading: list[trail_beam_anim] = [];
+        for(line beam of global "%uuid trailBeams") {
+            beam["opacity"] = beam["opacity"] - 2;
+            select entitiesByUUID(beam["uuid"]);
+            if(beam["opacity"] <= 0) {
+                entity.remove();
+            } else {
+                entity.setTextDisplayTextOpacity(beam["opacity"]);
+                stillFading.append(beam);
             }
-            global "%uuid trailBeams" = stillFading;
-            wait(1);
+            select reset;
         }
+        global "%uuid trailBeams" = stillFading;
     }
 
     function execBreak(
