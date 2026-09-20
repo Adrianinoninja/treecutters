@@ -212,7 +212,7 @@ namespace trinketShopMenu {
                 icon = icon.addLore(s"<#777777>Sweep: <#00aa00>+%entry(stats,sweep)");
             }
             if(stats["fortune"] > 0) {
-                icon = icon.addLore(s"<#777777>Fortune: <#00aa00>+%var(ft)%");
+                icon = icon.addLore(s"<#777777>Fortune: <#00aa00>+%entry(stats,fortune)%");
             }
             if(stats["timber"] > 0) {
                 icon = icon.addLore(s"<#777777>Timber: <#00aa00>+%entry(stats,timber)%");

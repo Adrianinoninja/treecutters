@@ -477,10 +477,11 @@ playerevent command {
             line avg = 0;
             for(line j of range(1, 10)) {
                 game.cloneRegion(
-                    loc(0, 4, 0),
-                    loc(50, 37, 50),
-                    loc(0, 6, 0),
-                    global "%uuid roomPos".shiftAllAxes(-25, -1, -25),
+                    loc(0, 3, 0),
+                    loc(50, 38, 50),
+                    loc(0, 3, 0),
+                    global "%uuid roomPos".shiftAllAxes(-25, -3, -25),
+                    ignoreAir = "False"
                 );
                 avg += treegens.growArbitraryTree(i).len();
             }
