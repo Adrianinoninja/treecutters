@@ -204,7 +204,7 @@ namespace trinketShopMenu {
         icon = icon.addLore(s"<#999999>Value: <#00ff00>%var(costFmt)");
         icon = icon.addLore(s"");
         icon = icon.addLore(s"<#777777>Personal Log Bonus: <#00aa00>+%var(localValue)%");
-        icon = icon.addLore(s"<#777777>Global Log Bonus: <#00aa00>+%var(globalValue)% <#003300>(x^0.95)");
+        icon = icon.addLore(s"<#777777>Global Log Bonus: <#00aa00>+%var(globalValue)% <#003300>(x^0.9)");
         line stats = trinket[id].stats;
         if(stats.len() != 0) {
             icon = icon.addLore(s"");
