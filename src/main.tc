@@ -6,6 +6,7 @@ import settingsMenu;
 
 playerevent join {
 
+    player.setAllowHandCrafting(allow = "Disable");
     // types of wood that the player can break
     declare global woodTypeList: list[item] = [
         item("stripped_oak_wood"),
