@@ -25,7 +25,7 @@ type falling_block_anim: {
     ticksLeft: num
 };
 
-declare global "%uuid fallingBlocks": list[falling_block_anim] = [];
+declare global "%uuid fallingBlocks": list[falling_block_anim];
 
 namespace sweeping {
     // reimplementation of aaxper's algorithm ported to terracotta

@@ -6,7 +6,7 @@ namespace weather {
         
         
         if(weatherMachineLogs > 500_000_000) {
-            // meownado
+            // earthquake
             weatherMachineLogs -= (400000 * game.playerCount)/20;
             weatherType = 6;
             if(game.ticksSinceStartup % 100 == 1) {
@@ -14,7 +14,7 @@ namespace weather {
             }
             select allPlayers;
             selected.displayParticleEffect(
-                par("Heart", amount = 20, spreadHoriz = 16, spreadVert = 16, motion = vec(0, -2, -20), motionVariation = 0),
+                par("Smoke", amount = 20, spreadHoriz = 16, spreadVert = 16, motion = vec(0, -3, -30), motionVariation = 0),
                 selected.eyeLocation
             );
             select reset;

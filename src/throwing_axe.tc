@@ -5,7 +5,7 @@ type trail_beam_anim: {
     opacity: num
 };
 
-declare global "%uuid trailBeams": list[trail_beam_anim] = [];
+declare global "%uuid trailBeams": list[trail_beam_anim];
 
 namespace throwingaxe {
     process throw(

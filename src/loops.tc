@@ -157,9 +157,6 @@ namespace loops {
                 tl += s"<red>LAG: Speed-based animations been slowed down for performance.\n";
             }
 
-            tl += s"<red>LAG: Block falling animations have been temporarily disabled manually for performance.\n";
-            tl += s"<red>Please check out https://github.com/akarahdev/treecutters/issues/23 if you want to see it back.\n";
-
             // weather machine data
             tl += s"\n<aqua><bold>WEATHER MACHINE<reset>\n";
             if(weatherType == 0) {
@@ -186,7 +183,7 @@ namespace loops {
                 tl += s"<gray>Cost: <red>-300k/s/p\n";
             }
             if(weatherType == 6) {
-                tl += s"<gray>Status: <yellow>meownado\n";
+                tl += s"<gray>Status: <yellow>Earthquake\n";
                 tl += s"<gray>Global Boost: <green>+350%\n";
                 tl += s"<gray>Cost: <red>-500k/s/p\n";
             }
