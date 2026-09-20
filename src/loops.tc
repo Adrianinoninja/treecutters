@@ -185,7 +185,6 @@ namespace loops {
             }
             if(weatherType == 6) {
                 tl += s"<gray>Status: <yellow>Supercell\n";
-                tl += s"<gray>Global Boost: <green>+350%\n";
                 tl += s"<gray>Cost: <red>-400k/s/p\n";
             }
             line fmt = util.numberFormat(weatherMachineLogs);
@@ -206,6 +205,9 @@ namespace loops {
             }
             if(weatherType == 5) {
                 tl += s"<gray>Weather Machine: <green>+250%\n";
+            }
+            if(weatherType == 6) {
+                tl += s"<gray>Weather Machine: <green>+350%\n";
             }
             tl += "\n\n";
             tl += s"<reset><blue><bold>TIMERS\n<reset>";

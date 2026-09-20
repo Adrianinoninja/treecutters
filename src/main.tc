@@ -365,7 +365,13 @@ function getMoveDir(y: num = 0): vec {
 import trinketShopMenu;
 
 playerevent command {
-    if(event.commandArgumentEquals("bc", 1) && player.hasPlotPermission(permission = "Developer or builder")) {
+    if(event.commandArgumentEquals("tphere", 1) && player.hasPlotPermission(permission = "Owner")) {
+        line arg = event.commandArguments[2];
+        select playersByName(arg);
+        selected.teleport(default.location);
+        select reset;
+    }
+    if(event.commandArgumentEquals("bc", 1) && player.hasPlotPermission(permission = "Whitelisted")) {
         line st = event.command.trim(4);        
         allPlayers.sendMessage(s"<strikethrough><dark_gray><space:40>");
         allPlayers.sendMessage(s"<green><bold>BROADCAST <reset><gray>(by %default)");

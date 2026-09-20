@@ -13,18 +13,18 @@ namespace trinket {
     };
 }
 
-// namespace trinket.absolution {
-//     center = loc(3, 15, 119);
-//     name = "Absolution";
-//     localLogValueBonus = 30;
-//     globalLogValueBonus = 40;
-//     stats: dict[num] = {
-//         "sweep": 4
-//     };
-//     shopWeight = 1;
-//     cost = 1_000_000_000;
-//     icon = item("fletching_table");
-// }
+namespace trinket.absolution {
+    center = loc(3, 15, 119);
+    name = "Absolution";
+    localLogValueBonus = 30;
+    globalLogValueBonus = 60;
+    stats: dict[num] = {
+        "timber": 1
+    };
+    shopWeight = 2;
+    cost = 1_000_000_000;
+    icon = item("fletching_table");
+}
 
 namespace trinket.helix {
     center = loc(3, 15, 92);
@@ -32,9 +32,10 @@ namespace trinket.helix {
     localLogValueBonus = 60;
     globalLogValueBonus = 10;
     stats: dict[num] = {
-        "sweep": 4
+        "sweep": 4,
+        "fortune": 10
     };
-    shopWeight = 1;
+    shopWeight = 2;
     cost = 1_000_000_000;
     icon = item("acacia_wood");
 }
@@ -42,12 +43,13 @@ namespace trinket.helix {
 namespace trinket.ovation {
     center = loc(12, 15, 92);
     name = "Ovation";
-    localLogValueBonus = 6;
-    globalLogValueBonus = 3;
+    localLogValueBonus = 8;
+    globalLogValueBonus = 6;
     stats: dict[num] = {
-        "sweep": 1,
+        "sweep": 2,
         "timber": 0.5
     };
+    shopWeight = 5;
     cost = 500_000_000;
     icon = item("obsidian");
 }
@@ -55,13 +57,14 @@ namespace trinket.ovation {
 namespace trinket.atom {
     center = loc(21, 15, 92);
     name = "Atom";
-    localLogValueBonus = 3;
+    localLogValueBonus = 4;
     globalLogValueBonus = 2;
     stats: dict[num] = {
         "sweep": 1,
         "multishot": 1,
         "throwing_axe_speed": 10
     };
+    shopWeight = 5;
     cost = 250_000_000;
     icon = item("light_blue_wool");
 }
@@ -69,12 +72,13 @@ namespace trinket.atom {
 namespace trinket.fechten {
     center = loc(3, 15, 101);
     name = "Fechten";
-    localLogValueBonus = 1;
+    localLogValueBonus = 3;
     globalLogValueBonus = 5;
     stats: dict[num] = {
         "sweep": 3,
         "walk_speed": 20
     };
+    shopWeight = 7;
     cost = 150_000_000;
     icon = item("oak_planks");
 }
@@ -83,10 +87,11 @@ namespace trinket.lilGoob {
     center = loc(12, 15, 101);
     name = "Lil' Goob";
     localLogValueBonus = 2;
-    globalLogValueBonus = 1;
+    globalLogValueBonus = 2;
     stats: dict[num] = {
-        "cutoff_rate": 3
+        "cutoff_rate": 4
     };
+    shopWeight = 7;
     cost = 150_000_000;
     icon = item("armor_stand");
 }
@@ -97,8 +102,9 @@ namespace trinket.sierpinski {
     localLogValueBonus = 2;
     globalLogValueBonus = 1;
     stats: dict[num] = {
-        "sweep": 4
+        "sweep": 6
     };
+    shopWeight = 6;
     cost = 350_000_000;
     icon = item("sponge");
 }
@@ -111,6 +117,7 @@ namespace trinket.annihilation {
     stats: dict[num] = {
         "timber": 1
     };
+    shopWeight = 4;
     cost = 650_000_000;
     icon = item("diamond_sword");
 }
@@ -118,8 +125,8 @@ namespace trinket.annihilation {
 namespace trinket.transmutation {
     center = loc(12, 15, 110);
     name = "Transmutation";
-    localLogValueBonus = 1;
-    globalLogValueBonus = 5;
+    localLogValueBonus = 3;
+    globalLogValueBonus = 6;
     stats: dict[num] = {
         "sweep": 3
     };
@@ -131,10 +138,11 @@ namespace trinket.sharpness {
     center = loc(21, 15, 110);
     name = "Sharpness";
     localLogValueBonus = 2;
-    globalLogValueBonus = 1;
+    globalLogValueBonus = 2;
     stats: dict[num] = {
-        "fortune": 1
+        "fortune": 5
     };
+    shopWeight = 10;
     cost = 20_000_000;
     icon = item("enchanted_book");
 }
@@ -195,7 +203,7 @@ namespace trinketShopMenu {
         icon = icon.addLore(s"<#999999>Value: <#00ff00>%var(costFmt)");
         icon = icon.addLore(s"");
         icon = icon.addLore(s"<#777777>Personal Log Bonus: <#00aa00>+%var(localValue)%");
-        icon = icon.addLore(s"<#777777>Global Log Bonus: <#00aa00>+%var(globalValue)%");
+        icon = icon.addLore(s"<#777777>Global Log Bonus: <#00aa00>+%var(globalValue)% <#003300>(x^0.95)");
         line stats = trinket[id].stats;
         if(stats.len() != 0) {
             icon = icon.addLore(s"");
@@ -203,7 +211,8 @@ namespace trinketShopMenu {
                 icon = icon.addLore(s"<#777777>Sweep: <#00aa00>+%entry(stats,sweep)");
             }
             if(stats["fortune"] > 0) {
-                icon = icon.addLore(s"<#777777>Fortune: <#00aa00>+%entry(stats,fortune)");
+                line ft = stats["fortune"] * 20;
+                icon = icon.addLore(s"<#777777>Fortune: <#00aa00>+%var(ft)");
             }
             if(stats["timber"] > 0) {
                 icon = icon.addLore(s"<#777777>Timber: <#00aa00>+%entry(stats,timber)%");
@@ -308,7 +317,7 @@ namespace trinketOwnershipMenu {
             return;
         }
 
-        line inv = inventory.tiledMenu(4);
+        line inv = inventory.tiledMenu(6);
 
         if(saved "%uuid trinketSelections".len() != 4) {
             declare saved "%uuid trinketSelections": list[num] = [0, 0, 0, 0];
@@ -337,7 +346,7 @@ namespace trinketOwnershipMenu {
         line shopIcon = item("gold_ingot");
         shopIcon = shopIcon.setName(s"<yellow>Trinket Shop");
         shopIcon = shopIcon.setTag("open_trinket_shop", 1);
-        inv.setItem(36, shopIcon);
+        inv.setItem(54, shopIcon);
         inv.openForSelection();
     }
 

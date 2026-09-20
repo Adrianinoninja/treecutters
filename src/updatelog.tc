@@ -39,7 +39,12 @@ namespace update.sep18th {
 
 namespace update.sep19th {
     date = "September 19th";
-    changes: list[str] = ["+ Added trinkets", "+ Added tree type levels 106-120", "+ Buffed Fortune from 6% -> 8%"];
+    changes: list[str] = ["+ Added trinkets", "+ Added tree type levels 106-120", "+ Buffed Fortune from 6% -> 8%", "+ Added Supercell weather type"];
+}
+
+namespace update.sep20th {
+    date = "September 20th";
+    changes: list[str] = ["+ Buffed non-Helix trinkets", "+ Added Absolution trinket"];
 }
 
 namespace updateMenu {

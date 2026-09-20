@@ -163,7 +163,7 @@ namespace sweeping {
             select reset;
         }
 
-        globalTrinketBuff = globalTrinketBuff.exponent(0.9);
+        globalTrinketBuff = globalTrinketBuff.exponent(0.95);
         globalTrinketBuff = globalTrinketBuff.round();
 
         logMul += (globalTrinketBuff / 100);
