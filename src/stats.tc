@@ -1,6 +1,12 @@
 import statShopIcon;
 import trinket;
 
+/** 
+ * STATS
+ * sweep: int - Number of blocks to break
+ * fortune: decimal - Raw value
+ */
+
 namespace stats {
     // stats basically power every mechanic in the game based on upgrades
     // e.g timber, sweep, fortune, etc.

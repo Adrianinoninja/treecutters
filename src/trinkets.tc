@@ -33,7 +33,8 @@ namespace trinket.helix {
     globalLogValueBonus = 10;
     stats: dict[num] = {
         "sweep": 4,
-        "fortune": 10
+        "fortune": 0.1,
+        "timber": 1
     };
     shopWeight = 1;
     cost = 2_000_000_000;
@@ -89,7 +90,7 @@ namespace trinket.lilGoob {
     localLogValueBonus = 2;
     globalLogValueBonus = 2;
     stats: dict[num] = {
-        "cutoff_rate": 4
+        "cutoff_rate": 0.04
     };
     shopWeight = 7;
     cost = 150_000_000;
@@ -211,7 +212,7 @@ namespace trinketShopMenu {
                 icon = icon.addLore(s"<#777777>Sweep: <#00aa00>+%entry(stats,sweep)");
             }
             if(stats["fortune"] > 0) {
-                line ft = stats["fortune"] * 20;
+                line ft = stats["fortune"] * 100;
                 icon = icon.addLore(s"<#777777>Fortune: <#00aa00>+%var(ft)");
             }
             if(stats["timber"] > 0) {
@@ -221,6 +222,7 @@ namespace trinketShopMenu {
                 icon = icon.addLore(s"<#777777>Walk Speed: <#00aa00>+%entry(stats,walk_speed)%");
             }
             if(stats["cutoff_rate"] > 0) {
+                line ft = stats["cutoff_rate"] * 100;
                 icon = icon.addLore(s"<#777777>Cut-off Rate: <#00aa00>-%entry(stats,cutoff_rate)%");
             }
             if(stats["multishot"] > 0) {
