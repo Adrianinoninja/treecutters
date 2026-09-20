@@ -107,7 +107,7 @@ namespace loops {
 
         if(game.ticksSinceStartup % 20 == 0) {
             if(saved trinketShopRestockTimer <= 0) {
-                declare saved trinketShopRestockTimer: num = 60*5;
+                declare saved trinketShopRestockTimer: num = 60*4;
                 trinketShopMenu.rerollShop();
             }
             trinketShopRestockTimer--;

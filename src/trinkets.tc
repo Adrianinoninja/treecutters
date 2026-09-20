@@ -13,6 +13,19 @@ namespace trinket {
     };
 }
 
+// namespace trinket.absolution {
+//     center = loc(3, 15, 119);
+//     name = "Absolution";
+//     localLogValueBonus = 30;
+//     globalLogValueBonus = 40;
+//     stats: dict[num] = {
+//         "sweep": 4
+//     };
+//     shopWeight = 1;
+//     cost = 1_000_000_000;
+//     icon = item("fletching_table");
+// }
+
 namespace trinket.helix {
     center = loc(3, 15, 92);
     name = "Helix";

@@ -112,7 +112,7 @@ namespace statShopIcon.speed {
     amount = 1;
     basePrice = 100;
     priceScaling = 1.25;
-    maxLevel = 10;
+    maxLevel = 20;
     levelReq = 11;
     description: list[str] = ["Grants +10% walk speed per tier."];
 }
@@ -196,7 +196,7 @@ namespace statShopIcon.extendedJumps {
     amount = 1;
     basePrice = 1_000_000;
     priceScaling = 5;
-    maxLevel = 4;
+    maxLevel = 5;
     levelReq = 46;
     description: list[str] = ["Each tier grants an extra mid-air jump", "before you must touch the ground."];
 }
