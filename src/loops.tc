@@ -6,11 +6,13 @@ import trinketShopMenu;
 import throwingaxe;
 
 playerevent chat {
-    global peopleWhoCant67: list[str] = ["908cd8fa-cc5d-4e5e-a941-4fd2fe6671e9"]; // list of people who are banned from saying 67
-    global banned67Phrases: list[str] = ["67", "6 7", "sixty seven", "sixty-seven", "sixtyseven", "six seven", "six-seven", "sixseven"];
+    global peopleWhoCant67: list[str] = ["DropExitJoin", "Criscomec", "ducktacular", "doyoulikemyhat", "Nuggetz_yipee", "Arid181"]; // list of people who are banned from saying 67
+    global banned67Phrases: list[str] = ["67", "6 7", "6-7", "6'7", "6\"7", "6'7", "б7", "δ7", "sixty seven", "sixty-seven", "sixtyseven", "six seven", "six-seven", "sixseven"];
     // currently only contains DropExitJoin
-    if((global peopleWhoCant67.contains(default.uuid)) && (event.message.contains(banned67Phrases, ignoreCase = "True"))) {
+    line namestr: str = default.name.clearFormatting();
+    if((global peopleWhoCant67.contains(namestr)) && (event.message.contains(banned67Phrases, ignoreCase = "True"))) {
         default.sendMessage("you have been 67 banned");
+        game.summonLightning(default.location);
         event.cancel();
     }
     if(global chatGameSolutions.len() != 0 && event.message.matches(global chatGameSolutions, ignoreCase = "True")) { 
@@ -150,7 +152,7 @@ namespace loops {
                 line lc = util.numberFormat(logs[player]);
                 line tag = createChatTag(level);
                 tl += s"%var(tag) <#dddddd>%var(player) <dark_gray>%var(lc)<reset>";
-                if(idx % oftency == 1) {
+                if(idx % oftency == 0) {
                     tl += s"\n";
                 } else {
                     tl += s"<space:7>";
@@ -202,8 +204,23 @@ namespace loops {
                 tl += s"<gray>Status: <yellow>Supercell\n";
                 tl += s"<gray>Cost: <red>-400k/s/p\n";
             }
+            if(weatherType == 7) {
+                tl += s"<gray>Status: <red>Multi-Vortex Supercell\n";
+                tl += s"<gray>Cost: <red>-800k/s/p\n";
+            }
+            if(weatherType == 8) {
+                tl += s"<gray>Status: <red>EF-6 Multi-Vortex Supercell\n";
+                tl += s"<gray>Cost: <red>-1.1m/s/p\n";
+            }
             line fmt = util.numberFormat(weatherMachineLogs);
             tl += s"<gray>Logs: <green>%var(fmt)\n\n";
+
+
+            tl += s"<dark_blue><bold>DRILL<reset>\n";
+            line fmt = util.numberFormat(saved drillLogUnits);
+            tl += s"<gray>Logs: <green>%var(fmt),000,000,000";
+            tl += s"<reset>\n\n";
+
             tl += s"<reset><yellow><bold>GLOBAL BUFFS\n<reset>";
             tl += s"<reset><gray>Trinkets: <green>+%var(globalTrinketBuff)%\n";
             if(weatherType == 1) {
@@ -224,6 +241,14 @@ namespace loops {
             if(weatherType == 6) {
                 tl += s"<gray>Weather Machine: <green>+350%\n";
             }
+            if(weatherType == 7) {
+                tl += s"<gray>Weather Machine: <green>+475%\n";
+            }
+            if(weatherType == 8) {
+                tl += s"<gray>Weather Machine: <green>+600%\n";
+            }
+            line globalDrillMulFmt = util.numberFormat(globalDrillMul);
+            tl += s"<gray>Drill: <green>+%var(globalDrillMulFmt)% <dark_gray>(Lv100+)\n";
             tl += "\n\n";
             tl += s"<reset><blue><bold>TIMERS\n<reset>";
             tl += s"<reset><gray>Trinket Shop Restock: <yellow>%var(trinketShopRestockTimer)s";
