@@ -152,7 +152,7 @@ namespace loops {
                 line lc = util.numberFormat(logs[player]);
                 line tag = createChatTag(level);
                 tl += s"%var(tag) <#dddddd>%var(player) <dark_gray>%var(lc)<reset>";
-                if(idx % oftency == 1) {
+                if(idx % oftency == 0) {
                     tl += s"\n";
                 } else {
                     tl += s"<space:7>";

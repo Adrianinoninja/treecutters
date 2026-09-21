@@ -200,7 +200,7 @@ namespace sweeping {
 
         declare global globalDrillMul: num = 0;
 
-        globalDrillMul += (num.root(lv100AboveCounter, 1.8) * num.root(drillLogUnits, 1.8)).ceil();
+        globalDrillMul += (num.root(lv100AboveCounter, 1.3) * num.root(drillLogUnits, 1.6)).ceil();
 
         declare global "globalLogMul": num = logMul;
 
