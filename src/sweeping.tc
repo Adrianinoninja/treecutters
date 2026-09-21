@@ -191,6 +191,12 @@ namespace sweeping {
 
         logMul += (globalTrinketBuff / 100);
 
+        declare global globalDrillMul: num = 0;
+
+        globalDrillMul += 10 * num.root(drillLogUnits, 2);
+
+        logMul += (globalDrillMul / 100);
+
         declare global "globalLogMul": num = logMul;
 
         return logMul;

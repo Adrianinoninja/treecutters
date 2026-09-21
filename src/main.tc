@@ -235,8 +235,11 @@ import throwingaxe;
 import stocksMenu;
 import weather;
 import trinketOwnershipMenu;
+import drill;
+
 lscancel playerevent rightClick {
     event.cancel();
+    drill.clicks();
     weather.donate();
     stocksMenu.clicks();
     if(event.blockEquals(item("lime_shulker_box"))) {

@@ -1,0 +1,10 @@
+namespace drill {
+    function clicks() {
+        if(player.isLookingAtBlock(loc(80, 4, 135))) {
+            if(saved "%uuid logs" >= 1_000_000_000) {
+                saved "%uuid logs" -= 1_000_000_000;
+                declare saved "drillLogUnits": num += 1;
+            }
+        }       
+    }
+}
