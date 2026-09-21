@@ -472,6 +472,9 @@ namespace loops {
         if(level > 119) {
             color = "gradient:#D60270:#0038A8";
         }
+        if(level > 124) {
+            color = "gradient:#A8D47A:#AAABAB";
+        }
         return txt.parseExpression("<dark_gray>[<%var(color)>%var(level)🪓<dark_gray>]");
     }
 

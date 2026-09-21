@@ -99,7 +99,9 @@ namespace statShopIcon.treeType {
         5_000_000_000, 6_000_000_000, 7_000_000_000, 8_000_000_000,
         10_000_000_000, // lv 115
         13_000_000_000, 16_000_000_000, 19_000_000_000, 22_000_000_000,
-        25_000_000_000 // lv 120
+        25_000_000_000, // lv 120
+        30_000_000_000, 35_000_000_000, 40_000_000_000, 45_000_000_000,
+        50_000_000_000 // lv 125
     ];
     maxLevel = 100000000;
     description: list[str] = ["Increases your tree type level,", "allowing you to unlock new tree types,", "new upgrades, and general progression."];
