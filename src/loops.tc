@@ -248,7 +248,7 @@ namespace loops {
                 tl += s"<gray>Weather Machine: <green>+700%\n";
             }
             line globalDrillMulFmt = util.numberFormat(globalDrillMul);
-            tl += s"<gray>Drill: <green>+%var(globalDrillMulFmt)%\n";
+            tl += s"<gray>Drill: <green>+%var(globalDrillMulFmt)% <dark_gray>(Lv100+)\n";
             tl += "\n\n";
             tl += s"<reset><blue><bold>TIMERS\n<reset>";
             tl += s"<reset><gray>Trinket Shop Restock: <yellow>%var(trinketShopRestockTimer)s";
