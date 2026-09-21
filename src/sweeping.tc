@@ -163,11 +163,11 @@ namespace sweeping {
         }
         if(weatherType == 7) {
             // waowaowawaow
-            logMul += 5;
+            logMul += 4.75;
         }
         if(weatherType == 8) {
             // waowaowawaow
-            logMul += 7;
+            logMul += 6;
         }
 
         declare global globalTrinketBuff = 0;

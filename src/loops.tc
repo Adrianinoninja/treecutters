@@ -242,10 +242,10 @@ namespace loops {
                 tl += s"<gray>Weather Machine: <green>+350%\n";
             }
             if(weatherType == 7) {
-                tl += s"<gray>Weather Machine: <green>+500%\n";
+                tl += s"<gray>Weather Machine: <green>+475%\n";
             }
             if(weatherType == 8) {
-                tl += s"<gray>Weather Machine: <green>+700%\n";
+                tl += s"<gray>Weather Machine: <green>+600%\n";
             }
             line globalDrillMulFmt = util.numberFormat(globalDrillMul);
             tl += s"<gray>Drill: <green>+%var(globalDrillMulFmt)% <dark_gray>(Lv100+)\n";
